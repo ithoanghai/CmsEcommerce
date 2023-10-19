@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block body_class %}Team - TGNP{% endblock %}
+
+{% block body %}
+    <div class="cohort-list-container">
+        <h2 class="with-actions">
+            Teams
+            <a class="button" href="{% url "teams:team_create" %}">
+                <i class="fas fa-plus"></i>
+                Create a Team
+            </a>
+        </h2>
+        <div class="cohort-list">
+            {% for team in teams %}
+            <div class="teammembers-thumb">
+                <h3>
+                    <a href="{% url "teams:team_detail" team.pk %}">
+                        {{ team.name }}
+                    </a>
+                    <span class="totals">
+                        <span class="users">{{ team.member_counts.users }}</span>
+                        <span class="total">{{ team.member_counts.total }}</span>
+                    </span>
+                </h3>
+                <div class="team-members">
+                    {% include "app_list/teams/_members.html" %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

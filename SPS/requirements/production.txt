@@ -1,0 +1,17 @@
+-r requirements-socialnetwork.txt
+-r requirements-ecommerce.txt
+-r requirements-cms.txt
+
+elasticsearch
+# Additional dependencies for Heroku, AWS, and Google Cloud deployment
+uwsgi
+psycopg2
+whitenoise
+boto3
+google-cloud-storage
+django-storages
+# For retrieving credentials and signing requests to Elasticsearch
+botocore
+aws-requests-auth
+django-redis
+django-basic-auth-ip-whitelist

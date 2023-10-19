@@ -1,0 +1,23 @@
+Django>=4.2
+wagtail
+wagtail-font-awesome-svg
+
+# 3rd-party apps that django cms depends on
+django-treebeard
+django-sekizai
+django-modelcluster
+django-widget-tweaks
+django_tables2
+django-polymorphic
+
+easy-thumbnails
+paho-mqtt
+haystack
+
+django_filer
+django-dotenv
+django-debug-toolbar
+django-extensions
+django-csp
+dj-database-url
+html5lib

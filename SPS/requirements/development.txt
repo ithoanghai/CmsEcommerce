@@ -1,0 +1,14 @@
+-r requirements-socialnetwork.txt
+-r requirements-ecommerce.txt
+-r requirements-cms.txt
+-r requirements-crm.txt
+
+black
+flake8
+isort  # leave this pinned - it tends to change rules between patch releases
+flake8-blind-except
+flake8-comprehensions
+flake8-print
+flake8-assertive
+curlylint
+djhtml

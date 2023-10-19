@@ -1,0 +1,194 @@
+{% load i18n static webanalytics_tags %}
+{% load theme_bootstrap_tags boxes_tags %}
+{% load sitetree %}
+{% load markitup_tags %}
+{% load metron_tags %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    {% block viewport %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock %}
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <title>
+        {% block head_title_base %}{% if SITE_NAME %}{{ SITE_NAME }} | {% endif %}
+            {% block head_title %}{% endblock %}
+        {% endblock %}
+    </title>
+
+    {% include 'theme_bootstrap/stylesheets.html' %}
+    {% include "theme_bootstrap/_styles.html" %}
+    {% comment %}<link href="{% static "css/theme.css" %}" rel="stylesheet">{% endcomment %}
+    {% block styles %}  {% endblock %}
+
+    {% block style_base %}
+        {% block extra_style %}{% endblock %}
+    {% endblock %}
+
+    {% block html5shim %}
+        <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <![endif]-->
+    {% endblock %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+    {% block extra_head_base %}
+        {% block extra_head %}{% endblock %}
+    {% endblock %}
+
+    {% csrf_token %}
+
+</head>
+<body class="page-has-left-panels page-has-right-panels
+        {% block body_class_base %}{% block body_class %}{% endblock %}{% endblock %}"
+      id="{% block body_id %}{% endblock %}" {% block body_extra_attributes %}{% endblock %}>
+<!-- Fixed Sidebar Left -->
+
+<div class="fixed-sidebar">
+    <div class="fixed-sidebar-left sidebar--small" id="sidebar-left">
+
+        <a href="" class="logo">
+            <div class="img-wrap">
+                <img src="{% static 'img/logo.webp' %}" alt="Olympus">
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="OPEN MENU">
+                            <use xlink:href="svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="NEWSFEED">
+                            <use xlink:href="svg-icons/sprites/icons.svg#olymp-newsfeed-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <svg class="olymp-manage-widgets-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="Manage Widgets">
+                            <use xlink:href="svg-icons/sprites/icons.svg#olymp-manage-widgets-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1">
+        <a href="" class="logo">
+            <div class="img-wrap">
+                <img src="{% static 'img/logo.webp' %}" alt="Olympus">
+            </div>
+            <div class="title-block">
+                <h6 class="logo-title">{% trans "Social" %}</h6>
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-close-icon left-menu-icon">
+                            <use xlink:href="svg-icons/sprites/icons.svg#olymp-close-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">{% trans "Collapse Menu" %}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="03-Newsfeed.html">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="NEWSFEED">
+                            <use xlink:href="svg-icons/sprites/icons.svg#olymp-newsfeed-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">{% trans "Newsfeed" %}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <svg class="olymp-manage-widgets-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="Manage Widgets">
+                            <use xlink:href="svg-icons/sprites/icons.svg#olymp-manage-widgets-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">{% trans "Manage Widgets" %}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ... end Fixed Sidebar Left -->
+
+
+<div class="{% block wrapper_class %}{% endblock %}">
+
+    {% sitetree_menu from "main" include "trunk" template "sitetree/menu_bootstrap3.html" %}
+
+    {% include "theme_bootstrap/_messages.html" %}
+    {% block messages %}{% endblock %}
+
+    {% include 'theme_bootstrap/header.html' %}
+    {% block header %}  {% endblock %}
+
+    {% block topbar_base %}{% endblock %}
+
+    {% block content %} {% endblock %}
+
+    {% block body_base %}
+        <main>
+            {% include "theme_bootstrap/_menu.html" %}
+            {% block content_left %} {% endblock %}
+
+            <section id="content-section">
+                <div id="content-body">
+                    {% block body %}{% endblock %}
+                </div>
+            </section>
+
+            {% block content_right %}{% endblock %}
+        </main>
+    {% endblock %}
+
+    {% analytics %}
+    {% block extra_body_base %}
+        {% block extra_body %}{% endblock %}
+    {% endblock %}
+
+    {% block footer_base %}
+        <hr/>
+        <footer>
+            <div class="container">
+                {% include "theme_bootstrap/_footer.html" %}
+                {% block footer %}{% endblock %}
+            </div>
+        </footer>
+    {% endblock %}
+
+    {% include 'theme_bootstrap/scripts.html' %}
+    {% block scripts %}{% endblock %}
+
+    {% include "theme_bootstrap/_scripts.html" %}
+    {% comment %}<script src="{% static "js/theme.js" %}"></script>{% endcomment %}
+    {% block theme_script %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>

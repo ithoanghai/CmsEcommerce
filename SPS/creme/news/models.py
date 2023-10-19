@@ -1,0 +1,39 @@
+import uuid
+
+from django.db import models
+from django.utils import timezone
+
+import markdown
+from imagekit.models import ImageSpecField
+
+
+def image_upload_to(instance, filename):
+    uid = str(uuid.uuid4())
+    ext = filename.split(".")[-1].lower()
+    return f"news-images/{instance.pk}/{uid}.{ext}"
+
+
+class News(models.Model):
+    image = models.ImageField(upload_to=image_upload_to, blank=True)
+    secondary_image = models.ImageField(upload_to=image_upload_to, blank=True)
+    title = models.CharField(max_length=200)
+    url = models.TextField()
+    description = models.TextField(blank=True)
+    description_html = models.TextField(blank=True, editable=False)
+
+    press_release = models.BooleanField(default=False)
+
+    published_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    image_thumb = ImageSpecField(source="image", id="news:image:thumb")
+    secondary_image_thumb = ImageSpecField(source="secondary_image", id="news:secondary_image:thumb")
+
+    def save(self, *args, **kwargs):
+        if self.description:
+            self.description_html = markdown.markdown(self.description)
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        app_label = 'news'  # Sử dụng tên của ứng dụng chứa model
+        verbose_name_plural = "news"

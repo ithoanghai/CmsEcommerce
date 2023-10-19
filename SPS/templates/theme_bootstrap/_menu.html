@@ -1,0 +1,81 @@
+<header>
+    <nav>
+        <div class="navbar navbar-default {% block navbar_class %}navbar-fixed-top{% endblock %}">
+            <div class="container">
+                {% block topbar %}
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="fa fa-bars"></span>
+                        </button>
+                        {% block site_brand %}
+                            <a class="navbar-brand" href="{% url "home" %}">{{ SITE_NAME }}</a>
+                        {% endblock %}
+                    </div>
+                    <div class="collapse navbar-collapse navbar-responsive-collapse">
+                        {% block nav %}
+                            <ul class="nav navbar-nav">
+                                {% include "theme_bootstrap/_nav.html" %}
+                            </ul>
+                        {% endblock %}
+                        {% block account_bar %}{% include "theme_bootstrap/_account_bar.html" %}{% endblock %}
+                    </div>
+                {% endblock %}
+            </div>
+        </div>
+    </nav>
+</header>
+<aside id="menu">
+    <div class="toggle-container">
+        <button class="btn btn-link btn-menu-toggle"><i class="fas fa-bars"></i>Menu trái</button>
+    </div>
+    <nav class="nav" id="app-nav" data-children=".config-menu">
+        <div class="config-menu-container">
+
+            <div class="container">
+                <div class="row">
+
+                    {% for label, config in available_configs.items %}
+                        <div class="col-md-3">
+                            <div class="config-menu">
+                                <div class="nav-header">
+                                    <div class="row">
+                                        <img data-show-menu="#menu" data-show="#config-{{ config.label }}"
+                                             src="{{ config.patch }}" class="patch" title="{{ config.title }}"
+                                             alt="{{ config.title }}"/>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <a class="nav-text" data-toggle="collapse"
+                                               href="#config-{{ config.label }}">
+                                                {{ config.title }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="config-{{ config.label }}" class="nav-items collapse
+                {% for v in config.views %}
+                    {% if current_view.name == v.name %}show {% endif %}
+                {% endfor %}
+            " data-parent="#app-nav">
+                                    {% for v in config.views %}
+                                        {% if v.menu %}
+                                            <div class="nav-item {% if current_view.name == v.name %}selected{% endif %}">
+                                                <a class="nav-link" href="{{ v.resolved_path }}">
+                                                    {{ v.display_name }}
+                                                    <span class="template">{{ v.short_template_name }}</span>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+
+        </div>
+    </nav>
+</aside>

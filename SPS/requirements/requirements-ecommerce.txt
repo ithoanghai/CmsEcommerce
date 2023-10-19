@@ -1,0 +1,31 @@
+Django>=4.2
+
+# These requirements are only necessary when developing on Oscar.
+
+# development
+django-debug-toolbar
+django-extensions
+psycopg2-binary
+
+# Sandbox
+Whoosh
+django-environ
+django-redis
+pysolr
+redis
+requests
+uWSGI
+whitenoise
+
+# Linting
+pylint
+pylint-django
+black
+
+# Helpers
+pyprof2calltree
+ipdb
+ipython
+
+# Country data
+pycountry

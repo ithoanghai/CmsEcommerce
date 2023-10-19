@@ -1,0 +1,137 @@
+{% extends "theme_bootstrap/base.html" %}
+
+{% load i18n %}
+
+{% block body_class %}account{% endblock %}
+
+{% block body_base %}
+    <section id="content_body">
+        <div class="container">
+            {% include "theme_bootstrap/_messages.html" %}
+            <div class="row">
+                <div class="col-md-3 columns">
+                    <nav class="settings-nav">
+        <div class="heading">Settings</div>
+        <a class="account-settings" href="{% url "account_settings" %}">
+            {% trans "Account" %}
+        </a>
+        <a class="account-password" href="{% url "password" %}">
+            {% trans "Change password" %}
+        </a>
+        <a class="account-delete" href="{% url "account_delete" %}">
+            {% trans "Delete account" %}
+        </a>
+        <br/>
+        {% if notifications_installed %}
+            <a class="notice-settings" href="{% url "notifications_app:notice_settings" %}">
+                {% trans "Notices" %}
+            </a>
+        {% endif %}
+        {% if invitations_installed %}
+            <a class="invitations-settings" href="{% url "invitations:invite" %}">
+                {% trans "Invitations" %}
+            </a>
+        {% endif %}
+        {% if teams_installed %}
+            <a class="team-info" href="{% url "teams:team_list" %}">
+                {% trans "Teams" %}
+            </a>
+        {% endif %}
+        {% if announcements_installed %}
+            <a class="announcement-edit-link" href="{% url "announcements:announcement_list" %}">
+                {% trans "Annoucements" %}
+            </a>
+        {% endif %}
+        {% if blog_installed %}
+            <a class="blog-post" href="{% url "blogs:blog" %}">
+                {% trans "Blog" %}
+            </a>
+        {% endif %}
+        {% if stripe_installed %}
+            {% comment %}<div class="heading">Billing</div>
+        <a class="stripe-subscriptions" href="{% url "stripe_subscription_list" %}">
+            {% trans "Subscriptions" %}
+        </a>{% endcomment %}
+            <a class="stripe-payment-methods" href="{% url "stripe:stripe_webhook" %}">
+                {% trans "Payment Methods" %}
+            </a>
+            {% comment %} <a class="stripe-invoices" href="{% url "stripe_invoice_list" %}">
+            {% trans "Invoices" %}
+        </a>{% endcomment %}
+        {% endif %}
+        {% if calendars_installed %}
+            <a class="calendar-table" href="{% url "calendars:monthly" year=2023 month=9 %}">
+                {% trans "Calendars" %}
+            </a>
+        {% endif %}
+        {% if likes_installed %}
+            <a class="like-link" href="{% url "likes:like_toggle" content_type_id=12345 object_id=1 %}">
+                {% trans "Likes" %}
+            </a>
+        {% endif %}
+        {% if waitinglist_installed %}
+            <a class="request-awaiting" href="{% url "waitinglist:home" %}">
+                {% trans "Waiting List" %}
+            </a>
+        {% endif %}
+        {% if badges_installed %}
+            <a class="badge" href="{% url "badges:badge_list" %}">
+                {% trans "Badges" %}
+            </a>
+        {% endif %}
+        {% if comments_installed %}
+            <a class="comment-box" href="{% url "comments:comment_list" %}">
+                {% trans "Comments" %}
+            </a>
+        {% endif %}
+        {% if documents_installed %}
+            <a class="document" href="{% url "documents:document_index" %}">
+                {% trans "Documents" %}
+            </a>
+        {% endif %}
+        {% if forums_installed %}
+            <a class="forum" href="{% url "forums:forums" %}">
+                {% trans "Forums" %}
+            </a>
+        {% endif %}
+        {% if referrals_installed %}
+            <a class="forum" href="{% url "referrals:create_referral" %}">
+                {% trans "Referrals" %}
+            </a>
+        {% endif %}
+        {% if reviews_installed %}
+            <a class="forum" href="{% url "reviews:review_section" %}">
+                {% trans "Submissions" %}
+            </a>
+        {% endif %}
+        {% if wiki_installed %}
+            <a class="forum" href="{% url "wiki:file_upload" %}">
+                {% trans "Wikis" %}
+            </a>
+        {% endif %}
+        {% if bookmarks_installed %}
+            <a class="forum" href="{% url "bookmarks:all_bookmarks" %}">
+                {% trans "Bookmarks" %}
+            </a>
+        {% endif %}
+        {% if flags_installed %}
+            <a class="flag-sprite" href="{% url "flags:flag" %}">
+                {% trans "Flags" %}
+            </a>
+        {% endif %}
+        {% if activities_installed %}
+            <a class="activitiez" href="{% url "activities:staff_dashboard" %}">
+                {% trans "LMS Activities" %}
+            </a>
+        {% endif %}
+
+    </nav>
+                </div>
+                <div class="col-md-9 columns">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

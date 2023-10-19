@@ -1,0 +1,27 @@
+{% extends "app_list/stripe/base.html" %}
+
+
+{% load bootstrap %}
+
+{% block body_class %}{{ block.super }} stripe-subscriptions{% endblock %}
+
+{% block content %}
+<div class="stripe-subscriptions-cancel-container">
+    <h4>Cancel Subscription</h4>
+    {% if errors %}
+        <div class="errors">
+            {{ errors }}
+        </div>
+    {% endif %}
+
+    <div class="summary">
+        You began your subscription of <strong>{{ object.plan.name }}</strong> on
+        {{ object.start }}.
+    </div>
+
+    <form action="{% url "stripe_subscription_delete" object.pk %}" method="post">
+        {% csrf_token %}
+        <button>Cancel</button>
+    </form>
+</div>
+{% endblock %}

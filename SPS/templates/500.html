@@ -1,0 +1,18 @@
+{% comment %}{% extends "theme_bootstrap/base.html" %}{% endcomment %}
+{% extends 'error-base.html' %}
+
+{% load i18n media %}
+
+{% block icon %}<img width="200px" height="200px" src="{% media_url 'common/images/500_200.png' %}"/>{% endblock %}
+
+{% block title %}{% translate 'Creme — 500 Error' %}{% endblock %}
+
+
+{% block head_title %}{% trans "Server Error" %}{% endblock %}
+
+{% block body %}
+    <header class="server-error internal-server-error">
+        <h1>{% trans "Something went wrong" %}</h1>
+        <p>{% trans "We're sorry but a server error has occurred. We've been notified and will look into it as soon as possible." %}</p>
+    </header>
+{% endblock %}

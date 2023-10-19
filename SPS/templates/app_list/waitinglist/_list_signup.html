@@ -1,0 +1,15 @@
+{% load i18n %}
+<div id="waitinglist">
+    <p>Enter your email address to reserve your spot in our private beta&hellip;</p>
+
+    <form method="post" action="{% url 'waitinglist:ajax_list_signup' %}" class="form-inline ajax" data-replace="#waitinglist">
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
+        {{ field.label_tag }}: {{ field }}
+        {% endfor %}
+        {{ form }}
+        <div class="form-actions">
+            <button>{% trans "Submit" %}</button>
+        </div>
+    </form>
+</div>

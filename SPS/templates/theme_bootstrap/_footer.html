@@ -1,0 +1,18 @@
+{% load i18n webanalytics_tags %}
+
+{% now "Y" as current_year %}
+
+{% analytics %}
+
+{% blocktrans %}
+<div class="copyright">&copy; {{ current_year }} &lt;THẾ GIỚI NHÀ PHỐ VIỆT NAM&gt;</div>
+{% endblocktrans %}
+
+<div class="made-with-pinax">
+    Made with Hoàng Hải
+    <div class="patches">
+        {% for app in apps %}
+            <img src="http://pinax.github.com/pinax-design/patches/{{ app }}.svg" />
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,6 @@
+    {# templates/waitinglist/survey_invite_body.txt
+    $ python manage.py mail_out_survey_links
+    #}
+
+    Please take a moment to complete a brief survey from Example.com:
+    {{ protocol }}://www.{{ site.domain }}{% url 'waitinglist_survey' instance.code %}

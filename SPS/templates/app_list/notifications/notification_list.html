@@ -1,0 +1,32 @@
+{% extends 'theme_bootstrap/base.html' %}
+
+{% load i18n %}
+
+{% block body_id %}notification-list{% endblock %}
+
+{% block head_title %}{% trans "Notification List" %}{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Recipient" %}</th>
+                <th>{% trans "Is Read" %}</th>
+                <th>{% trans "Description" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notification in notifications %}
+            <tr>
+                <td>{{ notification.type }}</td>
+                <td>{{ notification.recipient.username }}</td>
+                <td>{{ notification.is_read }}</td>
+                <td>{{ notification.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

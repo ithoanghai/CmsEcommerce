@@ -1,0 +1,40 @@
+from .settings import BASE_DIR
+
+# People who get code error notifications.
+# In the format [('Full Name', 'email@example.com'), ('Full Name', 'anotheremail@example.com')]
+# NB: you can eventually move it in '.settings.py' if your repository is private
+#     & it's not a problem to share these information.
+ADMINS = []
+
+# SECURITY WARNING: keep the secret key used in production secret!
+# HINT: use 'creme build_secret_key --settings=my_project.settings' to generate it.
+SECRET_KEY = "django-insecure-db!j7@wb5rsi%bffmak)(-)!y57@1u960_tq%l)ax^lifr1-n5"
+
+# A list of strings representing the host/domain names that this Django site can serve.
+# You should set this list for security purposes.
+# See: https://docs.djangoproject.com/en/4.2/ref/settings/#allowed-hosts
+# The default value is <['*']> & it will match anything ; set a narrower value
+# or provide your own validation (with in a middleware for example).
+# ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+# ALLOWED_HOSTS = ['www.example.com']
+
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+DATABASES = {
+    "default": {
+        # Possible backends: 'postgresql', 'mysql', 'sqlite3'.
+        "ENGINE": "django.db.backends.sqlite3",
+        # Name of the database, or path to the database file if using 'sqlite3'.
+        "NAME": BASE_DIR / "db.sqlite3",
+        # Not used with sqlite3.
+        "USER": "",
+        "PASSWORD": "",
+        # Set to empty string for localhost. Not used with 'sqlite3'.
+        "HOST": "",
+        # Set to empty string for default. Not used with 'sqlite3'.
+        "PORT": "",
+        # Extra parameters for database connection.
+        # Consult backend module's document for available keywords.
+        # 'OPTIONS': {},
+    },
+}

@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load invitations_tags %}
+
+<div class="invites">
+    {% invite_form request.user %}
+    {% invites_remaining user %}
+
+    <div class="sent">
+        <h3>Invitations Sent</h3>
+        {% invites_sent request.user %}
+    </div>
+</div>
+<ul class="invitations-invites-sent">
+    {% for invited in invited_list %}
+        <li class="{{ invited|status_class }}">
+            {% if invited.to_user %}
+                <a href="{{ invited.to_user.get_profile.get_absolute_url }}">
+                    {{ invited.signup_code.email }}
+                </a>
+            {% else %}
+                {{ invited.signup_code.email }}
+            {% endif %}
+        </li>
+    {% empty %}
+        <li class="empty-invites">
+            {% trans "You have not sent any invitations yet." %}
+        </li>
+    {% endfor %}
+</ul>

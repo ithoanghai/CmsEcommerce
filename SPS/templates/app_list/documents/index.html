@@ -1,0 +1,11 @@
+{% extends "app_list/documents/base.html" %}
+
+{% block body_class %}{{ block.super }} documents-index{% endblock %}
+
+{% block head_title %}Documents{% endblock %}
+
+{% block body %}
+    <h2>Documents</h2>
+    {% include "app_list/documents/_usage.html" %}
+    {% include "app_list/documents/_member_table.html" %}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% load theme_bootstrap_tags %}
+{% for message in messages %}
+    <div class="alert fade in {% get_message_tags message %} message {{ message.tags }}">
+        <button type="button" class="close" data-dismiss="alert"><i  class="fas fa-times"></i> &times;</button>
+        {{ message }}
+    </div>
+{% endfor %}

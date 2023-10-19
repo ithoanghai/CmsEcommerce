@@ -1,0 +1,761 @@
+*** CÁCH CÀI ĐẶT DJANGO CMS BẰNG TAY ***
+https://docs.django-cms.org/
+
+Cách dễ nhất để cài đặt Django CMS là sử dụng trình cài đặt Django CMS tự động . Đây là cách được khuyến nghị để bắt đầu với các dự án mới và đó là cách chúng tôi sử dụng trong phần hướng dẫn của tài liệu này .
+
+Nếu bạn muốn thực hiện mọi việc theo cách thủ công, hướng dẫn cách thực hiện này sẽ hướng dẫn bạn thực hiện quy trình.
+
+Ghi chú
+
+Bạn cũng có thể sử dụng hướng dẫn này để giúp bạn cài đặt Django CMS như một phần của dự án hiện có. Tuy nhiên, hướng dẫn giả định rằng bạn đang bắt đầu với một dự án trống, vì vậy bạn sẽ cần điều chỉnh các bước bên dưới một cách thích hợp theo yêu cầu.
+
+Tài liệu này giả định rằng bạn đã có chút hiểu biết cơ bản về Python và Django. Sau khi bạn đã tích hợp Django CMS vào dự án của mình, bạn có thể làm theo phần Bắt đầu để biết phần giới thiệu về cách phát triển với Django CMS.
+
+Cài đặt gói Django CMS
+Kiểm tra các yêu cầu Python/Django cho phiên bản Django CMS này.
+
+Django CMS cũng có các yêu cầu khác, được liệt kê dưới dạng phụ thuộc trong setup.py.
+
+Quan trọng
+
+Chúng tôi thực sự khuyên bạn nên thực hiện tất cả các bước sau trong môi trường ảo. Bạn nên biết cách tạo, kích hoạt và loại bỏ môi trường ảo bằng venv . Nếu không, bạn có thể sử dụng các bước bên dưới để bắt đầu, nhưng bạn nên dành vài phút để tìm hiểu những kiến ​​thức cơ bản về cách sử dụng virtualenv trước khi tiếp tục.
+
+python3 -m venv venv # create a virtualenv
+source venv/bin/activate  # activate it
+Để cms hoạt động chính xác, bạn sẽ cần phiên bản django 3.2. Làm việc với các phiên bản mới hơn có thể không ổn định. Bạn có thể cài đặt phiên bản django được đề xuất bằng lệnh sau:
+
+pip install django
+Trong virtualenv được kích hoạt, hãy chạy:
+
+pip install --upgrade pip
+để đảm bảo pipđược cập nhật vì các phiên bản cũ hơn có thể kém tin cậy hơn.
+
+Sau đó:
+
+pip install django-cms
+để cài đặt phiên bản ổn định mới nhất của Django CMS.
+
+Tạo một dự án mới
+Tạo một dự án mới:
+
+django-admin startproject myproject
+Nếu đây là điều mới đối với bạn, bạn nên đọc hướng dẫn chính thức của Django , hướng dẫn cách bắt đầu một dự án mới.
+
+Dự án mới của bạn sẽ trông như thế này:
+
+myproject
+    myproject
+        __init__.py
+        asgi.py
+        settings.py
+        urls.py
+        wsgi.py
+    manage.py
+Các ứng dụng và cài đặt được yêu cầu tối thiểu
+Mở tệp của dự án mới settings.pytrong trình soạn thảo văn bản của bạn.
+
+CÀI ĐẶT_APPS
+Bạn sẽ cần thêm phần sau vào danh sách của nó INSTALLED_APPS:
+
+'django.contrib.sites',
+'cms',
+'menus',
+'treebeard',
+django CMS cần sử dụng django.contrib.sites khung của Django. Bạn sẽ cần đặt a SITE_ID trong cài đặt - là đủ.SITE_ID = 1
+
+cmsvà menuslà các mô-đun Django CMS cốt lõi.
+
+django-treebeard được sử dụng để quản lý cấu trúc cây plugin và trang của Django CMS.
+
+django CMS cài đặt kiểu quản trị viên Django CMS . Điều này cung cấp một số kiểu dáng giúp làm cho các thành phần quản trị Django CMS dễ dàng làm việc hơn. Về mặt kỹ thuật, đây là thành phần tùy chọn và không cần phải kích hoạt trong dự án của bạn, nhưng bạn nên thực hiện điều này.
+
+Trong INSTALLED_APPS, trước django.contrib.admin , thêm:
+
+'djangocms_admin_style',
+Cài đặt ngôn ngữ
+django CMS yêu cầu bạn đặt LANGUAGEScài đặt. Điều này sẽ liệt kê tất cả các ngôn ngữ bạn muốn dự án của mình phục vụ và phải bao gồm ngôn ngữ đó trong LANGUAGE_CODE.
+
+Ví dụ:
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('de', 'German'),
+]
+(Để đơn giản, ở giai đoạn này bạn nên thay đổi giá trị mặc định en-ustrong LANGUAGE_CODEcài đặt thành en.)
+
+Cơ sở dữ liệu
+Django CMS yêu cầu phụ trợ cơ sở dữ liệu quan hệ. Mỗi cài đặt Django CMS phải có cơ sở dữ liệu riêng.
+
+Bạn có thể sử dụng SQLite, được bao gồm trong Python và không cần phải cài đặt riêng hoặc định cấu hình thêm. Bạn khó có thể sử dụng nó cho một dự án đang được sản xuất, nhưng nó lý tưởng cho việc phát triển và khám phá, đặc biệt khi nó được định cấu hình theo mặc định trong dự án Django mới DATABASES:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+Ghi chú
+
+Để triển khai, bạn sẽ cần sử dụng cơ sở dữ liệu sẵn sàng sản xuất với Django . Chúng tôi khuyên bạn nên sử dụng PostgreSQL hoặc MySQL .
+
+Việc cài đặt và bảo trì hệ thống cơ sở dữ liệu nằm ngoài phạm vi của tài liệu này nhưng được ghi lại rất đầy đủ trên các trang web tương ứng của hệ thống.
+
+Cho dù bạn sử dụng cơ sở dữ liệu nào, nó cũng sẽ yêu cầu cài đặt bộ điều hợp Python thích hợp:
+
+pip install psycopg2     # for Postgres
+pip install mysqlclient  # for MySQL
+Hãy tham khảo để biết cấu hình phù hợp cho chương trình phụ trợ cơ sở dữ liệu bạn đã chọn.Django's DATABASES setting documentation
+
+Bảng cơ sở dữ liệu
+Bây giờ hãy chạy di chuyển để tạo bảng cơ sở dữ liệu cho các ứng dụng mới:
+
+python manage.py migrate
+Người dùng quản trị
+Tạo siêu người dùng quản trị:
+
+python manage.py createsuperuser
+Sử dụng cho cấu hình cms check
+Khi bạn đã hoàn thành thiết lập bắt buộc tối thiểu được mô tả ở trên, bạn có thể sử dụng lệnh tích hợp sẵn của Django CMS để giúp bạn xác định và cài đặt các thành phần khác. Chạy:cms check
+
+python manage.py cms check
+Thao tác này sẽ kiểm tra cấu hình, ứng dụng và cơ sở dữ liệu của bạn cũng như báo cáo mọi sự cố.
+
+Ghi chú
+
+Nếu thiếu các thành phần chính, Django CMS sẽ không thể chạy và thay vào đó sẽ chỉ báo lỗi.cms check command
+
+Sau mỗi bước dưới đây, hãy chạy để xác minh rằng bạn đã giải quyết mục đó trong danh sách kiểm tra của nó.cms check
+
+Sekizai
+Django Sekizai được CMS yêu cầu để quản lý tệp tĩnh. Bạn cần phải 'sekizai'liệt kê trong INSTALLED_APPS,
+
+INSTALLED_APPS = [
+    ...,
+    'sekizai',
+    ...,
+]
+và 'sekizai.context_processors.sekizai'trong TEMPLATES['OPTIONS']['context_processors']:
+
+TEMPLATES = [
+    {
+        ...
+        'OPTIONS': {
+            'context_processors': [
+                ...
+                'sekizai.context_processors.sekizai',
+            ],
+        },
+    },
+]
+Phần mềm trung gian
+trong những MIDDLEWAREgì bạn cần - theo mặc định, django.middleware.locale.LocaleMiddlewarenó không được cài đặt trong các dự án Django.
+
+Ngoài ra thêm:
+
+'cms.middleware.user.CurrentUserMiddleware',
+'cms.middleware.page.CurrentPageMiddleware',
+'cms.middleware.toolbar.ToolbarMiddleware',
+'cms.middleware.language.LanguageCookieMiddleware',
+vào danh sách.
+
+Bạn cũng có thể thêm 'cms.middleware.utils.ApphookReloadMiddleware'. Nó không thực sự cần thiết, nhưng nó hữu ích . Nếu được bao gồm, nên ở đầu danh sách.
+
+thêm cấu hình sau vào settings.py:
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+Bộ xử lý bối cảnh
+Thêm 'cms.context_processors.cms_settings'vào TEMPLATES['OPTIONS']['context_processors'].
+
+Đồng thời thêm 'django.template.context_processors.i18n'nếu nó chưa có.
+
+cms checkbây giờ không thể xác định thêm bất kỳ vấn đề nào với dự án của bạn. Tuy nhiên, một số cấu hình bổ sung được yêu cầu.
+
+Cấu hình yêu cầu thêm
+URL
+Trong dự án urls.py, thêm vào danh sách. Nó phải xuất hiện sau các mẫu khác để có thể phát hiện các URL cụ thể cho các ứng dụng khác trước tiên.re_path(r'^', include('cms.urls'))urlpatterns
+
+Bạn cũng sẽ cần phải nhập cho django.urls.include. Ví dụ:
+
+from django.urls import re_path, include
+
+urlpatterns = [
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^', include('cms.urls')),
+]
+Dự án Django CMS bây giờ sẽ chạy, bạn sẽ thấy nếu bạn khởi chạy nó với
+
+python manage.py runserver
+Bạn sẽ có thể liên hệ với nó tại http://localhost:8000/ và quản trị viên tại http://localhost:8000/admin/ . Tuy nhiên, bạn thực sự vẫn chưa thể làm được điều gì hữu ích với nó.
+
+Mẫu
+django CMS yêu cầu ít nhất một mẫu cho các trang của nó, vì vậy bạn sẽ cần thêm CMS_TEMPLATESvào cài đặt của mình. Mẫu đầu tiên trong CMS_TEMPLATESdanh sách sẽ là mẫu mặc định của dự án.
+
+CMS_TEMPLATES = [
+    ('home.html', 'Home page template'),
+]
+Trong thư mục gốc của dự án, tạo một templatesthư mục và trong đó, home.htmlmột mẫu Django CMS tối thiểu:
+
+{% load cms_tags sekizai_tags %}
+<html>
+    <head>
+        <title>{% page_attribute "page_title" %}</title>
+        {% render_block "css" %}
+    </head>
+    <body>
+        {% cms_toolbar %}
+        {% placeholder "content" %}
+        {% render_block "js" %}
+    </body>
+</html>
+Điều này đáng để giải thích chi tiết một chút:
+
+{% load cms_tags sekizai_tags %}tải các thư viện thẻ mẫu mà chúng tôi sử dụng trong mẫu.
+
+{% page_attribute "page_title" %}trích xuất trang page_title attribute.
+
+{% render_block "css" %}và là các thẻ mẫu Sekizai tải các khối HTML được xác định bởi các ứng dụng Django. Django CMS xác định các khối cho CSS và JavaScript và yêu cầu hai thẻ này. Chúng tôi khuyên bạn nên đặt thẻ ngay trước thẻ và thẻ ngay trước thẻ .{% render_block "js" %}{% render_block "css" %}</head>{% render_block "js" %}</body>
+
+{% cms_toolbar %}hiển thị .django CMS toolbar
+
+{% placeholder "content" %}định nghĩa một placeholdernơi có thể chèn các plugin. Một mẫu cần ít nhất một thẻ mẫu để có ích cho Django CMS. Tên của trình giữ chỗ chỉ đơn giản là tên mô tả để bạn tham khảo.{% placeholder %}
+
+Django cần biết nơi để tìm các mẫu của nó, vì vậy hãy thêm templatesvào TEMPLATES['DIRS']danh sách:
+
+TEMPLATES = [
+    {
+        ...
+        'DIRS': ['templates'],
+        ...
+    },
+]
+Ghi chú
+
+Cách chúng tôi thiết lập mẫu ở đây chỉ mang tính chất minh họa. Trong một dự án thực tế, chúng tôi khuyên bạn nên tạo một base.htmlmẫu được chia sẻ bởi tất cả các ứng dụng trong dự án mà các mẫu Django CMS của bạn có thể mở rộng.
+
+Xem tài liệu ngôn ngữ mẫu của Django để biết thêm về cách hoạt động của kế thừa mẫu.
+
+Xử lý tập tin phương tiện và tĩnh
+Một trang web Django CMS sẽ cần xử lý:
+
+các tệp tĩnh , là phần cốt lõi của ứng dụng hoặc dự án, chẳng hạn như các hình ảnh, CSS hoặc JavaScript cần thiết của nó
+
+các tệp phương tiện được người dùng hoặc ứng dụng của trang web tải lên.
+
+STATIC_URLtheo mặc định được xác định (dưới dạng "/static/") trong cài đặt của dự án mới. STATIC_ROOT, vị trí mà các tệp tĩnh sẽ được sao chép và phục vụ từ đó không cần thiết cho quá trình phát triển - chỉ dành cho sản xuất .
+
+Hiện tại, khi sử dụng máy chủ và trong cài đặt của mình, bạn không cần phải lo lắng về một trong hai điều này.DEBUG = True
+
+Tuy nhiên, MEDIA_URL(nơi các tệp phương tiện sẽ được phân phát) và MEDIA_ROOT(nơi chúng sẽ được lưu trữ) cần được thêm vào cài đặt của bạn:
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+Để triển khai, bạn cần định cấu hình việc phân phát tệp phương tiện phù hợp. Chỉ dành cho mục đích phát triển , những điều sau đây sẽ hoạt động trong urls.py:
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    ...
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+(Xem tài liệu Django để biết hướng dẫn về cách phân phối tệp phương tiện trong quá trình sản xuất .)
+
+Thêm chức năng xử lý nội dung
+Bây giờ bạn đã thiết lập những điều cơ bản cho trang web django CMS, trang này có thể quản lý và phân phát các trang. Tuy nhiên, dự án cho đến nay vẫn chưa cài đặt plugin, điều đó có nghĩa là nó không có cách nào xử lý nội dung trong các trang đó. Tất cả nội dung trong django CMS được quản lý thông qua plugin. Vì vậy, bây giờ chúng ta cần cài đặt thêm một số ứng dụng addon để cung cấp plugin và chức năng khác.
+
+Bạn thực sự không cần phải cài đặt bất kỳ thứ nào trong số này. Django CMS không cam kết với bạn bất kỳ ứng dụng cụ thể nào để xử lý nội dung. Tuy nhiên, những cái được liệt kê ở đây cung cấp chức năng chính và được khuyến khích sử dụng.
+
+Trình lọc Django
+Django Filer cung cấp quản lý tập tin và hình ảnh. Nhiều ứng dụng khác cũng dựa vào Django Filer - thật bất thường khi có một trang Django CMS không chạy Django Filer. Cấu hình trong phần này sẽ giúp bạn bắt đầu, nhưng bạn nên tham khảo tài liệu Django Filer để biết thông tin cấu hình toàn diện hơn.
+
+Để cài đặt:
+
+pip install django-filer
+Một số ứng dụng sẽ được cài đặt dưới dạng phụ thuộc. Cần có Hình thu nhỏ dễ dàng để tạo phiên bản hình ảnh mới ở các kích cỡ khác nhau; Django MPTT quản lý cấu trúc cây của các thư mục trong Django Filer.
+
+Pillow, thư viện hình ảnh Python, sẽ được cài đặt. Gối cần một số thư viện cấp hệ thống - tài liệu Gối mô tả chi tiết những gì cần thiết để chạy ứng dụng này trên các hệ điều hành khác nhau.
+
+Thêm vào:
+
+'filer',
+'easy_thumbnails',
+'mptt',
+đến INSTALLED_APPS.
+
+Bạn cũng cần thêm:
+
+THUMBNAIL_HIGH_RESOLUTION = True
+
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters'
+)
+Các bảng cơ sở dữ liệu mới sẽ cần được tạo cho Django Filer và Easy Thumbnails, vì vậy hãy chạy di chuyển:
+
+python manage.py migrate filer
+python manage.py migrate easy_thumbnails
+(hoặc đơn giản là, ).python manage.py migrate
+
+Django CMS CKEditor
+Django CMS CKEditor là trình soạn thảo văn bản mặc định cho Django CMS.
+
+Cài đặt: .pip install djangocms-text-ckeditor
+
+Thêm djangocms_text_ckeditorvào INSTALLED_APPS.
+
+Chạy di chuyển:
+
+python manage.py migrate djangocms_text_ckeditor
+Các plugin khác
+Có các plugin dành cho Django CMS bao gồm rất nhiều chức năng. Để bắt đầu, sẽ rất hữu ích nếu bạn có thể dựa vào một bộ plugin được bảo trì tốt đáp ứng một số nhu cầu quản lý nội dung chung.
+
+liên kết djangocms
+
+tập tin djangocms
+
+djangocms-hình ảnh
+
+djangocms-video
+
+djangocms-googlemap
+
+đoạn mã djangocms
+
+kiểu djangocms
+
+Để cài đặt:
+
+pip install djangocms-link djangocms-file djangocms-picture djangocms-video djangocms-googlemap djangocms-snippet djangocms-style
+và thêm:
+
+'djangocms_link',
+'djangocms_file',
+'djangocms_picture',
+'djangocms_video',
+'djangocms_googlemap',
+'djangocms_snippet',
+'djangocms_style',
+đến INSTALLED_APPS.
+
+Sau đó chạy di chuyển:
+
+python manage.py migrate
+Những plugin này và các plugin khác được mô tả chi tiết hơn trong Một số plugin thường được sử dụng . Nhiều plugin được liệt kê khác có sẵn trên Django CMS Marketplace .
+
+Khởi động dự án
+Khởi động máy chủ:
+
+python manage.py runserver
+và truy cập trang web mới mà bây giờ bạn có thể truy cập tại http://localhost:8000. Đăng nhập nếu bạn chưa làm như vậy.
+
+nó-hoạt động-cms
+
+Các bước tiếp theo
+Hướng dẫn dành cho nhà phát triển sẽ giúp bạn hiểu cách tiếp cận Django CMS với tư cách là nhà phát triển. Lưu ý rằng các hướng dẫn này giả định rằng bạn đã cài đặt CMS bằng Trình cài đặt Django CMS, nhưng với một chút điều chỉnh, bạn sẽ có thể sử dụng nó làm cơ sở.
+
+Để triển khai dự án Django CMS của bạn trên máy chủ web sản xuất, vui lòng tham khảo tài liệu triển khai Django .
+
+**TÀI LIỆU HƯỚNG DẪN CÀI ĐẶT WAGTAIL**
+
+- [Installation](#installation)
+- [Next steps](#next-steps)
+- [Contributing](#contributing)
+- [Other notes](#other-notes)
+
+# CÁC NỀN TẢNG CÀI ĐẶT
+
+- [Gitpod](#setup-with-gitpod)
+- [Virtualenv](#setup-with-virtualenv)
+- [Vagrant](#setup-with-vagrant)
+- [Docker](#setup-with-docker)
+
+# MÔI TRƯỜNG PHÁT TRIỂN
+-  Pycharm IDE
+
+Thiết lập cài đặt chỉ với 1 click [Gitpod](#setup-with-gitpod).
+Nếu bạn muốn thiết lập cục bộ và mới làm quen với Python và/hoặc Django, chúng tôi khuyên bạn nên chạy dự án này trên Máy ảo bằng cách sử dụng [Vagrant](#setup-with-vagrant) hoặc [Docker](# setup-with-docker) (tùy theo cách nào bạn cảm thấy thoải mái nhất). Cả Vagrant và Docker sẽ giúp giải quyết các vấn đề phụ thuộc phần mềm phổ biến.
+Developer thì quen thuộc hơn với virtualenv và hướng dẫn thiết lập ứng dụng Django truyền thống [Thiết lập với virtualenv](#setup-with-virtualenv).
+
+## CÀI ĐẶT VỚI GITPOD
+
+Thiết lập môi trường phát triển và chạy web demo này chỉ bằng một cú nhấp chuột (yêu cầu tài khoản Github): (https://gitpod.io/)
+
+Khi Gitpod đã cài đặt xong thì mở trình duyệt gõ `/admin/` và đăng nhập bằng user`admin / Changeme`.
+
+## CÀI ĐẶT VỚI VAGRANT
+
+#### Yêu cầu phụ thuộc
+
+- [Vagrant](https://www.vagrantup.com/)
+- [Virtualbox](https://www.virtualbox.org/)
+
+#### Cài đặt
+
+Chạy lần lượt các lệnh sau trong pycharm:
+
+git clone https://github.com/TheGioiNhaPhoIntegratedV2/TGNPV2.git
+cd TheGioiNhaPhoIntegratedV2
+vagrant up
+vagrant ssh
+python manage.py runserver 0.0.0.0:8000
+
+Truy cập trang theo địa chỉ [http://localhost:8000/](http://localhost:8000/) và giao diện quản trị tại [http://localhost:8000/admin/](http://localhost:8000/admin/).
+Đăng nhập quản trị với thông tin người dùng `admin / changeme`.
+
+Nhấn `Ctrl+c` để dùng máy chủ cục bộ. Để thoát môi trường Vagrant, gõ `exit` sẽ dừng `vagrant halt`.
+
+## CÀI ĐẶT VỚI DOCKER
+
+#### yêu cầu phụ thuộc
+
+- [Docker](https://docs.docker.com/engine/installation/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Cài đặt
+
+Chạy lần lượt các lệnh sau:
+
+git clone https://github.com/TheGioiNhaPhoIntegratedV2/TGNPV2.git
+cd TheGioiNhaPhoIntegratedV2
+docker compose up --build -d
+
+Sau khi lệnh này hoàn thành và quay lại dấu nhắc lệnh, hãy đợi thêm 10 giây để quá trình thiết lập cơ sở dữ liệu hoàn tất.
+Sau đó chạy:
+
+docker compose run app /venv/bin/python manage.py migrate
+docker compose run app /venv/bin/python manage.py load_initial_data
+
+Nếu lỗi cơ sở dữ liệu,  đợi thêm 10 giây và thử lại. Cuối cùng, chạy:
+
+docker compose up
+
+Truy cập trang theo địa chỉ [http://localhost:8000/](http://localhost:8000/) và giao diện quản trị tại [http://localhost:8000/admin/](http://localhost:8000/admin/).
+Đăng nhập quản trị với thông tin người dùng `admin / changeme`.
+
+**Quan trọng:** `docker-compose.yml` này chỉ được định cấu hình để thử nghiệm cục bộ và không dành cho chạy chính thức.
+
+### Gỡ lỗi
+
+Để xem lịch sử Docker trong thời gian thực, gõ lệnh:
+
+docker compose logs -f
+
+## CÀI ĐẶT VỚI VIRTUALENV
+
+Bạn có thể chạy bản demo cục bộ mà không cần thiết lập Vagrant hoặc Docker và chỉ cần sử dụng Virtualenv, đây là phương pháp cài đặt được đề xuất (https://docs.djangoproject.com/en/3.2/topics/install/#install-the- django-code) cho chính Django.
+
+#### Các gói phụ thuộc cần cài đặt
+
+- Python 3.7, 3.8, 3.9, 3.10 or 3.11
+- [Virtualenv](https://virtualenv.pypa.io/en/stable/installation/)
+- [VirtualenvWrapper](https://virtualenvwrapper.readthedocs.io/en/latest/install.html) (optional)
+
+### Cài đặt
+
+Với [PIP](https://github.com/pypa/pip) và [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/)
+đã được cài đặt, chạy lệnh:
+
+    mkvirtualenv TheGioiNhaPhoIntegratedV2
+    python --version
+
+Tương thích với Python 4.x. tương thích với virtualenv:
+
+    deactivate
+    rmvirtualenv TheGioiNhaPhoIntegratedV2
+    mkvirtualenv TheGioiNhaPhoIntegratedV2 --python=python3.9
+    python --version
+
+Bắt đầu cài đặt demo project:
+
+    cd ~/dev [hoặc thư mục phát triển]
+    git clone https://github.com/TheGioiNhaPhoIntegratedV2/TGNPV2.git
+    cd TheGioiNhaPhoIntegratedV2
+    pip install -r requirements/development.txt
+
+Tiếp theo, thiết lập các biến môi trường cục bộ. Sử dụng [django-dotenv](https://github.com/jpadilla/django-dotenv). Nó đọc các biến môi trường nằm trong tên tệp `.env` trong thư mục gốc của dự án. Biến duy nhất chúng ta cần bắt đầu là `DJANGO_SETTINGS_MODULE`:
+    cp TheGioiNhaPhoIntegratedV2/settings/local.py.example TheGioiNhaPhoIntegratedV2/settings/local.py
+    cp .env.example .env
+
+Tiếp theo Để cài đặt cơ sở dữ liệu chạy lần lượt các lệnh sau:
+
+    ./manage.py migrate
+    ./manage.py load_initial_data
+    ./manage.py runserver
+
+Đăng nhập vào trang chủ quản trị `admin / changeme`.
+
+# CÁC BƯỚC TIẾP THEO
+
+Cài đặt các addon và tùy biến theo thiết kế của riêng mình trên nền tảng tương thích framework django
+
+# ĐÓNG GÓP CỘNG ĐỒNG
+
+Phiên bản này bắt đầu cho một nhánh mới là phát triển hệ thống đầy đủ CMS, CRM, Ecommercer, Social, tool push, crawl, cho lĩnh vực bán hàng, chăm sóc khách hàng, mua bán bất động sản
+
+### Lưu trữ dưới dạng đóng gói cài đặt để phân phối, phát triển
+
+Nếu bạn thay đổi nội dung hoặc hình ảnh trong kho lưu trữ này và cần chuẩn bị tệp lịch thi đấu mới để xuất, hãy thực hiện các thao tác sau trên một nhánh:
+
+python manage.py dumpdata --natural-forign --indent 2 -e auth.permission -e contenttypes -e wagtailcore.GroupCollectionPermission -e wagtailcore.revision -e wagtailimages.rendition -e Session -e wagtailsearch.indexentry -e wagtailsearch. sqliteftsindexentry -e wagtailcore.referenceindex -e wagtailcore.pagesubscription -e wagtailcore.modellogentry -e wagtailcore.pagelogentry > fixtures/appCMS.json
+đẹp hơn --write appCMS/base/fixtures/appCMS.json
+
+
+Tối ưu hóa mọi hình ảnh rộng 1200px với độ nén JPEG ở mức 60%. Lưu ý `media/images` bị bỏ qua trong repo bởi `.gitignore` nhưng `media/origin_images` thì không. "Các phiên bản" hình ảnh cục bộ của TheGioiNhaPhoIntegratedV2 bị loại trừ nếu không đạt.
+
+Thực hiện yêu cầu kéo tới https://github.com/TheGioiNhaPhoIntegratedV2/TheGioiNhaPhoIntegratedV2
+
+# CÁC CHÚ Ý KHÁC
+
+### Lưu ý khi tìm kiếm demo
+
+Vì ckhông thể (dễ dàng) sử dụng ElasticSearch cho bản demo này nên sử dụng tìm kiếm DB gốc của TheGioiNhaPhoIntegratedV2.
+Tuy nhiên, tìm kiếm DB gốc không thể tìm kiếm các trường cụ thể trong mô hình này trên truy vấn `Trang` tổng quát.
+Vì vậy, CHỈ nhằm mục đích demo, chúng tôi mã hóa cứng tên mô hình mà chúng tôi muốn tìm kiếm vào `search.views`,
+không lý tưởng lắm. Trong quá trình dùng thật, hãy sử dụng ElasticSearch và truy vấn tìm kiếm đơn giản hóa, theo
+[https://docs.wagtail.org/en/stable/topics/search/searching.html](https://docs.wagtail.org/en/stable/topics/search/searching.html).
+
+### Gửi email từ biểu mẫu liên hệ
+
+Cài đặt sau trong `base.py` và `production.py` đảm bảo rằng email trực tiếp không được gửi bởi biểu mẫu liên hệ demo.
+
+`EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'`
+
+Trong quá trình publish trên trang web, cần thay đổi thành:
+
+`EMAIL_BACKEND = 'Django.core.mail.backends.smtp.EmailBackend'`
+
+và định cấu hình theo hướng dẫn [cài đặt SMTP](https://docs.djangoproject.com/en/3.2/topics/email/#smtp-backend) phù hợp.
+
+### Kiểm tra việc tuân thủ Chính sách-Bảo mật-Nội dung
+
+Bakerydemo được thiết lập theo cách có thể dùng để kiểm tra khả năng tương thích của [Chính sách bảo mật nội dung](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) trong Wagtail. Nó sử dụng [django-csp](https://django-csp.readthedocs.io/en/latest/index.html) để tạo [tiêu đề HTTP CSP](https://developer.mozilla.org/en- US/docs/Web/HTTP/Tiêu đề/Chính sách bảo mật nội dung).
+
+Theo mặc định, `django-csp` không được bật vì TheGioiNhaPhoIntegratedV2 chưa hoàn toàn tương thích. Đặt biến môi trường `CSP_DEFAULT_SRC` trong tệp `.env` để đặt chính sách mặc định. Có thể được tìm thấy trong `.env.example`.
+
+### Người dùng được đưa vào dữ liệu demo
+
+Dữ liệu demo bao gồm những người dùng có vai trò và sở thích khác nhau. Bạn có thể sử dụng những người dùng này để kiểm tra nhanh hệ thống cấp phép trong Wagtail hoặc cách xử lý bản địa hóa trong giao diện quản trị.
+| Username    | Password   | Superuser | Groups     | Preferred language | Timezone      | Active |
+| ----------- | ---------- | --------- | ---------- | ------------------ | ------------- | ------ |
+| `admin`     | `changeme` | Yes       | None       | undefined          | undefined     | Yes    |
+| `editor`    | `changeme` | No        | Editors    | undefined          | undefined     | Yes    |
+| `moderator` | `changeme` | No        | Moderators | undefined          | undefined     | Yes    |
+| `inactive`  | `changeme` | yes       | None       | undefined          | undefined     | No     |
+| `german`    | `changeme` | yes       | None       | German             | Europe/Berlin | Yes    |
+| `arabic`    | `changeme` | yes       | None       | Arabic             | Asia/Beirut   | Yes    |
+
+### Ownership of demo content
+
+All content in the demo is public domain. Textual content in this project is either sourced from Wikimedia (Wikipedia for blog posts, [Wikibooks for recipes](https://en.wikibooks.org/wiki/Cookbook:Table_of_Contents)) or is lorem ipsum. All images are from either Wikimedia Commons or other copyright-free sources.
+
+
+
+*** CÀI ĐẶT OSCAR VÀ CÁC PHẦN PHỤ THUỘC CỦA NÓ ***
+
+Cài đặt Oscar (sẽ cài đặt Django làm phần phụ thuộc), sau đó tạo dự án:
+
+$ mkvirtualenv oscar
+$ pip install django-oscar[sorl-thumbnail]
+$ django-admin startproject frobshop
+Nếu bạn không có mkvirtualenv thì hãy thay thế dòng đó bằng:
+
+$ virtualenv oscar
+$ . ./oscar/bin/activate
+(oscar) $
+Điều này sẽ tạo một thư mục frobshopcho dự án của bạn. Rất nên cài đặt Oscar trong virtualenv.
+
+Mẹo
+
+sorl-thumbnaillà phần phụ thuộc tùy chọn cho hình thu nhỏ của hình ảnh nhưng là thứ mà Oscar dự kiến ​​sẽ sử dụng theo mặc định. Nó có thể được thay thế bằng easy-thumbnailshoặc một phụ trợ hình thu nhỏ tùy chỉnh. Nếu bạn muốn sử dụng một chương trình phụ trợ khác thì hãy nhớ thay đổi OSCAR_THUMBNAILERcài đặt để trỏ đến nó.
+
+Chú ý
+
+Hãy đảm bảo rằng pillowmột nhánh của Thư viện hình ảnh Python (PIL) được cài đặt có hỗ trợ JPEG. Các định dạng được hỗ trợ sẽ được in khi pillowcài đặt lần đầu. Hướng dẫn về cách nhận hỗ trợ JPEG rất cụ thể cho nền tảng, nhưng hướng dẫn dành cho PILcũng nên có tác dụng pillow. Nói chung, bạn cần đảm bảo rằng libjpeg-devnó đã được cài đặt và tìm thấy trong quá trình cài đặt.
+
+Cài đặt Django¶
+Trước tiên, hãy chỉnh sửa tệp cài đặt của bạn frobshop/frobshop/settings.pyđể nhập tất cả cài đặt mặc định của Oscar.
+
+from ...defaults import *
+Bây giờ hãy thêm bộ xử lý ngữ cảnh của Oscar vào cài đặt mẫu, được liệt kê bên dưới:
+
+'creme.search.context_processors.search_form',
+'creme.checkout.context_processors.checkout',
+'creme.communication.notifications.context_processors.notifications',
+'creme.core.context_processors.metadata',
+Tiếp theo, sửa đổi INSTALLED_APPSthành một danh sách và thêm django.contrib.sites, django.contrib.flatpages, các ứng dụng cốt lõi của Oscar và các ứng dụng của bên thứ ba mà Oscar phụ thuộc vào. Cũng đặt SITE_ID:
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    'django.contrib.sites',
+    'django.contrib.flatpages',
+
+    'creme.config.Shop',
+    'creme.analytics.apps.AnalyticsConfig',
+    'creme.checkout.apps.CheckoutConfig',
+    'creme.address.apps.AddressConfig',
+    'creme.shipping.apps.ShippingConfig',
+    'creme.catalogue.apps.CatalogueConfig',
+    'creme.reviews.apps.CatalogueReviewsConfig',
+    'creme.communication.apps.CommunicationConfig',
+    'creme.partner.apps.PartnerConfig',
+    'creme.basket.apps.BasketConfig',
+    'creme.payment.apps.PaymentConfig',
+    'creme.offer.apps.OfferConfig',
+    'creme.order.apps.OrderConfig',
+    'creme.customer.apps.CustomerConfig',
+    'creme.search.apps.SearchConfig',
+    'creme.voucher.apps.VoucherConfig',
+    'creme.wishlists.apps.WishlistsConfig',
+    'creme.dashboard.apps.DashboardConfig',
+    'creme.dashboard.reports.apps.ReportsDashboardConfig',
+    'creme.dashboard.users.apps.UsersDashboardConfig',
+    'creme.dashboard.orders.apps.OrdersDashboardConfig',
+    'creme.dashboard.catalogue.apps.CatalogueDashboardConfig',
+    'creme.dashboard.offers.apps.OffersDashboardConfig',
+    'creme.dashboard.partners.apps.PartnersDashboardConfig',
+    'creme.dashboard.pages.apps.PagesDashboardConfig',
+    'creme.dashboard.ranges.apps.RangesDashboardConfig',
+    'creme.dashboard.reviews.apps.ReviewsDashboardConfig',
+    'creme.dashboard.vouchers.apps.VouchersDashboardConfig',
+    'creme.dashboard.communications.apps.CommunicationsDashboardConfig',
+    'creme.dashboard.shipping.apps.ShippingDashboardConfig',
+
+    # 3rd-party apps that oscar depends on
+    'widget_tweaks',
+    'haystack',
+    'treebeard',
+    'sorl.thumbnail',   # Default thumbnail backend, can be replaced
+    'django_tables2',
+]
+
+SITE_ID = 1
+Lưu ý rằng Oscar yêu cầu django.contrib.flatpagesnhững thứ không được bao gồm theo mặc định. flatpagescũng yêu cầu django.contrib.sites. Thông tin thêm về cài đặt flatpagescó trong tài liệu Django .
+
+Mẹo
+
+Các mẫu mặc định của Oscar sử dụng django-widget-tweak nhưng thực sự nó là tùy chọn. Bạn có thể quyết định sử dụng các mẫu của riêng bạn mà không sử dụng.
+
+Tiếp theo, thêm creme.basket.middleware.BasketMiddlewarevà django.contrib.flatpages.middleware.FlatpageFallbackMiddlewarevào MIDDLEWAREcài đặt của bạn.
+
+MIDDLEWARE = (
+    ...
+    'creme.basket.middleware.BasketMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+)
+Đặt phụ trợ xác thực của bạn thành:
+
+AUTHENTICATION_BACKENDS = (
+    'creme.customer.auth_backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+để cho phép khách hàng đăng nhập bằng địa chỉ email thay vì tên người dùng.
+
+Đảm bảo rằng phương tiện và tập tin tĩnh của bạn được cấu hình đúng . Điều này có nghĩa là ít nhất phải thiết lập MEDIA_URLvà STATIC_URL. Nếu bạn đang phân phát tệp cục bộ, bạn cũng cần đặt MEDIA_ROOTvà STATIC_ROOT. Hãy xem cài đặt hộp cát để biết ví dụ hoạt động. Nếu bạn đang cung cấp tệp từ bộ lưu trữ từ xa (ví dụ: Amazon S3), bạn phải sao chép thủ công hình ảnh “Không tìm thấy hình ảnh” vào MEDIA_ROOT.
+
+Tìm kiếm phụ trợ¶
+Nếu hiện tại bạn hài lòng với tìm kiếm cơ bản, bạn chỉ cần thêm phần phụ trợ đơn giản của Haystack vào tùy HAYSTACK_CONNECTIONSchọn trong cài đặt Django của mình:
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
+Oscar sử dụng Haystack để loại bỏ các phần phụ trợ tìm kiếm khác nhau. Thật không may, việc viết mã bất khả tri phụ trợ vẫn khó và Apache Solr hiện là chương trình phụ trợ cấp sản xuất duy nhất được hỗ trợ. Cấu hình Haystack của bạn có thể trông giống như thế này:
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr',
+        'INCLUDE_SPELLING': True,
+    },
+}
+Oscar bao gồm một lược đồ mẫu để bắt đầu với Solr. Bạn có thể tìm thêm thông tin trong công thức thiết lập và chạy Solr .
+
+Cơ sở dữ liệu¶
+Kiểm tra cài đặt cơ sở dữ liệu của bạn. Một cách nhanh chóng để bắt đầu là sử dụng SQLite:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+        'ATOMIC_REQUESTS': True,
+    }
+}
+Lưu ý rằng chúng tôi khuyên bạn nên sử dụng ATOMIC_REQUESTSđể liên kết các giao dịch với các yêu cầu.
+
+URL¶
+Thay đổi của bạn frobshop/urls.pyđể bao gồm các URL của Oscar. Bạn cũng có thể bao gồm quản trị viên Django cho mục đích gỡ lỗi. Nhưng xin lưu ý rằng Oscar không cố gắng biến đó thành một giao diện khả thi; Tích hợp quản trị tồn tại để giảm bớt cuộc sống của các nhà phát triển.
+
+Nếu bạn có nhiều ngôn ngữ đặt cài đặt Django cho LANGUAGES, bạn cũng sẽ cần bao gồm các URL i18n của Django:
+
+from django.apps import apps
+from django.urls import include, path
+from django.contrib import admin
+
+urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
+
+    # The Django admin is not officially supported; expect breakage.
+    # Nonetheless, it's often useful for debugging.
+
+    path('admin/', admin.site.urls),
+
+    path('', include(apps.get_app_config('oscar').urls[0])),
+]
+Tạo nên cơ sở dữ liệu¶
+Oscar vận chuyển những cuộc di cư. Khung di chuyển của Django sẽ tự động phát hiện chúng và sẽ thực hiện đúng. Tạo cơ sở dữ liệu và cửa hàng có thể được duyệt:
+
+$ python manage.py migrate
+$ python manage.py runserver
+Bây giờ bạn sẽ có một bản cài đặt Oscar trống nhưng đang chạy mà bạn có thể duyệt tại http://localhost:8000 .
+
+Dữ liệu ban đầu¶
+Quá trình thanh toán mặc định yêu cầu địa chỉ giao hàng kèm theo một quốc gia. Oscar sử dụng mô hình dành cho các quốc gia có cờ cho biết quốc gia nào vận chuyển hợp lệ và do đó, countrybảng cơ sở dữ liệu phải được điền trước khi khách hàng có thể thanh toán.
+
+Cách dễ nhất để đạt được điều này là sử dụng dữ liệu quốc gia từ gói pycountry . Oscar gửi lệnh quản lý để phân tích dữ liệu đó:
+
+$ pip install pycountry
+[...]
+$ python manage.py oscar_populate_countries
+Theo mặc định, lệnh này sẽ đánh dấu tất cả các quốc gia là quốc gia vận chuyển. Gọi nó với --no-shippingtùy chọn để ngăn chặn điều đó. Sau đó, bạn cần đánh dấu thủ công ít nhất một quốc gia làm quốc gia vận chuyển.
+
+Tạo các lớp sản phẩm và đối tác thực hiện¶
+Mỗi lần triển khai Oscar cần ít nhất một và một . Chúng không được tạo tự động vì chúng rất cụ thể cho cửa hàng bạn muốn xây dựng.product classfulfilment partner
+
+Khi quản lý danh mục của mình, bạn phải luôn sử dụng bảng điều khiển Oscar để cung cấp các chức năng cần thiết. Sử dụng email và mật khẩu siêu người dùng Django của bạn để đăng nhập vào: http://127.0.0.1:8000/dashboard/ và tạo các phiên bản của cả hai ở đó.
+
+Điều quan trọng cần lưu ý là trang quản trị Django không được hỗ trợ. Nó có thể hoạt động hoặc không và chỉ được đưa vào hộp cát để thuận tiện cho nhà phát triển.
+
+Để thiết lập triển khai, chúng tôi khuyên bạn nên tạo các lớp sản phẩm dưới dạng di chuyển dữ liệu .
+
+Xác định quy trình đặt hàng¶
+Việc quản lý đơn hàng trong Oscar dựa vào quy trình đặt hàng xác định tất cả các trạng thái mà một đơn hàng có thể có và các chuyển đổi có thể có cho bất kỳ trạng thái nhất định nào. Các trạng thái trong Oscar không chỉ được sử dụng cho đơn hàng mà còn được xử lý ở cấp độ dòng để có thể xử lý việc vận chuyển một phần đơn hàng.
+
+Quy trình trạng thái đơn hàng ở mỗi cửa hàng là khác nhau, điều đó có nghĩa là việc thay đổi nó khá đơn giản trong Oscar. Đường dẫn được xác định trong settings.pytệp của bạn bằng cách sử dụng OSCAR_ORDER_STATUS_PIPELINEcài đặt. Bạn cũng cần chỉ định trạng thái ban đầu cho đơn hàng và chi tiết đơn hàng OSCAR_INITIAL_ORDER_STATUStương OSCAR_INITIAL_LINE_STATUS ứng.
+
+Để giúp bạn biết quy trình đặt hàng trông như thế nào, hãy xem cài đặt hộp cát Oscar:
+
+OSCAR_INITIAL_ORDER_STATUS = 'Pending'
+OSCAR_INITIAL_LINE_STATUS = 'Pending'
+OSCAR_ORDER_STATUS_PIPELINE = {
+    'Pending': ('Being processed', 'Cancelled',),
+    'Being processed': ('Processed', 'Cancelled',),
+    'Cancelled': (),
+}
+Việc xác định quy trình trạng thái đơn hàng chỉ đơn giản là một từ điển trong đó mỗi trạng thái được đưa ra làm khóa. Các chuyển đổi có thể sang các trạng thái khác có thể được chỉ định dưới dạng lặp lại các tên trạng thái. Một lần lặp trống xác định điểm cuối trong đường ống.
+
+Với ba cài đặt này được xác định trong dự án của bạn, bạn sẽ có thể thấy các trạng thái khác nhau trong bảng điều khiển quản lý đơn hàng.
+
+Bước tiếp theo¶
+Bước tiếp theo là triển khai logic nghiệp vụ của miền của bạn trên Oscar. Phần vui vẻ.

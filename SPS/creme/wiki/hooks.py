@@ -1,0 +1,23 @@
+class WikiDefaultHookset():
+
+    def can_create_page(self, wiki, user):
+        return False
+
+    def can_edit_page(self, page, user):
+        return False
+
+    def can_delete_page(self, page, user):
+        return False
+
+    def can_view_page(self, page, user):
+        return False
+
+
+class HookProxy():
+
+    def __getattr__(self, attr):
+        from django.conf import settings
+        return getattr(settings.WIKI_HOOKSET, attr)
+
+
+hookset = HookProxy()

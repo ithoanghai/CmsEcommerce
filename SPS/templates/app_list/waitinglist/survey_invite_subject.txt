@@ -1,0 +1,3 @@
+    {# templates/waitinglist/survey_invite_subject.txt #}
+
+    Survey from {{ site.name }}
