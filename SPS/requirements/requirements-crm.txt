@@ -1,0 +1,23 @@
+django
+celery
+python-dotenv
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+drf-yasg
+django-ses
+psycopg2-binary
+whitenoise
+sentry-sdk
+
+wagtail
+django_extensions
+
+# creme CRM
+creme-crm==2.5
+django-mediagenerator
+
+# remove it
+django-phonenumber-field
+arrow
+phonenumbers
