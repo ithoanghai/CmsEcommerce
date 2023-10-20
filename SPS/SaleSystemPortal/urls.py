@@ -15,19 +15,18 @@ from django.core.exceptions import ImproperlyConfigured
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.views.static import serve
 
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+
 from .configs import CONFIG_MAP
 from .views import as_view
 from .api import api_router
 
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
-from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.contrib.sitemaps.views import sitemap as WagtailSitemap
 from wagtail.images.views.serve import ServeView
-
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-from rest_framework import permissions
 
 from creme.creme_core.apps import creme_app_configs
 from creme.sitemaps import ActivitiesSitemap
@@ -79,17 +78,16 @@ def __prepare_static_url():
 
 url_main = [
     # ADMIN PAGE
+    path('creme/', include('creme.creme_core.urls')),
     path("admin/", admin.site.urls),
     path("wagtailadmin/", include(wagtailadmin_urls)),
 
     # MAIN PAGE
     path("", as_view("home.html", config=None), name="homepage"),
-    path("social/", as_view("home.html", config=None), name="home"),
-    path('shop/', include(apps.get_app_config('creme').urls[0])),
+    path('shop/', include(apps.get_app_config('creme_config').urls[0])),
     path('cms/', include(wagtail_urls)),
-    path('creme/', include('creme.creme_core.urls')),
-
     path('dashboard/', dashboard, name="dashboard"),
+
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
     path('sitemapsocial.xml', sitemap, {'sitemaps': {'socialpages': NewsSitemap}}),
     path('account/social/', include("social.apps.django_app.urls", namespace="social")),
@@ -108,7 +106,6 @@ url_crm_cms_social_ecommerce = [
 
     # CMS wagtail
     path('documents/', include('wagtail.documents.urls')),
-    #path('documents/', include(wagtaildocs_urls)),
     path('images/<parameter1>/<parameter2>/<parameter3>/', ServeView.as_view(), name='wagtailimages_serve'),
     path("api/v2/", api_router.urls),
     path("__debug__/", include(debug_toolbar.urls)),

@@ -21,56 +21,6 @@ def get_version():
 
 default_app_config = 'creme.config.Shop'
 
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.sites',
-    'django.contrib.flatpages',
-
-    'creme.config.Shop',
-    'creme.analytics.apps.AnalyticsConfig',
-    'creme.checkout.apps.CheckoutConfig',
-    'creme.address.apps.AddressConfig',
-    'creme.shipping.apps.ShippingConfig',
-    'creme.catalogue.apps.CatalogueConfig',
-    'creme.reviews.apps.ReviewsConfig',
-    'creme.communication.apps.CommunicationConfig',
-    'creme.partner.apps.PartnerConfig',
-    'creme.basket.apps.BasketConfig',
-    'creme.payment.apps.PaymentConfig',
-    'creme.offer.apps.OfferConfig',
-    'creme.order.apps.OrderConfig',
-    'creme.customer.apps.CustomerConfig',
-    'creme.search.apps.SearchConfig',
-    'creme.voucher.apps.VoucherConfig',
-    'creme.wishlists.apps.WishlistsConfig',
-    'creme.dashboard.apps.DashboardConfig',
-    'creme.dashboard.reports.apps.ReportsDashboardConfig',
-    'creme.dashboard.users.apps.UsersDashboardConfig',
-    'creme.dashboard.orders.apps.OrdersDashboardConfig',
-    'creme.dashboard.catalogue.apps.CatalogueDashboardConfig',
-    'creme.dashboard.offers.apps.OffersDashboardConfig',
-    'creme.dashboard.partners.apps.PartnersDashboardConfig',
-    'creme.dashboard.pages.apps.PagesDashboardConfig',
-    'creme.dashboard.ranges.apps.RangesDashboardConfig',
-    'creme.dashboard.reviews.apps.ReviewsDashboardConfig',
-    'creme.dashboard.vouchers.apps.VouchersDashboardConfig',
-    'creme.dashboard.communications.apps.CommunicationsDashboardConfig',
-    'creme.dashboard.shipping.apps.ShippingDashboardConfig',
-
-    # 3rd-party apps that oscar depends on
-    'widget_tweaks',
-    'haystack',
-    'treebeard',
-    'django_tables2',
-]
-
-
 # App registry hooking ---------------------------------------------------------
 
 try:

@@ -45,6 +45,12 @@ class HomeEntry(menu.FixedURLEntry):
     url_name = 'creme_core__home'
 
 
+class MyDashboardEntry(menu.FixedURLEntry):
+    id = 'creme_core-my_dashboard'
+    label = _('My Dashboard')
+    url_name = 'creme_core__my_dashboard'
+
+
 class MyPageEntry(menu.FixedURLEntry):
     id = 'creme_core-my_page'
     label = _('My page')
@@ -143,6 +149,7 @@ class CremeEntry(menu.ContainerEntry):
         HomeEntry,
         TrashEntry,
         UserSeparatorEntry,
+        MyDashboardEntry,
         MyPageEntry,
         MyJobsEntry,
         PasswordChangeEntry,

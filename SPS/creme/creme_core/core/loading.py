@@ -190,7 +190,7 @@ def _find_registered_app_name(module_label):
     Given a module label, finds the name of the matching Oscar app from the
     Django app registry.
     """
-    from ..core.application import OscarConfig
+    from ..apps import CremeAppConfig
 
     app_label = module_label.split('.')[0]
     try:
@@ -198,7 +198,7 @@ def _find_registered_app_name(module_label):
     except LookupError:
         raise AppNotFoundError(
             "Couldn't find an app to import %s from" % module_label)
-    if not isinstance(app_config, OscarConfig):
+    if not isinstance(app_config, CremeAppConfig):
         raise AppNotFoundError(
             "Couldn't find an Oscar app to import %s from" % module_label)
     return app_config.name

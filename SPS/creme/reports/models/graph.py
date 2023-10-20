@@ -40,7 +40,7 @@ from ..core.graph import (
 from ..graph_fetcher_registry import graph_fetcher_registry
 
 if TYPE_CHECKING:
-    from ...creme_core.core.graph import ReportGraphHand
+    from ..core.graph import ReportGraphHand
 
 logger = logging.getLogger(__name__)
 

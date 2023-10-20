@@ -170,11 +170,11 @@ class SearchConfigItem(CremeModel):
         role = self.role
 
         if role is None:
-            return gettext('Default search configuration for «{model}»').format(
+            return _('Default search configuration for «{model}»').format(
                 model=self.content_type,
             )
 
-        return gettext('Search configuration of «{role}» for «{model}»').format(
+        return _('Search configuration of «{role}» for «{model}»').format(
             role=role,
             model=self.content_type,
         )

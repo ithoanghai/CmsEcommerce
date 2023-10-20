@@ -27,7 +27,13 @@ from django.contrib.contenttypes.apps import (
 )
 from django.core import checks
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ImproperlyConfigured
+from django.urls import URLPattern, reverse_lazy
+from django.apps import apps
+from django.urls import include, path
+from django.utils.translation import gettext_lazy as _
 
+from .core.loading import feature_hidden, get_class
 from .core.field_tags import FieldTag
 
 from .checks import (  # NB: it registers other checks too
@@ -207,7 +213,145 @@ class ContentTypesConfig(VanillaContentTypesConfig):
         ContentType.__str__ = lambda this: this.name
 
 
-class CremeAppConfig(AppConfig):
+class OscarConfigMixin(object):
+    """
+    Base Oscar app configuration mixin, used to extend :py:class:`django.apps.AppConfig`
+    to also provide URL configurations and permissions.
+    """
+    # Instance namespace for the URLs
+    namespace = None
+    login_url = None
+
+    #: A name that allows the functionality within this app to be disabled
+    hidable_feature_name = None
+
+    #: Maps view names to lists of permissions. We expect tuples of
+    #: lists as dictionary values. A list is a set of permissions that all
+    #: need to be fulfilled (AND). Only one set of permissions has to be
+    #: fulfilled (OR).
+    #: If there's only one set of permissions, as a shortcut, you can also
+    #: just define one list.
+    permissions_map = {}
+
+    #: Default permission for any view not in permissions_map
+    default_permissions = None
+
+    def __init__(self, app_name, app_module, namespace=None, **kwargs):
+        """
+        kwargs:
+            namespace: optionally specify the URL instance namespace
+        """
+        app_config_attrs = [
+            'name',
+            'module',
+            'apps',
+            'label',
+            'verbose_name',
+            'path',
+            'models_module',
+            'models',
+        ]
+        # To ensure sub classes do not add kwargs that are used by
+        # :py:class:`django.apps.AppConfig`
+        clashing_kwargs = set(kwargs).intersection(app_config_attrs)
+        if clashing_kwargs:
+            raise ImproperlyConfigured(
+                "Passed in kwargs can't be named the same as properties of "
+                "AppConfig; clashing: %s." % ", ".join(clashing_kwargs))
+        super().__init__(app_name, app_module)
+        if namespace is not None:
+            self.namespace = namespace
+        # Set all kwargs as object attributes
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def get_urls(self):
+        """
+        Return the URL patterns for this app.
+        """
+        return []
+
+    def post_process_urls(self, urlpatterns):
+        """
+        Customise URL patterns.
+
+        This method allows decorators to be wrapped around an apps URL
+        patterns.
+
+        By default, this only allows custom decorators to be specified, but you
+        could override this method to do anything you want.
+
+        Args:
+            urlpatterns (list): A list of URL patterns
+
+        """
+        # Test if this the URLs in the Application instance should be
+        # available.  If the feature is hidden then we don't include the URLs.
+        if feature_hidden(self.hidable_feature_name):
+            return []
+
+        for pattern in urlpatterns:
+            if hasattr(pattern, 'url_patterns'):
+                self.post_process_urls(pattern.url_patterns)
+
+            if isinstance(pattern, URLPattern):
+                # Apply the custom view decorator (if any) set for this class if this
+                # is a URL Pattern.
+                decorator = self.get_url_decorator(pattern)
+                if decorator:
+                    pattern.callback = decorator(pattern.callback)
+
+        return urlpatterns
+
+    def get_permissions(self, url):
+        """
+        Return a list of permissions for a given URL name
+
+        Args:
+            url (str): A URL name (e.g., ``basket.basket``)
+
+        Returns:
+            list: A list of permission strings.
+        """
+        # url namespaced?
+        if url is not None and ':' in url:
+            view_name = url.split(':')[1]
+        else:
+            view_name = url
+        return self.permissions_map.get(view_name, self.default_permissions)
+
+    def get_url_decorator(self, pattern):
+        """
+        Return the appropriate decorator for the view function with the passed
+        URL name. Mainly used for access-protecting views.
+
+        It's possible to specify:
+
+        - no permissions necessary: use None
+        - a set of permissions: use a list
+        - two set of permissions (`or`): use a two-tuple of lists
+
+        See permissions_required decorator for details
+        """
+        from .views.decorators import permissions_required
+        permissions = self.get_permissions(pattern.name)
+        if permissions:
+            return permissions_required(permissions, login_url=self.login_url)
+
+    @property
+    def urls(self):
+        # We set the application and instance namespace here
+        return self.get_urls(), self.label, self.namespace
+
+
+class CremeAppConfig(OscarConfigMixin, AppConfig):
+    """
+    Base Oscar app configuration.
+
+    This is subclassed by each app to provide a customisable container for its
+    configuration, URL configurations, and permissions.
+    """
+
     # True => App can be used by some services
     #        (urls.py automatically used, 'creme_populate command' etc...)
     creme_app: bool = True
@@ -422,6 +566,57 @@ class CremeAppConfig(AppConfig):
 
     def register_user_setting_keys(self, user_setting_key_registry: '_SettingKeyRegistry') -> None:
         pass
+
+
+class DashboardConfig(CremeAppConfig):
+    label = 'dashboard'
+    name = 'creme.dashboard'
+    verbose_name = _('Dashboard')
+    login_url = reverse_lazy('dashboard:login')
+
+    namespace = 'dashboard'
+    permissions_map = {
+        'index': (['is_staff'], ['partner.dashboard_access']),
+    }
+
+    def ready(self):
+        self.index_view = get_class('dashboard.views', 'IndexView')
+        self.login_view = get_class('dashboard.views', 'LoginView')
+
+        self.catalogue_app = apps.get_app_config('catalogue_dashboard')
+        self.reports_app = apps.get_app_config('reports_dashboard')
+        self.orders_app = apps.get_app_config('orders_dashboard')
+        self.users_app = apps.get_app_config('users_dashboard')
+        self.pages_app = apps.get_app_config('pages_dashboard')
+        self.partners_app = apps.get_app_config('partners_dashboard')
+        self.offers_app = apps.get_app_config('offers_dashboard')
+        self.ranges_app = apps.get_app_config('ranges_dashboard')
+        self.reviews_app = apps.get_app_config('reviews_dashboard')
+        self.vouchers_app = apps.get_app_config('vouchers_dashboard')
+        self.comms_app = apps.get_app_config('communications_dashboard')
+        self.shipping_app = apps.get_app_config('shipping_dashboard')
+
+    def get_urls(self):
+        from django.contrib.auth import views as auth_views
+
+        urls = [
+            path('', self.index_view.as_view(), name='index'),
+            path('catalogue/', include(self.catalogue_app.urls[0])),
+            path('reports/', include(self.reports_app.urls[0])),
+            path('orders/', include(self.orders_app.urls[0])),
+            path('users/', include(self.users_app.urls[0])),
+            path('pages/', include(self.pages_app.urls[0])),
+            path('partners/', include(self.partners_app.urls[0])),
+            path('offers/', include(self.offers_app.urls[0])),
+            path('ranges/', include(self.ranges_app.urls[0])),
+            path('reviews/', include(self.reviews_app.urls[0])),
+            path('vouchers/', include(self.vouchers_app.urls[0])),
+            path('comms/', include(self.comms_app.urls[0])),
+            path('shipping/', include(self.shipping_app.urls[0])),
+            path('login/', self.login_view.as_view(), name='login'),
+            path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+        ]
+        return self.post_process_urls(urls)
 
 
 class CremeCoreConfig(CremeAppConfig):
@@ -840,3 +1035,4 @@ def extended_app_configs(app_labels):
             app_configs.update(app_config.get_extending_app_configs())
 
     return app_configs
+

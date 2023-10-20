@@ -405,26 +405,23 @@ MIDDLEWARE = [
 ]
 
 INSTALLED_DJANGO_APPS = [
-    'creme.creme_core.apps.ContentTypesConfig',  # Replaces 'django.contrib.contenttypes',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # EXTERNAL APPS
-    'formtools',
-    'creme.creme_core.apps.MediaGeneratorConfig',  # It manages JS, CSS & static images
-
-]
-
-BUILT_IN_APPS = INSTALLED_DJANGO_APPS + [
-    # add extra
+    #'django.contrib.contenttypes',
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'django.contrib.flatpages',
     "django.contrib.humanize",
+
+]
+
+BUILT_IN_APPS = INSTALLED_DJANGO_APPS + [
+    # EXTERNAL APPS
+    'creme.creme_core.apps.ContentTypesConfig',  # Replaces 'django.contrib.contenttypes',
+    'creme.creme_core.apps.MediaGeneratorConfig',  # It manages JS, CSS & static images
 ]
 
 
@@ -432,6 +429,7 @@ THIRD_PARTIES_APPS = [
     # templates and theme
     "bootstrapform",
     "theme_bootstrap",
+    'formtools',
 
     # external other lib for social
     'channels',
@@ -444,17 +442,16 @@ THIRD_PARTIES_APPS = [
     'reversion',
     'imagekit',
     'social_django',
-
-    # 3rd-party apps that oscar depends on
-    'treebeard',
     'sekizai',
     'filer',
     'mptt',
     "modelcluster",
     "debug_toolbar",
 
+    # 3rd-party apps that oscar depends on
     'widget_tweaks',
     'haystack',
+    'treebeard',
     'django_tables2',
 
     # 3rd-party app that django CRM denpends on
@@ -487,12 +484,10 @@ THIRD_PARTIES_APPS = [
     "wagtailfontawesomesvg",
     "wagtail.api.v2",
     "wagtail.locales",
-
 ]
 
 MODULES_APPS = [
     # Oscar Ecommerce
-    'creme.config.Shop',
     'creme.analytics.apps.AnalyticsConfig',
     'creme.checkout.apps.CheckoutConfig',
     'creme.address.apps.AddressConfig',
@@ -509,7 +504,7 @@ MODULES_APPS = [
     'creme.search.apps.SearchConfig',
     'creme.voucher.apps.VoucherConfig',
     'creme.wishlists.apps.WishlistsConfig',
-    'creme.dashboard.apps.DashboardConfig',
+    'creme.creme_core.apps.DashboardConfig',
     'creme.dashboard.reports.apps.ReportsDashboardConfig',
     'creme.dashboard.users.apps.UsersDashboardConfig',
     'creme.dashboard.orders.apps.OrdersDashboardConfig',
@@ -546,7 +541,7 @@ INSTALLED_CREME_APPS = [
     "creme.creme_core.common",
 
     # Manages the Configuration portal.
-    'creme.creme_config',
+    'creme.creme_config',       #mix Oscar and Creme
 
     # Manages Folders & Documents entities.
     # NB: currently used by "creme_core" for mass-importing,

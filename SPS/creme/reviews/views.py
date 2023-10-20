@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import hashlib
 import random
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mass_mail
@@ -46,7 +47,6 @@ from ..creme_core.models.auth import User, EmailAddress
 from ..creme_core.accounts.decorators import login_required
 from ..speakers.models import Speaker
 from ..teams.models import Team
-from ..conf import settings
 from ..utils.mail import send_email
 from ..creme_core.core.loading import get_classes, get_model, get_form
 from ..creme_core.core.utils import redirect_to_referrer

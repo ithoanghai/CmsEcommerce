@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
-from ..creme_core.core.application import OscarConfig
+from ..creme_config.apps import CremeAppConfig as OscarConfig
 from ..creme_core.core.loading import get_class
 
 

@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 from ...creme_core.core.loading import get_class, get_model
 
 ProductReview = get_model('reviews', 'productreview')
-DatePickerInput = get_class('creme.creme_core.forms.widgets', 'DatePickerInput')
+DatePickerInput = get_class('creme_core.forms.widgets', 'DatePickerInput')
 
 
 class DashboardProductReviewForm(forms.ModelForm):

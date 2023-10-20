@@ -5,7 +5,7 @@ from django.core.management import call_command
 from django.test import TestCase, override_settings
 
 from ..conf import settings
-from ..creme_core.models.auth import PasswordExpiry, PasswordHistory
+from ...models.auth import PasswordExpiry, PasswordHistory
 
 
 @override_settings(
