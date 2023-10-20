@@ -80,12 +80,12 @@ def default_class_loader(module_label, classnames, module_prefix):
 
         Load a single class:
 
-        >>> get_class('dashboard.catalogue.forms', 'ProductForm')
+        >>> get_class('creme_core.dashboard.catalogue.forms', 'ProductForm')
         creme.dashboard.catalogue.forms.ProductForm
 
         Load a list of classes:
 
-        >>> get_classes('dashboard.catalogue.forms',
+        >>> get_classes('creme_core.dashboard.catalogue.forms',
         ...             ['ProductForm', 'StockRecordForm'])
         [creme.dashboard.catalogue.forms.ProductForm,
          creme.dashboard.catalogue.forms.StockRecordForm]
@@ -108,11 +108,11 @@ def default_class_loader(module_label, classnames, module_prefix):
             "Importing from top-level modules is not supported")
 
     # import from Oscar package (should succeed in most cases)
-    # e.g. 'creme.dashboard.catalogue.forms'
+    # e.g. creme.creme_core.dashboard.catalogue.forms'
     oscar_module_label = "%s.%s" % (module_prefix, module_label)
     oscar_module = _import_module(oscar_module_label, classnames)
 
-    # returns e.g. 'creme.dashboard.catalogue',
+    # returns e.g. creme.creme_core.dashboard.catalogue',
     # 'yourproject.apps.dashboard.catalogue' or 'dashboard.catalogue',
     # depending on what is set in INSTALLED_APPS
     app_name = _find_registered_app_name(module_label)

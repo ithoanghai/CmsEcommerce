@@ -570,7 +570,7 @@ class CremeAppConfig(OscarConfigMixin, AppConfig):
 
 class DashboardConfig(CremeAppConfig):
     label = 'dashboard'
-    name = 'creme.dashboard'
+    name = 'creme.creme_core.dashboard'
     verbose_name = _('Dashboard')
     login_url = reverse_lazy('dashboard:login')
 
@@ -580,8 +580,8 @@ class DashboardConfig(CremeAppConfig):
     }
 
     def ready(self):
-        self.index_view = get_class('dashboard.views', 'IndexView')
-        self.login_view = get_class('dashboard.views', 'LoginView')
+        self.index_view = get_class('creme_core.views.dashboard', 'IndexView')
+        self.login_view = get_class('creme_core.views.dashboard', 'LoginView')
 
         self.catalogue_app = apps.get_app_config('catalogue_dashboard')
         self.reports_app = apps.get_app_config('reports_dashboard')

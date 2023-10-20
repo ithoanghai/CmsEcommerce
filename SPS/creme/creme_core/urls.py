@@ -470,7 +470,7 @@ creme_core_patterns = [
 
 urlpatterns = [
     re_path(r'^$',            index.Home.as_view(),   name='creme_core__home'),
-    re_path(r'^shop/dashboard/', get_class('dashboard.views', 'IndexView').as_view(), name='creme_core__my_dashboard'),
+    re_path(r'^shop/dashboard/', get_class('creme_core.views.dashboard', 'IndexView').as_view(), name='creme_core__my_dashboard'),
     re_path(r'^my_page[/]?$', index.MyPage.as_view(), name='creme_core__my_page'),
 
     re_path(r'^creme_core/', include(creme_core_patterns)),

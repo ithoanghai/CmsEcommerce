@@ -504,19 +504,20 @@ MODULES_APPS = [
     'creme.search.apps.SearchConfig',
     'creme.voucher.apps.VoucherConfig',
     'creme.wishlists.apps.WishlistsConfig',
+
     'creme.creme_core.apps.DashboardConfig',
-    'creme.dashboard.reports.apps.ReportsDashboardConfig',
-    'creme.dashboard.users.apps.UsersDashboardConfig',
-    'creme.dashboard.orders.apps.OrdersDashboardConfig',
-    'creme.dashboard.catalogue.apps.CatalogueDashboardConfig',
-    'creme.dashboard.offers.apps.OffersDashboardConfig',
-    'creme.dashboard.partners.apps.PartnersDashboardConfig',
-    'creme.dashboard.pages.apps.PagesDashboardConfig',
-    'creme.dashboard.ranges.apps.RangesDashboardConfig',
-    'creme.dashboard.reviews.apps.ReviewsDashboardConfig',
-    'creme.dashboard.vouchers.apps.VouchersDashboardConfig',
-    'creme.dashboard.communications.apps.CommunicationsDashboardConfig',
-    'creme.dashboard.shipping.apps.ShippingDashboardConfig',
+    'creme.creme_core.dashboard.reports.apps.ReportsDashboardConfig',
+    'creme.creme_core.dashboard.users.apps.UsersDashboardConfig',
+    'creme.creme_core.dashboard.orders.apps.OrdersDashboardConfig',
+    'creme.creme_core.dashboard.catalogue.apps.CatalogueDashboardConfig',
+    'creme.creme_core.dashboard.offers.apps.OffersDashboardConfig',
+    'creme.creme_core.dashboard.partners.apps.PartnersDashboardConfig',
+    'creme.creme_core.dashboard.pages.apps.PagesDashboardConfig',
+    'creme.creme_core.dashboard.ranges.apps.RangesDashboardConfig',
+    'creme.creme_core.dashboard.reviews.apps.ReviewsDashboardConfig',
+    'creme.creme_core.dashboard.vouchers.apps.VouchersDashboardConfig',
+    'creme.creme_core.dashboard.communications.apps.CommunicationsDashboardConfig',
+    'creme.creme_core.dashboard.shipping.apps.ShippingDashboardConfig',
 
     # "bakery wagtail cms",
     "app_CMS.base",
@@ -1304,7 +1305,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'url_name': 'dashboard:reports-index',
     },
 ]
-OSCAR_DASHBOARD_DEFAULT_ACCESS_FUNCTION = 'creme.dashboard.nav.default_access_fn'  # noqa
+OSCAR_DASHBOARD_DEFAULT_ACCESS_FUNCTION = 'creme.creme_core.nav.default_access_fn'  # noqa
 
 # Name of the base template used by all the common pages (there are some exceptions
 # like the login & "About" pages, which can be customised with their own way).

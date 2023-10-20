@@ -2,10 +2,10 @@ from django.utils.translation import gettext as _
 
 from ..creme_core.core.loading import get_class, get_model
 
-ReportGenerator = get_class('dashboard.reports.reports', 'ReportGenerator')
-ReportCSVFormatter = get_class('dashboard.reports.reports',
+ReportGenerator = get_class('creme_core.dashboard.reports.reports', 'ReportGenerator')
+ReportCSVFormatter = get_class('creme_core.dashboard.reports.reports',
                                'ReportCSVFormatter')
-ReportHTMLFormatter = get_class('dashboard.reports.reports',
+ReportHTMLFormatter = get_class('creme_core.dashboard.reports.reports',
                                 'ReportHTMLFormatter')
 Order = get_model('order', 'Order')
 
