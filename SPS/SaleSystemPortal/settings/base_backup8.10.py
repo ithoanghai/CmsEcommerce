@@ -160,7 +160,7 @@ MODULES_APPS = [
     'creme.search.apps.SearchConfig',
     'creme.voucher.apps.VoucherConfig',
     'creme.wishlists.apps.WishlistsConfig',
-    'creme.creme_core.dashboard.apps.DashboardConfig',
+    'creme.creme_core.apps.CremeAppConfig',
     'creme.creme_core.dashboard.reports.apps.ReportsDashboardConfig',
     'creme.creme_core.dashboard.users.apps.UsersDashboardConfig',
     'creme.creme_core.dashboard.orders.apps.OrdersDashboardConfig',
@@ -1238,7 +1238,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
         'icon': 'fas fa-list',
-        'url_name': 'dashboard:index',
+        'url_name': 'creme_core:index',
     },
     {
         'label': _('Catalogue'),
@@ -1246,27 +1246,27 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'children': [
             {
                 'label': _('Products'),
-                'url_name': 'dashboard:catalogue-product-list',
+                'url_name': 'creme_core:catalogue-product-list',
             },
             {
                 'label': _('Product Types'),
-                'url_name': 'dashboard:catalogue-class-list',
+                'url_name': 'creme_core:catalogue-class-list',
             },
             {
                 'label': _('Categories'),
-                'url_name': 'dashboard:catalogue-category-list',
+                'url_name': 'creme_core:catalogue-category-list',
             },
             {
                 'label': _('Ranges'),
-                'url_name': 'dashboard:range-list',
+                'url_name': 'creme_core:range-list',
             },
             {
                 'label': _('Low stock alerts'),
-                'url_name': 'dashboard:stock-alert-list',
+                'url_name': 'creme_core:stock-alert-list',
             },
             {
                 'label': _('Options'),
-                'url_name': 'dashboard:catalogue-option-list',
+                'url_name': 'creme_core:catalogue-option-list',
             },
         ]
     },
@@ -1276,15 +1276,15 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'children': [
             {
                 'label': _('Orders'),
-                'url_name': 'dashboard:order-list',
+                'url_name': 'creme_core:order-list',
             },
             {
                 'label': _('Statistics'),
-                'url_name': 'dashboard:order-stats',
+                'url_name': 'creme_core:order-stats',
             },
             {
                 'label': _('Partners'),
-                'url_name': 'dashboard:partner-list',
+                'url_name': 'creme_core:partner-list',
             },
             # The shipping method dashboard is disabled by default as it might
             # be confusing. Weight-based shipping methods aren't hooked into
@@ -1292,7 +1292,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
             # customising the repository slightly more difficult).
             # {
             #     'label': _('Shipping charges'),
-            #     'url_name': 'dashboard:shipping-method-list',
+            #     'url_name': 'creme_core:shipping-method-list',
             # },
         ]
     },
@@ -1302,11 +1302,11 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'children': [
             {
                 'label': _('Customers'),
-                'url_name': 'dashboard:users-index',
+                'url_name': 'creme_core:users-index',
             },
             {
                 'label': _('Stock alert requests'),
-                'url_name': 'dashboard:user-alert-list',
+                'url_name': 'creme_core:user-alert-list',
             },
         ]
     },
@@ -1316,15 +1316,15 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'children': [
             {
                 'label': _('Offers'),
-                'url_name': 'dashboard:offer-list',
+                'url_name': 'creme_core:offer-list',
             },
             {
                 'label': _('Vouchers'),
-                'url_name': 'dashboard:voucher-list',
+                'url_name': 'creme_core:voucher-list',
             },
             {
                 'label': _('Voucher Sets'),
-                'url_name': 'dashboard:voucher-set-list',
+                'url_name': 'creme_core:voucher-set-list',
             },
 
         ],
@@ -1335,22 +1335,22 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'children': [
             {
                 'label': _('Pages'),
-                'url_name': 'dashboard:page-list',
+                'url_name': 'creme_core:page-list',
             },
             {
                 'label': _('Email templates'),
-                'url_name': 'dashboard:comms-list',
+                'url_name': 'creme_core:comms-list',
             },
             {
                 'label': _('Reviews'),
-                'url_name': 'dashboard:reviews-list',
+                'url_name': 'creme_core:reviews-list',
             },
         ]
     },
     {
         'label': _('Reports'),
         'icon': 'fas fa-chart-bar',
-        'url_name': 'dashboard:reports-index',
+        'url_name': 'creme_core:reports-index',
     },
 ]
 OSCAR_DASHBOARD_DEFAULT_ACCESS_FUNCTION = 'creme.creme_core.nav.default_access_fn'  # noqa

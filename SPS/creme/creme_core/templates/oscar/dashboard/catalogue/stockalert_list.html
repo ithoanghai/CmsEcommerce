@@ -11,7 +11,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Stock alerts" %}</li>
         </ol>
     </nav>
@@ -33,9 +33,9 @@
                 {% trans "Filter" %}
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{% url 'dashboard:stock-alert-list' %}">{% trans "All" %}</a>
-                <a class="dropdown-item" href="{% url 'dashboard:stock-alert-list' %}?status=Open">{% trans "Open" %}</a>
-                <a class="dropdown-item" href="{% url 'dashboard:stock-alert-list' %}?status=Closed">{% trans "Closed" %}</a>
+                <a class="dropdown-item" href="{% url 'creme_core:stock-alert-list' %}">{% trans "All" %}</a>
+                <a class="dropdown-item" href="{% url 'creme_core:stock-alert-list' %}?status=Open">{% trans "Open" %}</a>
+                <a class="dropdown-item" href="{% url 'creme_core:stock-alert-list' %}?status=Closed">{% trans "Closed" %}</a>
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
     {% for alert in alerts %}
     <tr>
         <td>
-            <a href="{% url 'dashboard:catalogue-product' alert.stockrecord.product.id %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">
+            <a href="{% url 'creme_core:catalogue-product' alert.stockrecord.product.id %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">
                 {{ alert.stockrecord.product.get_title }}
             </a>
         </td>
@@ -65,7 +65,7 @@
         <td>{{ alert.date_created }}</td>
         <td>{{ alert.status }}</td>
         <td>
-            <a class="btn btn-info" href="{% url 'dashboard:catalogue-product' pk=alert.stockrecord.product.id %}">{% trans "Update" %}</a>
+            <a class="btn btn-info" href="{% url 'creme_core:catalogue-product' pk=alert.stockrecord.product.id %}">{% trans "Update" %}</a>
         </td>
     </tr>
     {% endfor %}

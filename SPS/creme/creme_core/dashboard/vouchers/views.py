@@ -101,7 +101,7 @@ class VoucherCreateView(generic.CreateView):
     model = Voucher
     template_name = 'oscar/dashboard/vouchers/voucher_form.html'
     form_class = VoucherForm
-    success_url = reverse_lazy('dashboard:voucher-list')
+    success_url = reverse_lazy('creme_core:voucher-list')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -142,13 +142,13 @@ class VoucherUpdateView(generic.UpdateView):
     context_object_name = 'voucher'
     model = Voucher
     form_class = VoucherForm
-    success_url = reverse_lazy('dashboard:voucher-list')
+    success_url = reverse_lazy('creme_core:voucher-list')
 
     def dispatch(self, request, *args, **kwargs):
         voucher_set = self.get_object().voucher_set
         if voucher_set is not None:
             messages.warning(request, _("The voucher can only be edited as part of its set"))
-            return redirect('dashboard:voucher-set-update', pk=voucher_set.pk)
+            return redirect('creme_core:voucher-set-update', pk=voucher_set.pk)
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -187,9 +187,9 @@ class VoucherDeleteView(generic.DeleteView):
     def get_success_url(self):
         messages.warning(self.request, _("Voucher deleted"))
         if self.object.voucher_set is not None:
-            return reverse('dashboard:voucher-set-detail', kwargs={'pk': self.object.voucher_set.pk})
+            return reverse('creme_core:voucher-set-detail', kwargs={'pk': self.object.voucher_set.pk})
         else:
-            return reverse('dashboard:voucher-list')
+            return reverse('creme_core:voucher-list')
 
 
 class VoucherSetCreateView(generic.CreateView):
@@ -209,7 +209,7 @@ class VoucherSetCreateView(generic.CreateView):
 
     def get_success_url(self):
         messages.success(self.request, _("Voucher set created"))
-        return reverse('dashboard:voucher-set-list')
+        return reverse('creme_core:voucher-set-list')
 
 
 class VoucherSetUpdateView(generic.UpdateView):
@@ -235,7 +235,7 @@ class VoucherSetUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, _("Voucher updated"))
-        return reverse('dashboard:voucher-set-detail', kwargs={'pk': self.object.pk})
+        return reverse('creme_core:voucher-set-detail', kwargs={'pk': self.object.pk})
 
 
 class VoucherSetDetailView(generic.ListView):
@@ -335,4 +335,4 @@ class VoucherSetDeleteView(generic.DeleteView):
 
     def get_success_url(self):
         messages.warning(self.request, _("Voucher set deleted"))
-        return reverse('dashboard:voucher-set-list')
+        return reverse('creme_core:voucher-set-list')

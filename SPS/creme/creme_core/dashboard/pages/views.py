@@ -74,7 +74,7 @@ class PageCreateUpdateMixin(object):
         msg = render_to_string('oscar/dashboard/pages/messages/saved.html',
                                {'page': self.object})
         messages.success(self.request, msg, extra_tags='safe noicon')
-        return reverse('dashboard:page-list')
+        return reverse('creme_core:page-list')
 
     def form_valid(self, form):
         # Ensure saved page is added to the current site
@@ -134,4 +134,4 @@ class PageDeleteView(generic.DeleteView):
     def get_success_url(self):
         messages.success(
             self.request, _("Deleted page '%s'") % self.object.title)
-        return reverse('dashboard:page-list')
+        return reverse('creme_core:page-list')

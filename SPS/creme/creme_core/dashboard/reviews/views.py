@@ -150,7 +150,7 @@ class ReviewListView(BulkEditMixin, generic.ListView):
         for review in reviews:
             review.status = new_status
             review.save()
-        return HttpResponseRedirect(reverse('dashboard:reviews-list'))
+        return HttpResponseRedirect(reverse('creme_core:reviews-list'))
 
 
 class ReviewUpdateView(generic.UpdateView):
@@ -160,7 +160,7 @@ class ReviewUpdateView(generic.UpdateView):
     context_object_name = 'review'
 
     def get_success_url(self):
-        return reverse('dashboard:reviews-list')
+        return reverse('creme_core:reviews-list')
 
 
 class ReviewDeleteView(generic.DeleteView):
@@ -169,4 +169,4 @@ class ReviewDeleteView(generic.DeleteView):
     context_object_name = 'review'
 
     def get_success_url(self):
-        return reverse('dashboard:reviews-list')
+        return reverse('creme_core:reviews-list')

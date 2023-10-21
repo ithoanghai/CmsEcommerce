@@ -12,8 +12,8 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:order-list' %}">{% trans "Orders" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:order-list' %}">{% trans "Orders" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Statistics" %}</li>
         </ol>
     </nav>
@@ -26,10 +26,10 @@
         <h3><i class="fas fa-filter"></i> {% trans "Filter" %}</h3>
     </div>
     <div class="card card-body bg-light">
-        <form method="get" action="{% url 'dashboard:order-stats' %}" class="form-inline">
+        <form method="get" action="{% url 'creme_core:order-stats' %}" class="form-inline">
             {% include "oscar/dashboard/partials/form_fields_inline.html" with form=form %}
             <button type="submit" class="btn btn-primary mr-2" data-loading-text="{% trans 'Filtering...' %}">{% trans "Filter result" %}</button>
-            <a href="{% url 'dashboard:order-stats' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
+            <a href="{% url 'creme_core:order-stats' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
         </form>
     </div>
 
@@ -58,7 +58,7 @@
             </tr>
             {% for dict in order_status_breakdown %}
                 <tr>
-                    <td><a href="{% url 'dashboard:order-list' %}{% querystring 'status'=dict.status %}">{{ dict.status }}</a></td>
+                    <td><a href="{% url 'creme_core:order-list' %}{% querystring 'status'=dict.status %}">{{ dict.status }}</a></td>
                     <td>{{ dict.freq }}</td>
                 </tr>
             {% endfor %}

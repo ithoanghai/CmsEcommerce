@@ -9,7 +9,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Partners" %}</li>
         </ol>
     </nav>
@@ -17,7 +17,7 @@
 
 {% block header %}
     <div class="page-header">
-        <a href="{% url 'dashboard:partner-create' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new partner" %}</a>
+        <a href="{% url 'creme_core:partner-create' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new partner" %}</a>
         <h1>{% trans "Partners" %}</h1>
     </div>
 {% endblock header %}
@@ -28,7 +28,7 @@
             {% include 'oscar/dashboard/partials/form_fields_inline.html' with form=form %}
             <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
             {% if is_filtered %}
-                <a class="btn btn-secondary" href="{% url 'dashboard:partner-list' %}" >{% trans "Reset" %}</a>
+                <a class="btn btn-secondary" href="{% url 'creme_core:partner-list' %}" >{% trans "Reset" %}</a>
             {% endif %}
         </form>
     </div>
@@ -49,7 +49,7 @@
                 {% for partner in partners %}
                     <tr>
                         <td>
-                            <a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">{{ partner.name }}</a>
+                            <a href="{% url 'creme_core:partner-manage' pk=partner.pk %}">{{ partner.name }}</a>
                         </td>
                         <td>
                             {% with users=partner.users.all %}
@@ -57,7 +57,7 @@
                                     <ul>
                                         {% for user in users %}
                                             <li>
-                                                <a href="{% url 'dashboard:partner-user-update' partner_pk=partner.pk user_pk=user.id %}" title="{% trans "Edit the user's details" %}">
+                                                <a href="{% url 'creme_core:partner-user-update' partner_pk=partner.pk user_pk=user.id %}" title="{% trans "Edit the user's details" %}">
                                                     {{ user.get_full_name|default:user.email }}
                                                 </a>
                                             </li>
@@ -88,16 +88,16 @@
                                         {% trans "Actions" %}
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{% url 'dashboard:partner-manage' pk=partner.pk %}">
+                                        <a class="dropdown-item" href="{% url 'creme_core:partner-manage' pk=partner.pk %}">
                                             {% trans "Manage partner and users" %}
                                         </a>
-                                        <a class="dropdown-item" href="{% url 'dashboard:partner-delete' pk=partner.pk %}">
+                                        <a class="dropdown-item" href="{% url 'creme_core:partner-delete' pk=partner.pk %}">
                                             {% trans "Delete partner" %}
                                         </a>
-                                        <a class="dropdown-item" href="{% url 'dashboard:partner-user-select' partner_pk=partner.pk %}">
+                                        <a class="dropdown-item" href="{% url 'creme_core:partner-user-select' partner_pk=partner.pk %}">
                                             {% trans "Link an existing user" %}
                                         </a>
-                                        <a class="dropdown-item" href="{% url 'dashboard:partner-user-create' partner_pk=partner.pk %}">
+                                        <a class="dropdown-item" href="{% url 'creme_core:partner-user-create' partner_pk=partner.pk %}">
                                             {% trans "Link a new user" %}
                                         </a>
                                     </div>

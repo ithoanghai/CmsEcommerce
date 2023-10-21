@@ -22,7 +22,12 @@
 ################################################################################
 
 from django.db import models
-
+from django.utils.translation import gettext as _
 
 class CaseSensitivity(models.Model):
     text = models.CharField(max_length=4)
+
+    class Meta:
+        verbose_name = _("password expiry")
+        verbose_name_plural = _("password expiry")
+        app_label = 'creme_core'

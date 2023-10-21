@@ -10,7 +10,7 @@ class UserTable(DashboardTable):
     check = TemplateColumn(
         template_name='oscar/dashboard/users/user_row_checkbox.html',
         verbose_name=' ', orderable=False)
-    email = LinkColumn('dashboard:user-detail', args=[A('id')],
+    email = LinkColumn('creme_core:user-detail', args=[A('id')],
                        accessor='email')
     name = Column(accessor='get_full_name',
                   order_by=('last_name', 'first_name'))

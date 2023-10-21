@@ -61,7 +61,7 @@ class PartnerCreateView(generic.CreateView):
     model = Partner
     template_name = 'oscar/dashboard/partners/partner_form.html'
     form_class = PartnerCreateForm
-    success_url = reverse_lazy('dashboard:partner-list')
+    success_url = reverse_lazy('creme_core:partner-list')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -72,7 +72,7 @@ class PartnerCreateView(generic.CreateView):
         messages.success(self.request,
                          _("Partner '%s' was created successfully.") %
                          self.object.name)
-        return reverse('dashboard:partner-list')
+        return reverse('creme_core:partner-list')
 
 
 class PartnerManageView(generic.UpdateView):
@@ -82,7 +82,7 @@ class PartnerManageView(generic.UpdateView):
     """
     template_name = 'oscar/dashboard/partners/partner_manage.html'
     form_class = PartnerAddressForm
-    success_url = reverse_lazy('dashboard:partner-list')
+    success_url = reverse_lazy('creme_core:partner-list')
 
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
@@ -118,7 +118,7 @@ class PartnerDeleteView(generic.DeleteView):
         messages.success(self.request,
                          _("Partner '%s' was deleted successfully.") %
                          self.object.name)
-        return reverse('dashboard:partner-list')
+        return reverse('creme_core:partner-list')
 
 
 # =============
@@ -152,7 +152,7 @@ class PartnerUserCreateView(generic.CreateView):
         name = self.object.get_full_name() or self.object.email
         messages.success(self.request,
                          _("User '%s' was created successfully.") % name)
-        return reverse('dashboard:partner-list')
+        return reverse('creme_core:partner-list')
 
 
 class PartnerUserSelectView(generic.ListView):
@@ -207,7 +207,7 @@ class PartnerUserLinkView(generic.View):
                 request,
                 _("User '%(name)s' is already linked to '%(partner_name)s'")
                 % {'name': name, 'partner_name': partner.name})
-        return redirect('dashboard:partner-manage', pk=partner_pk)
+        return redirect('creme_core:partner-manage', pk=partner_pk)
 
     def link_user(self, user, partner):
         """
@@ -263,7 +263,7 @@ class PartnerUserUnlinkView(generic.View):
                 request,
                 _("User '%(name)s' is not linked to '%(partner_name)s'") %
                 {'name': name, 'partner_name': partner.name})
-        return redirect('dashboard:partner-manage', pk=partner_pk)
+        return redirect('creme_core:partner-manage', pk=partner_pk)
 
 
 # =====
@@ -292,4 +292,4 @@ class PartnerUserUpdateView(generic.UpdateView):
         name = self.object.get_full_name() or self.object.email
         messages.success(self.request,
                          _("User '%s' was updated successfully.") % name)
-        return reverse('dashboard:partner-list')
+        return reverse('creme_core:partner-list')

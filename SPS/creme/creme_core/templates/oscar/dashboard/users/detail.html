@@ -9,8 +9,8 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:users-index' %}">{% trans "Customers" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:users-index' %}">{% trans "Customers" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ customer.email }}</li>
         </ol>
     </nav>
@@ -84,7 +84,7 @@
                         <tr>
                             <th>{% trans "Actions" %}</th>
                             <td>
-                                <form id="password_reset_form" action="{% url 'dashboard:user-password-reset' pk=customer.id %}" method="post">
+                                <form id="password_reset_form" action="{% url 'creme_core:user-password-reset' pk=customer.id %}" method="post">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Sending...' %}">{% trans 'Send password reset email' %}</button>
                                 </form>
@@ -129,12 +129,12 @@
                                         </tr>
                                         {% for order in orders %}
                                             <tr>
-                                                <td><a href="{% url 'dashboard:order-detail' order.number %}">{{ order.number }}</a></td>
+                                                <td><a href="{% url 'creme_core:order-detail' order.number %}">{{ order.number }}</a></td>
                                                 <td>{{ order.num_items }}</td>
                                                 <td>{{ order.basket_total_incl_tax|currency }}</td>
                                                 <td>{{ order.date_placed|date }}</td>
                                                 <td>{{ order.status|default:"-" }}</td>
-                                                <td><a href="{% url 'dashboard:order-detail' number=order.number %}" class="btn btn-info">{% trans "View" %}</a></td>
+                                                <td><a href="{% url 'creme_core:order-detail' number=order.number %}" class="btn btn-info">{% trans "View" %}</a></td>
                                             </tr>
                                         {% endfor %}
                                     {% else %}

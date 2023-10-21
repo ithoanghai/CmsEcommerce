@@ -310,7 +310,7 @@ class PopUpWindowDeleteMixin(PopUpWindowMixin):
 class LoginView(auth_views.LoginView):
     template_name = 'oscar/dashboard/login.html'
     authentication_form = AuthenticationForm
-    login_redirect_url = reverse_lazy('dashboard:index')
+    login_redirect_url = reverse_lazy('creme_core:index')
 
     def get_success_url(self):
         url = self.get_redirect_url()

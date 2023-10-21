@@ -10,9 +10,9 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:offer-list' %}">{% trans "Offers" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:offer-detail' pk=offer.pk %}">'{{ offer.name }}'</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:offer-list' %}">{% trans "Offers" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:offer-detail' pk=offer.pk %}">'{{ offer.name }}'</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Delete?" %}</li>
         </ol>
     </nav>
@@ -28,7 +28,7 @@
         <p>{% trans "Are you sure you want to delete this offer?" %}</p>
         <div class="form-actions">
             <button class="btn btn-danger" type="submit" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete" %}</button> {% trans "or" %}
-            <a href="{% url 'dashboard:offer-list' %}">{% trans "cancel" %}</a>
+            <a href="{% url 'creme_core:offer-list' %}">{% trans "cancel" %}</a>
         </div>
     </form>
 {% endblock dashboard_content %}

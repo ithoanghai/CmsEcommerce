@@ -12,7 +12,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Offers" %}</li>
         </ol>
     </nav>
@@ -20,7 +20,7 @@
 
 {% block header %}
     <div class="page-header">
-        <a href="{% url 'dashboard:offer-metadata' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new offer" %}</a>
+        <a href="{% url 'creme_core:offer-metadata' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new offer" %}</a>
         <h1>{% trans "Offers" %}</h1>
     </div>
 {% endblock header %}
@@ -53,7 +53,7 @@
             {% endfor %}
             <button type="submit" class="btn btn-primary mr-2" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
             <a data-toggle="modal" data-target="#SearchModal" href="#" class="mr-2">{% trans "Advanced Search" %}</a>
-            <a href="{% url 'dashboard:offer-list' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
+            <a href="{% url 'creme_core:offer-list' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
         </form>
 
         {# Search modal, if there are form errors the form is automatically openend #}
@@ -100,7 +100,7 @@
                 </tr>
                 {% for offer in offers %}
                     <tr>
-                        <td><a href="{% url 'dashboard:offer-detail' pk=offer.pk %}">{{ offer.name }}</a></td>
+                        <td><a href="{% url 'creme_core:offer-detail' pk=offer.pk %}">{{ offer.name }}</a></td>
                         <td>{{ offer.offer_type }}</td>
                         {% if form.is_bound %}{% if form.is_voucher_offer_type or not form.cleaned_data.offer_type %}
                         <td>{{ offer.vouchers.count }}</td>
@@ -139,14 +139,14 @@
                                         <a class="dropdown-item" href="{% url 'offer:detail' slug=offer.slug %}">
                                             {% trans "Browse" %}
                                         </a>
-                                        <a class="dropdown-item" href="{% url 'dashboard:offer-detail' pk=offer.pk %}">
+                                        <a class="dropdown-item" href="{% url 'creme_core:offer-detail' pk=offer.pk %}">
                                             {% trans "Stats" %}
                                         </a>
-                                        <a class="dropdown-item" href="{% url 'dashboard:offer-metadata' pk=offer.pk %}">
+                                        <a class="dropdown-item" href="{% url 'creme_core:offer-metadata' pk=offer.pk %}">
                                             {% trans "Edit" %}
                                         </a>
                                         {% if not offer.vouchers.exists %}
-                                        <a class="dropdown-item" href="{% url 'dashboard:offer-delete' pk=offer.pk %}">
+                                        <a class="dropdown-item" href="{% url 'creme_core:offer-delete' pk=offer.pk %}">
                                             {% trans "Delete" %}
                                         </a>
                                         {% endif %}

@@ -1,11 +1,11 @@
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
-from ...apps import DashboardConfig
+from ...apps import CremeCoreConfig
 from ...core.loading import get_class
 
 
-class PagesDashboardConfig(DashboardConfig):
+class PagesDashboardConfig(CremeCoreConfig):
     label = 'pages_dashboard'
     name = 'creme.creme_core.dashboard.pages'
     verbose_name = _('Pages dashboard')

@@ -10,9 +10,9 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item">
-                <a href="{% url 'dashboard:range-list' %}">{% trans "Ranges" %}</a>
+                <a href="{% url 'creme_core:range-list' %}">{% trans "Ranges" %}</a>
             </li>
             {% if range %}
                 <li class="breadcrumb-item active" aria-current="page">'{{ range.name }}'</li>
@@ -37,7 +37,7 @@
                 {# This is an input so we distinguish between which button was pressed #}
                 <input class="btn btn-primary" type="submit" name="action" value="{% trans "Save and edit products" %}"/>
                 {% trans "or" %}
-                <a href="{% url 'dashboard:range-list' %}">{% trans "cancel" %}</a>
+                <a href="{% url 'creme_core:range-list' %}">{% trans "cancel" %}</a>
             </div>
         {% endblock form_actions %}
     </form>

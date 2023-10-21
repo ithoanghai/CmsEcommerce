@@ -464,7 +464,7 @@ class CremeAppConfig(OscarConfigMixin, AppConfig):
             self.register_enumerable(enumerable.enumerable_registry)
             self.register_fields_config(fields_config.fields_config_registry)
             self.register_field_printers(field_printers.field_printers_registry)
-            self.register_filefields_download(download.filefield_download_registry)
+            #self.register_filefields_download(download.filefield_download_registry)
             self.register_function_fields(function_field.function_field_registry)
             self.register_icons(icons.icon_registry)
             self.register_imprints(imprint.imprint_manager)
@@ -568,18 +568,31 @@ class CremeAppConfig(OscarConfigMixin, AppConfig):
         pass
 
 
-class DashboardConfig(CremeAppConfig):
-    label = 'dashboard'
-    name = 'creme.creme_core.dashboard'
-    verbose_name = _('Dashboard')
-    login_url = reverse_lazy('dashboard:login')
+class CremeCoreConfig(CremeAppConfig):
+    default = True
+    name = 'creme.creme_core'
+    verbose_name = _('Core Dashboard')
+    label = 'creme_core'
+    login_url = reverse_lazy('creme_core:login')
 
-    namespace = 'dashboard'
+    namespace = 'creme_core'
     permissions_map = {
         'index': (['is_staff'], ['partner.dashboard_access']),
     }
 
+    @property
+    def url_root(self):
+        return ''  # We want to catch some URLs which do not start by 'creme_core/'
+
     def ready(self):
+        super().ready()
+
+        if self.MIGRATION_MODE:
+            return
+
+        checks.register(Tags.settings)(check_uninstalled_apps)  # Crashes in migrate mode.
+
+        #for oscar
         self.index_view = get_class('creme_core.views.dashboard', 'IndexView')
         self.login_view = get_class('creme_core.views.dashboard', 'LoginView')
 
@@ -617,24 +630,6 @@ class DashboardConfig(CremeAppConfig):
             path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
         ]
         return self.post_process_urls(urls)
-
-
-class CremeCoreConfig(CremeAppConfig):
-    default = True
-    name = 'creme.creme_core'
-    verbose_name = _('Core')
-
-    @property
-    def url_root(self):
-        return ''  # We want to catch some URLs which do not start by 'creme_core/'
-
-    def ready(self):
-        super().ready()
-
-        if self.MIGRATION_MODE:
-            return
-
-        checks.register(Tags.settings)(check_uninstalled_apps)  # Crashes in migrate mode.
 
     def all_apps_ready(self):
         if self.MIGRATION_MODE:
@@ -776,9 +771,9 @@ class CremeCoreConfig(CremeAppConfig):
         from . import models
 
         register_model = config_registry.register_model
-        register_model(models.Language, 'language')
-        register_model(models.Currency, 'currency')
-        register_model(models.Vat,      'vat_value')
+        #register_model(models.Language, 'language')
+        #register_model(models.Currency, 'currency')
+        #register_model(models.Vat,      'vat_value')
 
         if settings.TESTS_ON:
             from .tests import fake_bricks, fake_models

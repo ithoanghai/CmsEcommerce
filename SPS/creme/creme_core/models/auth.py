@@ -33,22 +33,18 @@ from typing import TYPE_CHECKING
 
 # import pytz
 from django.apps import apps
-from django.conf import settings
 from django.contrib.auth.models import (
-    AbstractBaseUser,
     BaseUserManager,
     _user_has_perm,
-    AbstractUser, AnonymousUser, PermissionsMixin, UserManager,
+    AbstractUser, AnonymousUser, PermissionsMixin,
 )
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.db import models
 from django.db.models import Q, QuerySet
 from django.utils.functional import partition
 from django.utils.timezone import now, zoneinfo
 from django.utils.translation import gettext
-from django.utils.translation import gettext_lazy as trans
 from django.utils.text import slugify
 from django import forms
 from django.db import models, transaction
@@ -874,6 +870,13 @@ class Tags(models.Model):
     name = models.CharField(max_length=20)
     slug = models.CharField(max_length=20, unique=True, blank=True)
 
+    class Meta:
+        # abstract = True TODO: class AbstractCremeTags ?
+        ordering = ('name', "slug")
+        verbose_name = gettext('Tags')
+        verbose_name_plural = gettext('Tags')
+        app_label = 'creme_core'
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
@@ -894,6 +897,13 @@ class Account(models.Model):
         choices=settings.ACCOUNTS_LANGUAGES,
         default=DEFAULT_LANGUAGE,
     )
+
+    class Meta:
+        # abstract = True TODO: class AbstractCremeAccount ?
+        ordering = ('user', "timezone")
+        verbose_name = gettext('Account')
+        verbose_name_plural = gettext('Account')
+        app_label = 'creme_core'
 
     @classmethod
     def for_request(cls, request):
@@ -970,6 +980,8 @@ class EmailAddress(models.Model):
     class Meta:
         verbose_name = gettext("email address")
         verbose_name_plural = gettext("email addresses")
+        app_label = 'creme_core'
+
         if not settings.ACCOUNT_EMAIL_UNIQUE:
             unique_together = [("user", "email")]
 
@@ -1030,6 +1042,7 @@ class EmailConfirmation(models.Model):
     class Meta:
         verbose_name = gettext("email confirmation")
         verbose_name_plural = gettext("email confirmations")
+        app_label = 'creme_core'
 
     def __str__(self):
         return "confirmation for {0}".format(self.email_address)
@@ -1095,6 +1108,7 @@ class SignupCode(models.Model):
     class Meta:
         verbose_name = gettext("signup code")
         verbose_name_plural = gettext("signup codes")
+        app_label = 'creme_core'
 
     def __str__(self):
         if self.email:
@@ -1191,6 +1205,11 @@ class SignupCodeResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        verbose_name = gettext("signup code result")
+        verbose_name_plural = gettext("signup codes result")
+        app_label = 'creme_core'
+
     def save(self, **kwargs):
         super(SignupCodeResult, self).save(**kwargs)
         self.signup_code.calculate_use_count()
@@ -1206,6 +1225,7 @@ class AccountDeletion(models.Model):
     class Meta:
         verbose_name = gettext("account deletion")
         verbose_name_plural = gettext("account deletions")
+        app_label = 'creme_core'
 
     @classmethod
     def expunge(cls, hours_ago=None):
@@ -1236,6 +1256,7 @@ class PasswordHistory(models.Model):
     class Meta:
         verbose_name = gettext("password history")
         verbose_name_plural = gettext("password histories")
+        app_label = 'creme_core'
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="password_history", on_delete=models.CASCADE)
     password = models.CharField(max_length=255)  # encrypted password
@@ -1253,6 +1274,11 @@ class PasswordExpiry(models.Model):
         on_delete=models.CASCADE,
     )
     expiry = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = gettext("password expiry")
+        verbose_name_plural = gettext("password expiry")
+        app_label = 'creme_core'
 
 #BEGIN FOR CREME MODEL
 class SetCredentials(models.Model):

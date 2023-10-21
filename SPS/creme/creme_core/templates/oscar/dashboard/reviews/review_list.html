@@ -11,7 +11,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Reviews" %}</li>
         </ol>
     </nav>
@@ -66,7 +66,7 @@
                     <tr>
                         <td><input type="checkbox" name="selected_review" class="selected_review" value="{{ review.id }}"/></td>
                         <td>
-                            <a href="{% url 'dashboard:reviews-update' pk=review.id %}">{{ review.title }}</a>
+                            <a href="{% url 'creme_core:reviews-update' pk=review.id %}">{{ review.title }}</a>
                         </td>
                         <td>
                             {% if review.product %}
@@ -76,7 +76,7 @@
                         {% endif %}
                         <td>
                             {% if not review.is_anonymous %}
-                                <a href="{% url 'dashboard:user-detail' pk=review.user.id %}">{{ review.reviewer_name }}</a>
+                                <a href="{% url 'creme_core:user-detail' pk=review.user.id %}">{{ review.reviewer_name }}</a>
                             {% else %}
                                 {{ review.name }}
                             {% endif %}
@@ -109,8 +109,8 @@
                                                         {% trans "View on site" %}
                                                     </a>
                                                 {% endif %}
-                                                <a class="dropdown-item" href="{% url 'dashboard:reviews-update' pk=review.id %}">{% trans "Edit" %}</a>
-                                                <a class="dropdown-item" href="{% url 'dashboard:reviews-delete' pk=review.id %}">{% trans "Delete" %}</a>
+                                                <a class="dropdown-item" href="{% url 'creme_core:reviews-update' pk=review.id %}">{% trans "Edit" %}</a>
+                                                <a class="dropdown-item" href="{% url 'creme_core:reviews-delete' pk=review.id %}">{% trans "Delete" %}</a>
                                             </div>
                                         </div>
                                     </div>

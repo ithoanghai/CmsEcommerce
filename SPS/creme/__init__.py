@@ -19,8 +19,6 @@ def get_version():
     return version
 
 
-default_app_config = 'creme.config.Shop'
-
 # App registry hooking ---------------------------------------------------------
 
 try:
@@ -45,7 +43,6 @@ else:
 
         if getattr(self, '_all_apps_ready', False):
             return
-
         _original_populate(self, installed_apps)
 
         with self._lock:

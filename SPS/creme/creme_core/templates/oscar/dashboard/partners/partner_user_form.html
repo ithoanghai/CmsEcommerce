@@ -11,11 +11,11 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:partner-list' %}">{% trans "Partners" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:partner-list' %}">{% trans "Partners" %}</a></li>
             {% if partner %}
                 <li class="breadcrumb-item">
-                    <a href="{% url 'dashboard:partner-manage' pk=partner.id %}">{{ partner.name }}</a>
+                    <a href="{% url 'creme_core:partner-manage' pk=partner.id %}">{{ partner.name }}</a>
                 </li>
             {% endif %}
             <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
@@ -31,7 +31,7 @@
         {% include 'oscar/dashboard/partials/form_fields.html' with form=form %}
         <div class="form-actions">
             <button class="btn btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
-            {% trans "or" %} <a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">{% trans "cancel" %}</a>.
+            {% trans "or" %} <a href="{% url 'creme_core:partner-manage' pk=partner.pk %}">{% trans "cancel" %}</a>.
         </div>
     </form>
 

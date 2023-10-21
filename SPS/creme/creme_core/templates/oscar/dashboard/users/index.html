@@ -18,7 +18,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Customers" %}</li>
         </ol>
     </nav>
@@ -32,7 +32,7 @@
         <form method="get" class="form-inline">
             {% include "oscar/dashboard/partials/form_fields_inline.html" with form=form %}
             <button type="submit" name="search" class="btn btn-primary mr-2" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
-            <a href="{% url 'dashboard:users-index' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
+            <a href="{% url 'creme_core:users-index' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
         </form>
     </div>
 

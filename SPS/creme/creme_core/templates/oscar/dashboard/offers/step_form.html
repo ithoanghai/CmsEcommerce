@@ -18,11 +18,11 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'dashboard:offer-list' %}">{% trans "Offers" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core:offer-list' %}">{% trans "Offers" %}</a></li>
             {% if offer.pk %}
                 <li class="breadcrumb-item">
-                    <a href="{% url 'dashboard:offer-detail' pk=offer.pk %}">{{ offer.name }}</a>
+                    <a href="{% url 'creme_core:offer-detail' pk=offer.pk %}">{{ offer.name }}</a>
                 </li>
             {% else %}
                 <li class="breadcrumb-item">{% trans "Create new offer" %}</li>
@@ -72,7 +72,7 @@
                                 {% endif %}
                             {% endblock %}
                             </div>
-                            <a class="btn btn-secondary" href="{% url 'dashboard:offer-list' %}">{% trans "cancel" %}</a>
+                            <a class="btn btn-secondary" href="{% url 'creme_core:offer-list' %}">{% trans "cancel" %}</a>
                         </div>
                     </div>
 

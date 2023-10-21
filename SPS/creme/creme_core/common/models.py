@@ -14,11 +14,10 @@ from .templatetags.common_tags import (is_document_file_audio,
                                              is_document_file_text,
                                              is_document_file_video,
                                              is_document_file_zip)
-from ..models.auth import User, Tags
-from ...cases.models import Case
+from ..models.auth import User, Tags, Account
 
+from ...cases.models import Case
 from ...contacts.models import Contact
-from ...creme_core.models.auth import Account
 from ...events.models import Event
 from ...invoices.models import Invoice
 from ...leads.models import Lead

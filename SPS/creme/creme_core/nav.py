@@ -5,7 +5,7 @@ from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import resolve, reverse
 
-from ..creme_core.apps import DashboardConfig
+from ..creme_core.apps import CremeCoreConfig
 from ..creme_core.views.decorators import check_permissions
 
 logger = logging.getLogger('creme.creme_core')
@@ -64,7 +64,7 @@ def _dashboard_url_names_to_config():
     dashboard_configs = (
         config
         for config in apps.get_app_configs()
-        if isinstance(config, DashboardConfig)
+        if isinstance(config, CremeCoreConfig)
     )
     urls_to_config = {}
     for config in dashboard_configs:
