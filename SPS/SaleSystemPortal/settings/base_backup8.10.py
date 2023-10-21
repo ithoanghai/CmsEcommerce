@@ -1238,7 +1238,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
         'icon': 'fas fa-list',
-        'url_name': 'creme_core:catalogue-product-list',
+        'url_name': 'creme_core',
     },
     {
         'label': _('Catalogue'),

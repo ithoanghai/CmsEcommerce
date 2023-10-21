@@ -190,7 +190,7 @@ class Populator(BasePopulator):
                 # logger.info('Documents app is installed
                 # => we use the Documents blocks on detail view')
 
-                from creme_crm.creme.documents.bricks import LinkedDocsBrick
+                from ..documents.bricks import LinkedDocsBrick
 
                 BrickDetailviewLocation.objects.create_if_needed(
                     brick=LinkedDocsBrick, order=600, zone=RIGHT, model=Event,

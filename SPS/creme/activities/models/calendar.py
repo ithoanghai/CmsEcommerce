@@ -62,7 +62,7 @@ class CalendarManager(models.Manager):
         """
         kwargs = {} if not color else {'color': color}
         cal = self.model(
-            name=name or gettext("{user}'s calendar").format(user=user),
+            name=name or _("{user}'s calendar").format(user=user),
             user=user, is_default=True, is_custom=False,
             is_public=is_public,
             **kwargs

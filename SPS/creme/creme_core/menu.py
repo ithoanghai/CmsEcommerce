@@ -42,13 +42,13 @@ logger = logging.getLogger(__name__)
 class HomeEntry(menu.FixedURLEntry):
     id = 'creme_core-home'
     label = _('Home')
-    url_name = 'shop_home'
+    url_name = 'creme_dashboard'
 
 
 class MyDashboardEntry(menu.FixedURLEntry):
     id = 'creme_core-my_dashboard'
-    label = _('My Dashboard')
-    url_name = 'creme_core__my_dashboard'
+    label = _('My Shop Dashboard')
+    url_name = 'creme_core__shop_dashboard'
 
 
 class MyPageEntry(menu.FixedURLEntry):

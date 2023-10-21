@@ -592,7 +592,7 @@ class CremeCoreConfig(CremeAppConfig):
         checks.register(Tags.settings)(check_uninstalled_apps)  # Crashes in migrate mode.
 
         #for oscar admin dashboard
-        #self.index_view = get_class('creme_core.views.index', 'IndexView')
+        self.index_view = get_class('creme_core.views.index', 'IndexView')
         self.login_view = get_class('creme_core.views.index', 'LoginView')
         #for oscar frontend
         self.catalogue_app = apps.get_app_config('catalogue_dashboard')
@@ -612,7 +612,7 @@ class CremeCoreConfig(CremeAppConfig):
         from django.contrib.auth import views as auth_views
 
         urls = [
-            #path('', include(self.index_view.as_view()), name='index'),
+            path('', self.index_view.as_view(), name='index_view'),
             path('catalogue/', include(self.catalogue_app.urls[0])),
             path('reports/', include(self.reports_app.urls[0])),
             path('orders/', include(self.orders_app.urls[0])),

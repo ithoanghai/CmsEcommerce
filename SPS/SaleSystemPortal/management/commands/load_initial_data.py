@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         fixtures_dir = os.path.join(settings.BASE_DIR, "fixtures")
-        fixture_file = os.path.join(fixtures_dir, "appCMS.json")
+        fixture_file = os.path.join(fixtures_dir, "bakerydemo.json")
 
         print("Copying media files to configured storage...")  # noqa: T201
         local_storage = FileSystemStorage(os.path.join(fixtures_dir, "media"))

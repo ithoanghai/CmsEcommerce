@@ -56,7 +56,7 @@ class ActivityCreationFormDefault(_ActivityCustomFormDefault):
 
     def group_desc_for_dt_alert(self):
         return {
-            'name': gettext('Generate an alert on a specific date'),
+            'name': _('Generate an alert on a specific date'),
             'layout': LAYOUT_DUAL_SECOND,
             'cells': [
                 activity_forms.DatetimeAlertSubCell(model=self.descriptor.model).into_cell(),
@@ -65,7 +65,7 @@ class ActivityCreationFormDefault(_ActivityCustomFormDefault):
 
     def group_desc_for_period_alert(self):
         return {
-            'name': gettext('Generate an alert in a while'),
+            'name': _('Generate an alert in a while'),
             'layout': LAYOUT_DUAL_SECOND,
             'cells': [
                 activity_forms.PeriodAlertSubCell(model=self.descriptor.model).into_cell(),
@@ -120,7 +120,7 @@ class UnavailabilityCreationFormDefault(ActivityCreationFormDefault):
             self.group_desc_for_main_fields(remaining=False),
             self.group_desc_for_when(),
             {
-                'name': gettext('Unavailable users'),
+                'name': _('Unavailable users'),
                 'cells': [
                     activity_forms.ParticipatingUsersSubCell(model=model).into_cell(),
                 ],

@@ -123,7 +123,7 @@ if settings.USE_JQPLOT:
                 if fetcher_vname else
                 str(fetcher.graph)
             )
-            self.description = gettext(
+            self.description = _(
                 'This block displays the graph «{graph}», contained by the report «{report}».\n'
                 'App: Reports'
             ).format(graph=graph, report=graph.linked_report)
@@ -255,7 +255,7 @@ else:
                 if fetcher_vname else
                 str(fetcher.graph)
             )
-            self.description = gettext(
+            self.description = _(
                 'This block displays the graph «{graph}», contained by the report «{report}».\n'
                 'App: Reports'
             ).format(graph=graph, report=graph.linked_report)

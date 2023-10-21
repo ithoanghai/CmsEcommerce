@@ -33,7 +33,7 @@ class ContactFormDefault(CustomFormDefault):
             # LAYOUT_DUAL_SECOND
             self.group_desc_for_description(),
             {
-                'name': gettext('Contact details'),
+                'name': _('Contact details'),
                 'layout': LAYOUT_DUAL_SECOND,
                 'cells': [*self.regular_fields_cells(*self.details_fields)],
             },

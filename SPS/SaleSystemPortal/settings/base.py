@@ -78,38 +78,37 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 #   - use a database engine that supports transactions
 #     (i.e. not MyISAM for MySQL, which uses now INNODB by default).
 #   - configure your database to use utf8 (e.g. with MySQL, 'utf8_general_ci' is OK).
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["DBNAME"],
-        "USER": os.environ["DBUSER"],
-        "PASSWORD": os.environ["DBPASSWORD"],
-        "HOST": os.environ["DBHOST"],
-        "PORT": os.environ["DBPORT"],
-    }
-}
 # DATABASES = {
-#     'default': {
-#     # Possible backends: 'postgresql', 'mysql', 'sqlite3'.
-#     # NB: 'oracle' backend is not working with creme for now.
-#     # 'ENGINE': 'django.db.backends.mysql',
-#     'ENGINE': 'django.db.backends.sqlite3',
-#
-#     # Name of the database, or path to the database file if using 'sqlite3'.
-#     'NAME': 'cremecrm',
-#     # Not used with sqlite3.
-#     'USER': 'creme',
-#     # Not used with sqlite3.
-#     'PASSWORD': 'creme',
-#     # Set to empty string for localhost. Not used with 'sqlite3'.
-#     'HOST': '',
-#     # Set to empty string for default. Not used with 'sqlite3'.
-#     'PORT': '',
-#     # Extra parameters for database connection.
-#     # Consult backend module's document for available keywords.
-#     'OPTIONS': {},
-#     },
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.environ["DBNAME"],
+#         "USER": os.environ["DBUSER"],
+#         "PASSWORD": os.environ["DBPASSWORD"],
+#         "HOST": os.environ["DBHOST"],
+#         "PORT": os.environ["DBPORT"],
+#     }
 # }
+DATABASES = {
+    'default': {
+    # Possible backends: 'postgresql', 'mysql', 'sqlite3'.
+    # NB: 'oracle' backend is not working with creme for now.
+    # 'ENGINE': 'django.db.backends.mysql',
+   'ENGINE': 'django.db.backends.sqlite3',
+    # Name of the database, or path to the database file if using 'sqlite3'.
+    'NAME': os.environ["DBNAME"],
+    # Not used with sqlite3.
+    'USER': os.environ["DBUSER"],
+    # Not used with sqlite3.
+    'PASSWORD': os.environ["DBPASSWORD"],
+    # Set to empty string for localhost. Not used with 'sqlite3'.
+    'HOST': os.environ["DBHOST"],
+    # Set to empty string for default. Not used with 'sqlite3'.
+    'PORT': os.environ["DBPORT"],
+    # Extra parameters for database connection.
+    # Consult backend module's document for available keywords.
+    'OPTIONS': {},
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -725,7 +724,7 @@ INSTALLED_CREME_APPS = [
     "creme.wiki",
 ]
 
-INSTALLED_APPS = BUILT_IN_APPS + INSTALLED_CREME_APPS + MODULES_APPS + THIRD_PARTIES_APPS
+INSTALLED_APPS = BUILT_IN_APPS + INSTALLED_CREME_APPS + THIRD_PARTIES_APPS + MODULES_APPS
 
 
 THUMBNAIL_HIGH_RESOLUTION = True
@@ -1190,7 +1189,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
         'icon': 'fas fa-list',
-        'url_name': 'creme_core:catalogue-product-list',
+        'url_name': 'creme_core:index_view',
     },
     {
         'label': _('Catalogue'),

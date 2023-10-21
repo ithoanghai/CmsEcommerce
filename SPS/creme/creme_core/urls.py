@@ -1,5 +1,10 @@
 from django.conf import settings
-from django.urls import include, re_path
+from django.urls import include, re_path, path
+from django.apps import apps
+from django.contrib.auth import views as auth_views
+
+from .core.loading import get_class
+
 
 from .views import (
     auth,
@@ -466,9 +471,27 @@ creme_core_patterns = [
     ),
 ]
 
+oscarpatterns = [
+    path('catalogue/', include(apps.get_app_config('catalogue_dashboard').urls[0])),
+    path('reports/', include(apps.get_app_config('reports_dashboard').urls[0])),
+    path('orders/', include(apps.get_app_config('orders_dashboard').urls[0])),
+    path('users/', include(apps.get_app_config('users_dashboard').urls[0])),
+    path('pages/', include(apps.get_app_config('pages_dashboard').urls[0])),
+    path('partners/', include(apps.get_app_config('partners_dashboard').urls[0])),
+    path('offers/', include(apps.get_app_config('offers_dashboard').urls[0])),
+    path('ranges/', include(apps.get_app_config('ranges_dashboard').urls[0])),
+    path('reviews/', include(apps.get_app_config('reviews_dashboard').urls[0])),
+    path('vouchers/', include(apps.get_app_config('vouchers_dashboard').urls[0])),
+    path('comms/', include(apps.get_app_config('communications_dashboard').urls[0])),
+    path('shipping/', include(apps.get_app_config('shipping_dashboard').urls[0])),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+
+    ]
+
 urlpatterns = [
-    re_path(r'^$',            index.Home.as_view(),   name='shop_home'),
-    re_path(r'^shop/dashboard/', index.IndexView.as_view(), name='creme_core__my_dashboard'),
+    re_path(r'^$',            index.Home.as_view(),   name='creme_dashboard'),
+    re_path(r'^shop/dashboard/',include(oscarpatterns)),
+    re_path(r'^shop/dashboard/', index.IndexView.as_view(), name='creme_core__shop_dashboard'),
     re_path(r'^my_page[/]?$', index.MyPage.as_view(), name='creme_core__my_page'),
 
     re_path(r'^creme_core/', include(creme_core_patterns)),

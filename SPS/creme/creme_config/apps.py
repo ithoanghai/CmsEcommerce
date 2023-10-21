@@ -155,6 +155,7 @@ class CremeConfigConfig(CremeAppConfig):
         self.dashboard_app = apps.get_app_config('creme_core')
 
         #for oscar
+        self.index_view = get_class('creme_core.views.index', 'IndexView')
         self.catalogue_app = apps.get_app_config('catalogue')
         self.customer_app = apps.get_app_config('customer')
         self.basket_app = apps.get_app_config('basket')
@@ -173,7 +174,6 @@ class CremeConfigConfig(CremeAppConfig):
 
         urls = [
             path('dashboard/', self.dashboard_app.urls),  #shop dashboard
-
             path('', RedirectView.as_view(url=settings.OSCAR_HOMEPAGE), name='shop_home'),
             path('catalogue/', self.catalogue_app.urls),
             path('basket/', self.basket_app.urls),
