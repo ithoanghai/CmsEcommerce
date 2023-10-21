@@ -106,7 +106,7 @@ class ActivityUnlinking(generic.CremeDeletion):
         entities_per_id = CremeEntity.objects.in_bulk([activity_id, subject_id])
 
         if len(entities_per_id) != 2:
-            raise Http404(gettext('One entity does not exist any more.'))
+            raise Http404(_('One entity does not exist any more.'))
 
         entities = {
             'entity': entities_per_id[subject_id],

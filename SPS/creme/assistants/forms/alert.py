@@ -351,7 +351,7 @@ class AlertForm(CremeModelForm):
         instance.real_entity = entity
 
         fields = self.fields
-        fields['user'].empty_label = gettext(
+        fields['user'].empty_label =_(
             'Same owner than the entity (currently «{user}»)'
         ).format(user=entity.user)
 

@@ -209,7 +209,7 @@ class EntityFilterDeletion(EntityDeletionMixin, generic.CremeModelDeletion):
         # TODO: move in a middleware ??
         except ProtectedError as e:
             raise ConflictError(
-                gettext(
+                _(
                     'The filter can not be deleted because of its dependencies '
                     '({dependencies}).'
                 ).format(

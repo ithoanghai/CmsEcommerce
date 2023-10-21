@@ -51,7 +51,7 @@ class MarketSegment(CremeModel):
 
     @staticmethod
     def generate_property_text(segment_name):
-        return gettext('is in the segment «{}»').format(segment_name)
+        return _('is in the segment «{}»').format(segment_name)
 
     def save(self, *args, **kwargs):
         if self.property_type is None:

@@ -89,7 +89,7 @@ class SendingEdition(generic.RelatedToEntityEditionPopup):
 
     def check_instance_permissions(self, instance, user):
         if instance.state == EmailSending.State.DONE:
-            raise ConflictError(gettext('This sending is done.'))
+            raise ConflictError(_('This sending is done.'))
 
     def get_title_format_data(self):
         data = super().get_title_format_data()

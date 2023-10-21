@@ -49,7 +49,7 @@ ProductTable, CategoryTable, AttributeOptionGroupTable, OptionTable \
 (PopUpWindowCreateMixin,
  PopUpWindowUpdateMixin,
  PopUpWindowDeleteMixin) \
-    = get_classes('creme_core.views.dashboard',
+    = get_classes('creme_core.views.index',
                   ('PopUpWindowCreateMixin',
                    'PopUpWindowUpdateMixin',
                    'PopUpWindowDeleteMixin'))

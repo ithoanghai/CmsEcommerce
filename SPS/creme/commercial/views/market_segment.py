@@ -64,7 +64,7 @@ class SegmentDeletion(generic.CremeModelEditionPopup):
         super().check_view_permissions(user=user)
 
         if MarketSegment.objects.count() < 2:
-            raise ConflictError(gettext("You can't delete the last segment."))
+            raise ConflictError(_("You can't delete the last segment."))
 
     def post(self, *args, **kwargs):
         try:
@@ -73,6 +73,6 @@ class SegmentDeletion(generic.CremeModelEditionPopup):
             logger.exception('Error in MarketSegment deletion view')
 
             return HttpResponse(
-                gettext('You cannot delete this segment [original error: {}].').format(e),
+                _('You cannot delete this segment [original error: {}].').format(e),
                 status=400,
             )

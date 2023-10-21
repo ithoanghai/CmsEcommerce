@@ -105,7 +105,7 @@ class PollRepliesCreationForm(core_forms.CremeForm):
         lines = pform.lines.filter(disabled=False)
 
         if not lines:
-            raise exception_class(gettext('The form must contain one line at least.'))
+            raise exception_class(_('The form must contain one line at least.'))
 
         self.pform = pform
         self.pform_lines = lines

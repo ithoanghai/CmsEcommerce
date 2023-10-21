@@ -8,7 +8,7 @@ from django.urls import resolve, reverse
 from ..creme_core.apps import CremeCoreConfig
 from ..creme_core.views.decorators import check_permissions
 
-logger = logging.getLogger('creme.creme_core')
+logger = logging.getLogger('creme.creme_config')
 
 
 class Node(object):

@@ -36,7 +36,7 @@ class LinkedOpportunityButton(Button):
     permissions = cperm(get_opportunity_model())
 
     def get_ctypes(self):
-        from creme import persons
+        from .. import persons
         return (
             persons.get_organisation_model(),
             persons.get_contact_model(),

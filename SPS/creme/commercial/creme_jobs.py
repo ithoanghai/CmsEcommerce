@@ -104,13 +104,13 @@ class _ComApproachesEmailsSendType(JobType):
                     continue
 
                 emails.append(EmailMessage(
-                    gettext(
+                    _(
                         '[{software}] The organisation «{organisation}» seems neglected'
                     ).format(
                         software=settings.SOFTWARE_LABEL,
                         organisation=orga,
                     ),
-                    gettext(
+                    _(
                         "It seems you haven't created a commercial approach for "
                         "the organisation «{orga}» since {delay} days."
                     ).format(
@@ -129,26 +129,26 @@ class _ComApproachesEmailsSendType(JobType):
                 JobResult.objects.create(
                     job=job,
                     messages=[
-                        gettext('An error has occurred while sending emails'),
-                        gettext('Original error: {}').format(e),
+                        _('An error has occurred while sending emails'),
+                        _('Original error: {}').format(e),
                     ],
                 )
 
     def get_description(self, job):
         return [
-            gettext(
+            _(
                 "For each customer organisation, an email is sent to its owner "
                 "(i.e. a Creme user), if there is no commercial approach since "
                 "{} days linked to: the organisation, one of its managers/employees, "
                 "or an Opportunity which targets this organisation."
             ).format(self.list_target_orga[0][1]),
-            gettext(
+            _(
                 "Hint: to create commercial approaches, activate the field "
                 "«Is a commercial approach?» in the configuration of Activities' forms ; "
                 "so when you create an Activity, if you check the box, some approaches "
                 "will be created for participants, subjects & linked entities."
             ),
-            gettext(
+            _(
                 "Hint: to see commercial approaches, activate the related block "
                 "on detail-views."
             ),

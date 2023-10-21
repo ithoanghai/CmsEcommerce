@@ -86,7 +86,7 @@ url_main = [
     path("", as_view("home.html", config=None), name="homepage"),
     path('shop/', include(apps.get_app_config('creme_config').urls[0])),
     path('cms/', include(wagtail_urls)),
-    path('dashboard/', dashboard, name="dashboard"),
+
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
     path('sitemapsocial.xml', sitemap, {'sitemaps': {'socialpages': NewsSitemap}}),
@@ -95,7 +95,7 @@ url_main = [
 
     path('search/', search_views.search, name="search"),
 
-    path("logout/", auth_views.LogoutView.as_view(), {"next_page": "/login/"}, name="logout"),
+    path("logout/", auth_views.LogoutView.as_view(), {"next_page": "/creme_login/"}, name="logout"),
 ]
 
 url_crm_cms_social_ecommerce = [
@@ -165,8 +165,7 @@ url_crm_cms_social_ecommerce = [
         name='creme_login',
     ),
     url(
-        r'^creme_logout[/]?$', auth_views.logout_then_login,
-        name='creme_logout',
+        r'^creme_logout[/]?$', auth_views.logout_then_login, name='creme_logout',
     ),
     url(
         r'^creme_about[/]?$', render,

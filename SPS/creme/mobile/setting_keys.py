@@ -1,7 +1,7 @@
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
-from ...creme_core.core.setting_key import SettingKey
+from ..creme_core.core.setting_key import SettingKey
 
 LOCATION_MAP_URL = SettingKey(
     id='mobile-location_map_url',

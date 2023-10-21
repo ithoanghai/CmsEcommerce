@@ -117,7 +117,7 @@ class DisplayedNameSetting(_UserFieldSetting):
 
     def dispatch(self, request, *args, **kwargs):
         if not get_world_settings_model().objects.instance().user_name_change_enabled:
-            raise PermissionDenied(gettext(
+            raise PermissionDenied(_(
                 'Your are not allowed to change your displayed name'
             ))
 

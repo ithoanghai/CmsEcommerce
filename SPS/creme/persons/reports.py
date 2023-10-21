@@ -39,7 +39,7 @@ class OwnedGraphFetcher(GraphFetcher):
 
     def _aux_fetch_4_entity(self, entity, order, user):
         if not isinstance(entity, Contact):
-            raise self.IncompatibleContentType(gettext(
+            raise self.IncompatibleContentType(_(
                 "The volatile link «Belongs to the Contact/User» is only "
                 "compatible with Contacts ; you should fix your blocks' configuration."
             ))

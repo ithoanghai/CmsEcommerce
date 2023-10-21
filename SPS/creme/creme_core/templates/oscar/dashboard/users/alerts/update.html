@@ -10,7 +10,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'creme_core__home' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'creme_core:user-alert-list' %}">{% trans "Product alerts" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% blocktrans with id=alert.id %}Alert #{{ id }}{% endblocktrans %}</li>
         </ol>

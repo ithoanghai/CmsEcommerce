@@ -23,7 +23,7 @@ class _ActivityCustomFormDefault(CustomFormDefault):
         model = self.descriptor.model
 
         return {
-            'name': gettext('When'),
+            'name': _('When'),
             'layout': LAYOUT_DUAL_SECOND,
             'cells': [
                 activity_forms.StartSubCell(model=model).into_cell(),
@@ -44,7 +44,7 @@ class ActivityCreationFormDefault(_ActivityCustomFormDefault):
         model = self.descriptor.model
 
         return {
-            'name': gettext('Participants & subjects'),
+            'name': _('Participants & subjects'),
             'cells': [
                 activity_forms.MyParticipationSubCell(model=model).into_cell(),
                 activity_forms.ParticipatingUsersSubCell(model=model).into_cell(),

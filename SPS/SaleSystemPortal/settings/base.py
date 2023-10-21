@@ -1190,7 +1190,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
         'icon': 'fas fa-list',
-        'url_name': 'creme_core:index',
+        'url_name': 'catalogue:index',
     },
     {
         'label': _('Catalogue'),
@@ -1305,7 +1305,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'url_name': 'creme_core:reports-index',
     },
 ]
-OSCAR_DASHBOARD_DEFAULT_ACCESS_FUNCTION = 'creme.creme_core.nav.default_access_fn'  # noqa
+OSCAR_DASHBOARD_DEFAULT_ACCESS_FUNCTION = 'creme.creme_config.nav.default_access_fn'  # noqa
 
 # Name of the base template used by all the common pages (there are some exceptions
 # like the login & "About" pages, which can be customised with their own way).

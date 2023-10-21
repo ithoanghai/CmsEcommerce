@@ -35,10 +35,10 @@ class TurnoverField(FunctionField):
         is_hidden = FieldsConfig.objects.get_for_model(entity.__class__).is_fieldname_hidden
 
         if is_hidden('estimated_sales'):
-            return FunctionFieldResult(gettext('Error: «Estimated sales» is hidden'))
+            return FunctionFieldResult(_('Error: «Estimated sales» is hidden'))
 
         if is_hidden('chance_to_win'):
-            return FunctionFieldResult(gettext(r'Error: «% of chance to win» is hidden'))
+            return FunctionFieldResult(_(r'Error: «% of chance to win» is hidden'))
 
         return self.result_type(
             (entity.estimated_sales or 0) * (entity.chance_to_win or 0) / 100.0

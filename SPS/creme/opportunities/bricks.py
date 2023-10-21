@@ -91,7 +91,7 @@ class OpportunityCardHatBrick(_RelatedToOpportunity, Brick):
         is_hidden = context['fields_configs'].get_for_model(Opportunity).is_fieldname_hidden
 
         if apps.is_installed('creme.activities'):
-            from creme.activities import get_activity_model
+            from ..activities import get_activity_model
 
             is_neglected = not get_activity_model().objects.future_linked(
                 entity=opportunity,
@@ -339,7 +339,7 @@ brick_classes: list[type[Brick]] = [
 ]
 
 if apps.is_installed('creme.billing'):
-    from creme import billing
+    from .. import billing
 
     Invoice    = billing.get_invoice_model()
     Quote      = billing.get_quote_model()

@@ -28,12 +28,12 @@ from django.forms.fields import CallableChoiceIterator
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.core.enumerable import EmptyEnumerator
-from creme.creme_core.enumerators import CustomFieldEnumerator
-from creme.creme_core.forms import enumerable as enum_forms
-from creme.creme_core.forms.enumerable import EnumerableChoiceSet
-from creme.creme_core.forms.widgets import UnorderedMultipleChoiceWidget
-from creme.creme_core.gui import menu
+from ...creme_core.core.enumerable import EmptyEnumerator
+from ...creme_core.enumerators import CustomFieldEnumerator
+from ...creme_core.forms import enumerable as enum_forms
+from ...creme_core.forms.enumerable import EnumerableChoiceSet
+from ...creme_core.forms.widgets import UnorderedMultipleChoiceWidget
+from ...creme_core.gui import menu
 
 from ..registry import config_registry
 from . import widgets

@@ -26,12 +26,12 @@ from typing import Callable, Iterator
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Model, QuerySet
 
-from creme.creme_core import models
-from creme.creme_core.core import entity_cell
-from creme.creme_core.core.entity_filter import condition_handler
+from ...creme_core import models
+from ...creme_core.core import entity_cell
+from ...creme_core.core.entity_filter import condition_handler
 # from creme.creme_core.core.exceptions import ConflictError
-from creme.creme_core.gui.bricks import brick_registry
-from creme.creme_core.gui.custom_form import (
+from ...creme_core.gui.bricks import brick_registry
+from ...creme_core.gui.custom_form import (
     FieldGroup,
     FieldGroupList,
     customform_descriptor_registry,

@@ -10,7 +10,7 @@
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-                <li><a href="{% url "dashboard" %}"><i class="fa fa-dashboard"></i> {% trans "Dashboard" %}</a></li>
+                <li><a href="{% url "creme_login" %}"><i class="fa fa-dashboard"></i> {% trans "Shop" %}</a></li>
                 <li><a href="{% url "account_settings" %}"><i class="fa fa-user"></i> {% trans "Settings" %}</a></li>
                   {% if request.user.is_staff %}
                     <li><a href="{% url THEME_ADMIN_URL|default:"admin:index" %}"><i class="fa fa-cog"></i> {% trans "Admin" %}</a></li>

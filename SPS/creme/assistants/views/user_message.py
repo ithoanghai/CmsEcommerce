@@ -42,5 +42,5 @@ class UserMessageDeletion(generic.CremeModelDeletion):
     def check_instance_permissions(self, instance, user):
         if user.id != instance.recipient_id:
             raise PermissionDenied(
-                gettext('You are not allowed to delete this message: {}').format(instance)
+               _('You are not allowed to delete this message: {}').format(instance)
             )

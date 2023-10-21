@@ -44,7 +44,7 @@ class PasswordReset(base.SubmittableMixin, auth_views.PasswordResetView):
     def dispatch(self, *args, **kwargs):
         if not get_world_settings_model().objects.instance().password_reset_enabled:
             raise PermissionDenied(
-                gettext('You are not allowed to use the «Lost password» feature.')
+                _('You are not allowed to use the «Lost password» feature.')
             )
         return super().dispatch(*args, **kwargs)
 
@@ -90,7 +90,7 @@ class OwnPasswordChange(base.CancellableMixin,
     def dispatch(self, *args, **kwargs):
         if not get_world_settings_model().objects.instance().password_change_enabled:
             raise PermissionDenied(
-                gettext('You are not allowed to change your password.')
+                _('You are not allowed to change your password.')
             )
         return super().dispatch(*args, **kwargs)
 
@@ -101,7 +101,7 @@ class OwnPasswordChange(base.CancellableMixin,
 
         if get_world_settings_model().objects.instance().password_reset_enabled:
             context['help_message'] = mark_safe(
-                gettext(
+                _(
                     'You lost your password? <a href="{url}">You can reset it</a>'
                 ).format(url=reverse('creme_core__reset_password'))
             )
@@ -115,7 +115,7 @@ class OwnPasswordChangeDone(auth_views.PasswordChangeDoneView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['information_messages'] = [
-            gettext('Use your new password the next time you want to login.'),
+            _('Use your new password the next time you want to login.'),
         ]
 
         return context

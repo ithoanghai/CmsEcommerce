@@ -106,7 +106,7 @@ class CremeWizardView(base.PermissionsMixin,
                     except CustomFormConfigItem.DoesNotExist as e:
                         # TODO: unit test
                         raise Http404(
-                            gettext(
+                            _(
                                 'No default form has been created in DataBase for the '
                                 'model «{model}». Contact your administrator.'
                             ).format(model=descriptor.model._meta.verbose_name)

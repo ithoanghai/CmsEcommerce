@@ -96,7 +96,7 @@ class AbstractAct(CremeEntity):
 
         if not due_date or not start or due_date < start:
             raise ValidationError(
-                gettext("Due date can't be before start."),
+                _("Due date can't be before start."),
                 code='duedate_before_start',
             )
 

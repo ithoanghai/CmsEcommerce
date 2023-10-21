@@ -32,9 +32,9 @@ from django.template.defaultfilters import linebreaks
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
-from creme.creme_core.core import entity_cell
-from creme.creme_core.core.entity_filter import EF_USER
-from creme.creme_core.core.entity_filter.condition_handler import (
+from ...creme_core.core import entity_cell
+from ...creme_core.core.entity_filter import EF_USER
+from ...creme_core.core.entity_filter.condition_handler import (
     CustomFieldConditionHandler,
     DateCustomFieldConditionHandler,
     DateRegularFieldConditionHandler,
@@ -45,14 +45,14 @@ from creme.creme_core.core.entity_filter.condition_handler import (
     RelationSubFilterConditionHandler,
     SubFilterConditionHandler,
 )
-from creme.creme_core.core.function_field import function_field_registry
-from creme.creme_core.gui.custom_form import (
+from ...creme_core.core.function_field import function_field_registry
+from ...creme_core.gui.custom_form import (
     EntityCellCustomFormExtra,
     EntityCellCustomFormSpecial,
     FieldGroupList,
     customform_descriptor_registry,
 )
-from creme.creme_core.models import (
+from ...creme_core.models import (
     BrickDetailviewLocation,
     BrickHomeLocation,
     BrickMypageLocation,
@@ -75,12 +75,12 @@ from creme.creme_core.models import (
     SetCredentials,
     UserRole,
 )
-from creme.creme_core.models.custom_field import _TABLES as CF_TABLES
-from creme.creme_core.utils.dependence_sort import (
+from ...creme_core.models.custom_field import _TABLES as CF_TABLES
+from ...creme_core.utils.dependence_sort import (
     DependenciesLoopError,
     dependence_sort,
 )
-from creme.creme_core.utils.meta import FieldInfo
+from ...creme_core.utils.meta import FieldInfo
 
 from .. import constants
 

@@ -153,7 +153,7 @@ class CremeEntity(CremeModel):
     def allowed_str(self, user) -> str:
         return (
             str(self) if user.has_perm_to_view(self) else
-            gettext('Entity #{id} (not viewable)').format(id=self.id)
+            _('Entity #{id} (not viewable)').format(id=self.id)
         )
 
     def get_real_entity(self) -> CremeEntity:

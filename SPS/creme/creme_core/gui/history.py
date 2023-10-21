@@ -197,9 +197,9 @@ class HTMLBooleanFieldChangeExplainer(HTMLFieldChangeExplainer):
 
     def render_value(self, *, user, value):
         return (
-            gettext('Yes') if value else
-            gettext('No') if value is False else
-            gettext('N/A')
+           _('Yes') if value else
+           _('No') if value is False else
+           _('N/A')
         )
 
 
@@ -452,7 +452,7 @@ class HistoryLineExplainer:
                 this._cfield_id = cfield_id
 
             def render(this, user):
-                return gettext(
+                return_(
                     'Deleted field (with id={id}) set'
                 ).format(id=this._cfield_id)
 
@@ -484,7 +484,7 @@ class HistoryLineExplainer:
                 this._field_name = field_name
 
             def render(this, user):
-                return gettext('“{field}” set').format(field=this._field_name)
+                return_('“{field}” set').format(field=this._field_name)
 
         for modif in modifications:
             field_name = modif[0]

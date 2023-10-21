@@ -22,10 +22,10 @@ from django import forms
 from django.db.models.aggregates import Max
 from django.utils.translation import gettext as _
 
-from creme.creme_config.forms.fields import MenuEntriesField
-from creme.creme_core.forms import CremeForm, CremeModelForm
-from creme.creme_core.gui.menu import ContainerEntry, menu_registry
-from creme.creme_core.models import MenuConfigItem, UserRole
+from ...creme_config.forms.fields import MenuEntriesField
+from ...creme_core.forms import CremeForm, CremeModelForm
+from ...creme_core.gui.menu import ContainerEntry, menu_registry
+from ...creme_core.models import MenuConfigItem, UserRole
 
 logger = logging.getLogger(__name__)
 

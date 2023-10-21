@@ -178,7 +178,7 @@ class Search(SearcherMixin, base.EntityCTypeRelatedMixin, base.BricksView):
 
         if error is None:
             self.search_error = error = (
-                gettext(
+                _(
                     'Please enter at least {count} characters'
                 ).format(count=MIN_RESEARCH_LENGTH)
                 if len(self.get_search_terms()) < MIN_RESEARCH_LENGTH else

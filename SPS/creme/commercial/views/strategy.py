@@ -177,7 +177,7 @@ class BaseEvaluatedOrganisationView(generic.BricksView):
             try:
                 self.organisation = orga = strategy.evaluated_orgas.get(id=orga_id)
             except get_organisation_model().DoesNotExist:
-                raise Http404(gettext(
+                raise Http404(_(
                     'This organisation «{orga}» is not (no more ?) evaluated by '
                     'the strategy «{strategy}»').format(
                     orga=orga_id, strategy=strategy,

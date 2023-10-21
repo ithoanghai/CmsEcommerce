@@ -147,10 +147,10 @@ class Base(CremeEntity):
     def _clean_source_n_target(self):
         if not self.pk:  # Creation
             if not self._source:
-                raise ValidationError(gettext('Source organisation is required.'))
+                raise ValidationError(_('Source organisation is required.'))
 
             if not self._target:
-                raise ValidationError(gettext('Target is required.'))
+                raise ValidationError(_('Target is required.'))
 
     def _pre_delete(self):
         lines = [*self.iter_all_lines()]

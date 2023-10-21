@@ -87,7 +87,7 @@ class AbstractFolder(CremeEntity):
 
     def _check_deletion(self):
         if str(self.uuid) in self.not_deletable_UUIDs:
-            raise SpecificProtectedError(gettext('This folder is a system folder.'), [self])
+            raise SpecificProtectedError(_('This folder is a system folder.'), [self])
 
     def clean(self):
         if self.pk:
@@ -129,7 +129,7 @@ class AbstractFolder(CremeEntity):
         max_length = self._meta.get_field('title').max_length
         self.title = truncate_str(
             source.title, max_length,
-            suffix=' ({} {:08x})'.format(gettext('Copy'), randint(0, MAXINT)),
+            suffix=' ({} {:08x})'.format(_('Copy'), randint(0, MAXINT)),
         )
 
         # TODO: atomic

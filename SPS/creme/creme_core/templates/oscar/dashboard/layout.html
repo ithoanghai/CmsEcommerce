@@ -43,7 +43,7 @@
                     <a class="nav-link" href="{% url 'customer:summary' %}"><i class="fas fa-user"></i> {% trans "Account" %}</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'creme_core:logout' %}"><i class="fas fa-sign-out-alt"></i> {% trans "Log out" %}</a>
+                    <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> {% trans "Log out" %}</a>
                   </li>
                 </ul>
           </div>
@@ -91,7 +91,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="{% url 'creme_core:index' %}">{% trans "Dashboard" %}</a>
+                        <a href="{% url 'creme_core__home' %}">{% trans "Dashboard" %}</a>
                     </li>
                 </ol>
             </nav>

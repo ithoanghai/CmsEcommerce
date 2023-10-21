@@ -37,19 +37,19 @@ from django.utils.timezone import localtime, make_aware, now
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-import creme.activities.constants as act_constants
-import creme.persons.constants as persons_constants
-from creme import persons
-from creme.activities import get_activity_model
-from creme.activities.models import Calendar
-from creme.creme_core.auth.decorators import login_required
-from creme.creme_core.core.exceptions import ConflictError
-from creme.creme_core.models import CremeEntity, EntityCredentials, Relation
-from creme.creme_core.utils import get_from_GET_or_404, get_from_POST_or_404
-from creme.creme_core.utils.chunktools import iter_as_chunk
+from ..activities import constants as act_constants
+from ..persons import constants as persons_constants
+from .. import persons
+from ..activities import get_activity_model
+from ..activities.models import Calendar
+from ..creme_core.auth.decorators import login_required
+from ..creme_core.core.exceptions import ConflictError
+from ..creme_core.models import CremeEntity, EntityCredentials, Relation
+from ..creme_core.utils import get_from_GET_or_404, get_from_POST_or_404
+from ..creme_core.utils.chunktools import iter_as_chunk
 # from creme.creme_core.utils.dates import make_aware_dt
-from creme.creme_core.utils.dates import dt_from_ISO8601
-from creme.creme_core.views.decorators import jsonify
+from ..creme_core.utils.dates import dt_from_ISO8601
+from ..creme_core.views.decorators import jsonify
 from ..creme_core.views.utils import build_cancel_path
 from ..persons.views.contact import ContactCreation
 from ..persons.views.organisation import OrganisationCreation

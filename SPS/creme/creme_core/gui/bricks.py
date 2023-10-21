@@ -482,7 +482,7 @@ class EntityBrick(Brick):
         ]
 
     def _get_title(self, entity: CremeEntity, context) -> str:
-        return gettext('Information «{model}»').format(model=type(entity)._meta.verbose_name)
+        return _('Information «{model}»').format(model=type(entity)._meta.verbose_name)
 
     def detailview_display(self, context):
         entity = context['object']
@@ -516,11 +516,11 @@ class SpecificRelationsBrick(QuerysetBrick):
 
         rtype = relationbrick_item.relation_type
         self.relation_type_deps = (rtype.id,)
-        self.verbose_name = gettext(
+        self.verbose_name =_(
             'Relationship block: «{predicate}»'
         ).format(predicate=rtype.predicate)
 
-        self.description = gettext(
+        self.description =_(
             'Displays the linked entities which are the objects of relationships «{predicate}» '
             '(the current entity being the subject of these relationships).\n'
             'Hint #1: this kind of block can be created in the configuration of blocks.\n'

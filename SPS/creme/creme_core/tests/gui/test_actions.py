@@ -951,7 +951,7 @@ class BuiltinActionsTestCase(CremeTestCase):
             is_default=True,
             label=_('See'),
             icon='view',
-            help_text=gettext('Go to the entity {entity}').format(entity=self.contact),
+            help_text=_('Go to the entity {entity}').format(entity=self.contact),
         )
         self.assertAction(
             actions.ViewAction(self.user, instance=self.contact_other),
@@ -964,7 +964,7 @@ class BuiltinActionsTestCase(CremeTestCase):
             is_default=True,
             label=_('See'),
             icon='view',
-            help_text=gettext('Go to the entity {entity}').format(entity=self.contact_other),
+            help_text=_('Go to the entity {entity}').format(entity=self.contact_other),
         )
 
     def test_clone_action(self):

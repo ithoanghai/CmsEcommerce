@@ -302,7 +302,7 @@ class EnumPollLineType(PollLineType):
         choices = kwargs.get('choices') or ()
 
         if len(choices) < 2:
-            raise ValidationError(gettext('Give 2 choices at least.'))
+            raise ValidationError(_('Give 2 choices at least.'))
 
         self._args['choices'] = choices
 
@@ -451,7 +451,7 @@ class EnumOrStringPollLineType(EnumPollLineType):
 
                 stats_append((label, count))
 
-            stats_append((gettext('Other'), 0 if in_choices else 1))
+            stats_append((_('Other'), 0 if in_choices else 1))
 
         return stats
 

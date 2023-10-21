@@ -448,14 +448,14 @@ class CalendarDeletion(generic.CremeModelEditionPopup):
     def check_instance_permissions(self, instance, user):
         if not instance.is_custom:
             raise ConflictError(
-                gettext('You cannot delete this calendar: it is not custom.')
+                _('You cannot delete this calendar: it is not custom.')
             )
 
         if instance.user_id != user.id:
-            raise PermissionDenied(gettext('You are not allowed to delete this calendar.'))
+            raise PermissionDenied(_('You are not allowed to delete this calendar.'))
 
         if not Calendar.objects.filter(user=user).exclude(id=instance.id).exists():
-            raise ConflictError(gettext('You cannot delete your last calendar.'))
+            raise ConflictError(_('You cannot delete your last calendar.'))
 
         ctype = ContentType.objects.get_for_model(Calendar)
         dcom = DeletionCommand.objects.filter(content_type=ctype).first()

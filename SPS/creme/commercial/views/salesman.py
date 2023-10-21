@@ -39,7 +39,7 @@ class SalesManCreation(contact_views.ContactCreation):
 
         if not ptype.enabled:
             raise ConflictError(
-                gettext(
+                _(
                     'The property type «{}» is disabled; you should enable it '
                     'or remove the menu entries referencing salesmen.'
                 ).format(ptype.text)

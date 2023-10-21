@@ -21,9 +21,9 @@ from __future__ import annotations
 from django.forms import ModelChoiceField
 from django.utils.translation import gettext as _
 
-import creme.creme_core.forms.header_filter as hf_forms
-from creme.creme_core.forms import CremeModelForm
-from creme.creme_core.models import SearchConfigItem, UserRole
+from ...creme_core.forms import header_filter as hf_forms
+from ...creme_core.forms import CremeModelForm
+from ...creme_core.models import SearchConfigItem, UserRole
 
 
 class SearchRegularFieldsWidget(hf_forms.EntityCellRegularFieldsWidget):

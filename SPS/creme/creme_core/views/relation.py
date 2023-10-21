@@ -472,7 +472,7 @@ def add_relations_with_same_type(request):
         #     so it's a good thing to have the permission to view it.
         if not user.has_perm_to_view(entity) or not user.has_perm_to_link(entity):
             errors[403].append(
-                gettext(
+                _(
                     'Permission denied to entity with id={}'
                 ).format(entity.id))
             continue
@@ -496,7 +496,7 @@ def add_relations_with_same_type(request):
 
     if not errors:
         status = 200
-        message = gettext('Operation successfully completed')
+        message = _('Operation successfully completed')
     else:
         status = min(errors)
         message = ','.join(

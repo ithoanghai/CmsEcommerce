@@ -546,7 +546,7 @@ class VcfImportForm(CremeModelForm):
                 img_format = get_image_format(image_data)
             except Exception:
                 logger.exception('Clean image encoded in VCF')
-                raise ValidationError(gettext('Invalid image data'))
+                raise ValidationError(_('Invalid image data'))
 
             # TODO: check with settings.ALLOWED_IMAGES_EXTENSIONS ?
             self._vcf_image_info = (ContentFile(image_data), img_format)

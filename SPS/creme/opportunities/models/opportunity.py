@@ -61,7 +61,7 @@ class SalesPhase(core_models.MinionModel):
         super().clean()
 
         if self.won and self.lost:
-            raise ValidationError(gettext('A phase can not be won and lost at the same time.'))
+            raise ValidationError(_('A phase can not be won and lost at the same time.'))
 
 
 class Origin(core_models.MinionModel):
@@ -147,10 +147,10 @@ class AbstractOpportunity(CremeEntity):
         #     & the following validation was annoying.
         if not self.pk and self.user_id:  # Creation
             if not self._opp_emitter:
-                raise ValidationError(gettext('Emitter is required.'))
+                raise ValidationError(_('Emitter is required.'))
 
             if not self._opp_target:
-                raise ValidationError(gettext('Target is required.'))
+                raise ValidationError(_('Target is required.'))
 
     def _pre_delete(self):
         for relation in self.relations.filter(
@@ -263,7 +263,7 @@ class AbstractOpportunity(CremeEntity):
         def get_current_quote_ids(self):
             from django.contrib.contenttypes.models import ContentType
 
-            from creme.billing import get_quote_model
+            from ...billing import get_quote_model
 
             ct = ContentType.objects.get_for_model(get_quote_model())
 

@@ -1,8 +1,8 @@
 from django import template
 
-from ..core.loading import get_class
+from ...creme_core.core.loading import get_class
 
-get_nodes = get_class('creme_core.menu', 'get_nodes')
+get_nodes = get_class('creme_config.menu', 'get_nodes')
 register = template.Library()
 
 

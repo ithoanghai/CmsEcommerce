@@ -66,9 +66,9 @@ class WaitingAction(CremeModel):
         if self.user is not None and self.user != user and not user.is_superuser:
             return (
                 False,
-                gettext(
+                _(
                     'You are not allowed to validate/delete the waiting action <{}>'
                 ).format(self.id)
             )
 
-        return True, gettext('OK')
+        return True, _('OK')

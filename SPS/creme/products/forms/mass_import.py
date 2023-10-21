@@ -22,12 +22,12 @@ from django.forms import Field, ValidationError
 # from django.forms.widgets import Select
 from django.utils.translation import gettext as _
 
-from creme.creme_core.forms.fields import ChoiceModelIterator
-from creme.creme_core.forms.mass_import import (
+from ...creme_core.forms.fields import ChoiceModelIterator
+from ...creme_core.forms.mass_import import (
     BaseExtractorWidget,
     ImportForm4CremeEntity,
 )
-from creme.creme_core.forms.widgets import PrettySelect
+from ...creme_core.forms.widgets import PrettySelect
 
 from ..models import Category, SubCategory
 
@@ -71,7 +71,7 @@ class CategoriesExtractor:
                             cat_created = True
                         else:
                             raise self._FatalError(
-                                gettext('The category «{}» does not exist').format(cat_name)
+                                _('The category «{}» does not exist').format(cat_name)
                             )
 
             # Sub-category
@@ -95,14 +95,14 @@ class CategoriesExtractor:
                             )
                         else:
                             raise self._FatalError(
-                                gettext('The sub-category «{}» does not exist').format(
+                                _('The sub-category «{}» does not exist').format(
                                     subcat_name,
                                 )
                             )
 
             # Error checking
             if sub_category.category_id != category.id:
-                error_msg = gettext(
+                error_msg =_(
                     'The category «{cat}» and the sub-category «{sub_cat}» are not matching.'
                 ).format(
                     cat=category,

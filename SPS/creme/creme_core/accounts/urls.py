@@ -20,6 +20,7 @@ from .views import (
     AccountAttachmentView,
 )
 from ..api.docs import doc_view
+from ..views.index import LoginView
 
 app_name = 'accounts' #app_name = "api_accounts"
 

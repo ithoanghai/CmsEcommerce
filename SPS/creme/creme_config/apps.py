@@ -152,6 +152,7 @@ class CremeConfigConfig(CremeAppConfig):
     def ready(self):
         from django.contrib.auth.forms import SetPasswordForm
 
+        #for oscar
         self.dashboard_app = apps.get_app_config('creme_core')
 
         self.catalogue_app = apps.get_app_config('catalogue')
@@ -214,5 +215,6 @@ class CremeConfigConfig(CremeAppConfig):
                 )),
                 name='password-reset-complete'),
         ]
-        return urls
+        #return urls
+        return self.post_process_urls(urls)
 

@@ -1456,7 +1456,7 @@ class ImportForm(CremeModelForm):
                                     else:
                                         job_result.updated = updated = True
                                 else:
-                                    append_error(gettext(
+                                    append_error(_(
                                         'Several entities corresponding to the '
                                         'search have been found. '
                                         'So a new entity have been created to avoid errors.'

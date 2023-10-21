@@ -23,7 +23,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 # TODO: move them to creme_core ?
-import creme.creme_config.forms.creme_property_type as ptype_forms
+from ...creme_config.forms import creme_property_type as ptype_forms
 
 from ..forms import creme_property as prop_forms
 from ..gui.bricks import Brick, QuerysetBrick
