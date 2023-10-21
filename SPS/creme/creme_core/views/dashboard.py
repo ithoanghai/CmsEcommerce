@@ -37,7 +37,7 @@ class IndexView(TemplateView):
 
     def get_template_names(self):
         if self.request.user.is_staff:
-            return ['oscar/dashboard/index.html', ]
+            return ['creme_core/home.html', ]
         else:
             return ['oscar/dashboard/index_nonstaff.html', 'oscar/dashboard/index.html']
 
