@@ -246,7 +246,7 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
             brick_id=UserMessagesBrick.id, defaults={'order': 50},
         )
 
-        response2 = self.assertGET200(reverse('creme_core__home'))
+        response2 = self.assertGET200(reverse('shop_home'))
         home_brick_node = self.get_brick_node(
             self.get_html_tree(response2.content), brick=UserMessagesBrick,
         )

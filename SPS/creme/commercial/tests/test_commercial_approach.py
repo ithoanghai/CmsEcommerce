@@ -440,7 +440,7 @@ class CommercialApproachTestCase(CremeTestCase, BrickTestCaseMixin):
         "Home."
         BrickHomeLocation.objects.create(brick_id=ApproachesBrick.id, order=100)
 
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         self._get_commap_brick_node(response)
 
     def _send_mails(self):

@@ -371,7 +371,7 @@ class LoginView(auth_views.LoginView):
     #template_name = 'oscar/dashboard/login.html'
     template_name = 'authent/creme_login.html'
     authentication_form = AuthenticationForm
-    login_redirect_url = reverse_lazy('creme_core__home')
+    login_redirect_url = reverse_lazy('shop_home')
 
     def get_success_url(self):
         url = self.get_redirect_url()

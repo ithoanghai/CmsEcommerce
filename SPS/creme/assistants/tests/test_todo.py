@@ -300,7 +300,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
             brick_id=TodosBrick.id, defaults={'order': 50},
         )
 
-        response2 = self.assertGET200(reverse('creme_core__home'))
+        response2 = self.assertGET200(reverse('shop_home'))
         home_brick_node = self.get_brick_node(
             self.get_html_tree(response2.content), brick=TodosBrick,
         )
@@ -327,7 +327,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         self.assertFalse(todo_found(detail_brick_node_hidden, todo3))
 
         # Home + hide validated ---
-        response4 = self.assertGET200(reverse('creme_core__home'))
+        response4 = self.assertGET200(reverse('shop_home'))
         home_brick_node_hidden = self.get_brick_node(
             self.get_html_tree(response4.content), brick=TodosBrick,
         )

@@ -6,7 +6,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'creme_core__home' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item">
                 <a href="{% if parent %}{% url 'creme_core:catalogue-category-detail-list' pk=parent.pk %}{% else %}{% url 'creme_core:catalogue-category-list' %}{% endif %}">
                     {% trans "Categories" %}

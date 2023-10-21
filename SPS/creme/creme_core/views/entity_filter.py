@@ -111,7 +111,7 @@ class FilterMixin:
     # TODO: rename (shadows view method)
     def get_success_url(self):
         # TODO: callback_url?
-        return self.build_lv_url() or reverse('creme_core__home')
+        return self.build_lv_url() or reverse('shop_home')
 
     def save_in_session(self, lvs_attr):
         request = self.request

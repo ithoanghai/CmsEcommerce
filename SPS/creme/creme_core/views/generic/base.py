@@ -486,7 +486,7 @@ class CremeFormView(CancellableMixin, PermissionsMixin, TitleMixin, SubmittableM
     """
     form_class: type[CremeForm] = CremeForm
     template_name = 'creme_core/generics/blockform/add.html'
-    success_url = reverse_lazy('creme_core__home')
+    success_url = reverse_lazy('shop_home')
     atomic_POST: bool = True
 
     def dispatch(self, request, *args, **kwargs):

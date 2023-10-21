@@ -410,7 +410,7 @@ class ActivityBricksTestCase(BrickTestCaseMixin, _ActivitiesTestCase):
             brick_id=PastActivitiesBrick.id, defaults={'order': 11},
         )
 
-        response1 = self.assertGET200(reverse('creme_core__home'))
+        response1 = self.assertGET200(reverse('shop_home'))
         tree = self.get_html_tree(response1.content)
 
         future_brick_node = self.get_brick_node(tree, FutureActivitiesBrick)

@@ -228,7 +228,7 @@ class ActionTestCase(BrickTestCaseMixin, AssistantsTestCase):
         create_home(brick_id=ActionsOnTimeBrick.id,    defaults={'order': 50})
         create_home(brick_id=ActionsNotOnTimeBrick.id, defaults={'order': 51})
 
-        response2 = self.assertGET200(reverse('creme_core__home'))
+        response2 = self.assertGET200(reverse('shop_home'))
 
         home_brick_node_ok = self.get_brick_node(
             self.get_html_tree(response2.content), brick=ActionsOnTimeBrick,

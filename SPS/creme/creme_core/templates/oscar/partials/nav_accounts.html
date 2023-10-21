@@ -46,7 +46,7 @@
                     </li>
                     {% if user.is_staff or perms.partner.dashboard_access %}
                         <li class="nav-item mr-2">
-                            <a href="{% url 'creme_core__home' %}" class="nav-link">
+                            <a href="{% url 'shop_home' %}" class="nav-link">
                                 <i class="fas fa-list-ul mr-2"></i>
                                 {% trans "Dashboard" %}
                             </a>

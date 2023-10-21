@@ -187,7 +187,7 @@ APPEND_SLASH = False
 
 ROOT_URLCONF = 'creme.urls'  # Means urls.py
 
-LOGIN_REDIRECT_URL = 'creme_core__home'
+LOGIN_REDIRECT_URL = 'shop_home'
 LOGIN_URL = 'creme_login'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files,

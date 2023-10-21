@@ -294,7 +294,7 @@ class MapBrickTestCase(BrickTestCaseMixin, GeoLocationBaseTestCase):
 
         api_key = 'thegoldenticket'
         with OverrideSettingValueContext(setting_keys.GOOGLE_API_KEY, api_key):
-            response = self.assertGET200(reverse('creme_core__home'))
+            response = self.assertGET200(reverse('shop_home'))
 
         self.assertTemplateUsed(response, 'geolocation/bricks/google/filtered-map.html')
 
@@ -328,7 +328,7 @@ class MapBrickTestCase(BrickTestCaseMixin, GeoLocationBaseTestCase):
             GEOLOCATION_OSM_COPYRIGHT_URL=cright_url,
             GEOLOCATION_OSM_COPYRIGHT_TITLE=cright_title,
         ):
-            response = self.assertGET200(reverse('creme_core__home'))
+            response = self.assertGET200(reverse('shop_home'))
 
         self.assertTemplateUsed(response, 'geolocation/bricks/osm/filtered-map.html')
 

@@ -32,7 +32,7 @@ class CremeDeletion(CheckedView):
         return ''
 
     def get_success_url(self):
-        return reverse('creme_core__home')
+        return reverse('shop_home')
 
     def post(self, request, *args, **kwargs):
         # TODO: <return self.delete(request, *args, **kwargs)> ?

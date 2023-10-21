@@ -24,7 +24,7 @@ from django.apps import apps
 from django.conf import settings
 from django.urls import path, reverse_lazy
 from django.views.generic.base import RedirectView
-
+from django.apps import AppConfig
 from ..creme_core.core.loading import get_class
 from ..creme_core.apps import CremeAppConfig
 
@@ -152,9 +152,9 @@ class CremeConfigConfig(CremeAppConfig):
     def ready(self):
         from django.contrib.auth.forms import SetPasswordForm
 
-        #for oscar
         self.dashboard_app = apps.get_app_config('creme_core')
 
+        #for oscar
         self.catalogue_app = apps.get_app_config('catalogue')
         self.customer_app = apps.get_app_config('customer')
         self.basket_app = apps.get_app_config('basket')
@@ -172,9 +172,9 @@ class CremeConfigConfig(CremeAppConfig):
         from ..creme_core.views.decorators import login_forbidden
 
         urls = [
-            path('dashboard/', self.dashboard_app.urls),
+            path('dashboard/', self.dashboard_app.urls),  #shop dashboard
 
-            path('', RedirectView.as_view(url=settings.OSCAR_HOMEPAGE), name='home'),
+            path('', RedirectView.as_view(url=settings.OSCAR_HOMEPAGE), name='shop_home'),
             path('catalogue/', self.catalogue_app.urls),
             path('basket/', self.basket_app.urls),
             path('checkout/', self.checkout_app.urls),
@@ -215,6 +215,6 @@ class CremeConfigConfig(CremeAppConfig):
                 )),
                 name='password-reset-complete'),
         ]
-        #return urls
-        return self.post_process_urls(urls)
+        return urls
+        #return self.post_process_urls(urls)
 

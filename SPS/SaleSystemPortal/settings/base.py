@@ -255,7 +255,7 @@ APPEND_SLASH = False
 ROOT_URLCONF = 'SaleSystemPortal.urls' # Means urls.py
 #ROOT_URLCONF = 'creme.urls'
 
-LOGIN_REDIRECT_URL = 'creme_core__home'     #LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_REDIRECT_URL = 'shop_home'     #LOGIN_REDIRECT_URL = "dashboard"
 LOGIN_URL = 'creme_login'
 # ACCOUNT_LOGIN_URL = LOGIN_URL = "accounts:login"
 
@@ -1190,7 +1190,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
         'icon': 'fas fa-list',
-        'url_name': 'catalogue:index',
+        'url_name': 'creme_core:catalogue-product-list',
     },
     {
         'label': _('Catalogue'),

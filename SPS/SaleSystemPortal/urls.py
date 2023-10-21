@@ -30,7 +30,6 @@ from wagtail.images.views.serve import ServeView
 
 from creme.creme_core.apps import creme_app_configs
 from creme.sitemaps import ActivitiesSitemap
-from creme.views import dashboard
 from creme.sitemaps import NewsSitemap
 from creme.creme_core.views.exceptions import permission_denied
 from app_CMS.search import views as search_views

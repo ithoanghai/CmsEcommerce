@@ -11,7 +11,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'creme_core__home' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'creme_core:shipping-method-list' %}">{% trans "Shipping methods" %}</a></li>
             <li class="breadcrumb-item">{{ band.method.name }}</li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Delete weight band?" %}</li>

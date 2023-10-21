@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 class HomeEntry(menu.FixedURLEntry):
     id = 'creme_core-home'
     label = _('Home')
-    url_name = 'creme_core__home'
+    url_name = 'shop_home'
 
 
 class MyDashboardEntry(menu.FixedURLEntry):

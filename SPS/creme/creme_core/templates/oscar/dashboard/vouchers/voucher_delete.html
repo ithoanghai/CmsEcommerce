@@ -15,7 +15,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'creme_core__home' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'creme_core:voucher-list' %}">{% trans "Vouchers" %}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'creme_core:voucher-stats' pk=voucher.pk %}">{{ voucher }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Delete?" %}</li>

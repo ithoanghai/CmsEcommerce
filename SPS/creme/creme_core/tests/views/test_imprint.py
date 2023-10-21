@@ -92,7 +92,7 @@ class ImprintViewsTestCase(ViewsTestCase, BrickTestCaseMixin):
         self.assertGET200(orga1.get_absolute_url())
         self.assertGET200(orga2.get_absolute_url())
 
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         document = self.get_html_tree(response.content)
         brick_node = self.get_brick_node(document, brick=ImprintsBrick)
         self.assertInstanceLink(brick_node, orga1)
@@ -107,7 +107,7 @@ class ImprintViewsTestCase(ViewsTestCase, BrickTestCaseMixin):
         orga = FakeOrganisation.objects.create(user=user, name='Middle Earth')
         self.assertGET200(orga.get_absolute_url())
 
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         document = self.get_html_tree(response.content)
         brick_node = self.get_brick_node(document, brick=ImprintsBrick)
         self.assertBrickHasClass(brick_node, 'is-empty')

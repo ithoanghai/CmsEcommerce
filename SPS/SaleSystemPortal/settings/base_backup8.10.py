@@ -964,7 +964,7 @@ AUTH_USER_MODEL = BLOG_SCOPING_MODEL = "accounts.User"
 # ACCOUNT_LOGIN_URL = LOGIN_URL = "accounts:login"
 LOGIN_URL = 'creme_login'
 #LOGIN_REDIRECT_URL = "dashboard"
-LOGIN_REDIRECT_URL = 'creme_core__home'
+LOGIN_REDIRECT_URL = 'shop_home'
 ACCOUNT_HOOKSET = "app_list.accounts.hooks.AccountDefaultHookSet"
 NOTIFY_ON_PASSWORD_CHANGE = True
 DEFAULT_HTTP_PROTOCOL = "https"
@@ -1238,7 +1238,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
         'icon': 'fas fa-list',
-        'url_name': 'catalogue:index',
+        'url_name': 'creme_core:catalogue-product-list',
     },
     {
         'label': _('Catalogue'),

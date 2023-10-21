@@ -65,7 +65,7 @@ from .base import Report, ReportGraph, skipIfCustomReport, skipIfCustomRGraph
 
 
 # def home_display_context(user):
-#     request = RequestFactory().get(reverse('creme_core__home'))
+#     request = RequestFactory().get(reverse('shop_home'))
 #     request.session = SessionBase()
 #     request.user = user
 #

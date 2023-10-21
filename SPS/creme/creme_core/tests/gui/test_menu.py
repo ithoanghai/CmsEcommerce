@@ -196,7 +196,7 @@ class MenuTestCase(CremeTestCase):
         self.assertIs(FixedURLEntry.single_instance, True)
 
         entry_label = 'Home'
-        entry_url_name = 'creme_core__home'
+        entry_url_name = 'shop_home'
 
         # ---
         validate = FixedURLEntry.validate
@@ -220,7 +220,7 @@ class MenuTestCase(CremeTestCase):
         user = self.login_as_standard(admin_4_apps=['creme_config'])
 
         entry_label = 'Home'
-        entry_url_name = 'creme_core__home'
+        entry_url_name = 'shop_home'
 
         class TestEntry01(FixedURLEntry):
             id = 'creme_core-test'
@@ -248,7 +248,7 @@ class MenuTestCase(CremeTestCase):
         class TestEntry01(FixedURLEntry):
             id = 'creme_core-test'
             label = entry_label
-            url_name = 'creme_core__home'
+            url_name = 'shop_home'
             permissions = 'creme_config'  # <===
 
         expected = f'<span class="ui-creme-navigation-text-entry forbidden">{entry_label}</span>'
@@ -593,7 +593,7 @@ class MenuTestCase(CremeTestCase):
         entry_label = _('Home')
         self.assertEqual(entry_label, entry.label)
 
-        entry_url = reverse('creme_core__home')
+        entry_url = reverse('shop_home')
         self.assertEqual(entry_url, entry.url)
 
         self.assertHTMLEqual(

@@ -1444,7 +1444,7 @@ class EntityDeletion(EntityDeletionMixin,
         if hasattr(entity, 'get_related_entity'):
             return entity.get_related_entity().get_absolute_url()
 
-        return reverse('creme_core__home')
+        return reverse('shop_home')
 
     def get_ajax_success_url(self):
         # NB: we redirect because this view can be used from the detail-view

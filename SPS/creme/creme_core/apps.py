@@ -26,13 +26,11 @@ from django.contrib.contenttypes.apps import (
     ContentTypesConfig as VanillaContentTypesConfig,
 )
 from django.core import checks
-from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import URLPattern, reverse_lazy
 from django.apps import apps
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
-from django.views.generic.base import RedirectView
 
 from .core.loading import feature_hidden, get_class
 from .core.field_tags import FieldTag
@@ -594,7 +592,8 @@ class CremeCoreConfig(CremeAppConfig):
         checks.register(Tags.settings)(check_uninstalled_apps)  # Crashes in migrate mode.
 
         #for oscar admin dashboard
-        self.index_view = get_class('creme_core.views.index', 'IndexView')
+        #self.index_view = get_class('creme_core.views.index', 'IndexView')
+        self.login_view = get_class('creme_core.views.index', 'LoginView')
         #for oscar frontend
         self.catalogue_app = apps.get_app_config('catalogue_dashboard')
         self.reports_app = apps.get_app_config('reports_dashboard')
@@ -610,8 +609,10 @@ class CremeCoreConfig(CremeAppConfig):
         self.shipping_app = apps.get_app_config('shipping_dashboard')
 
     def get_urls(self):
+        from django.contrib.auth import views as auth_views
+
         urls = [
-            path('', self.index_view.as_view(), name='index'),
+            #path('', include(self.index_view.as_view()), name='index'),
             path('catalogue/', include(self.catalogue_app.urls[0])),
             path('reports/', include(self.reports_app.urls[0])),
             path('orders/', include(self.orders_app.urls[0])),
@@ -624,6 +625,8 @@ class CremeCoreConfig(CremeAppConfig):
             path('vouchers/', include(self.vouchers_app.urls[0])),
             path('comms/', include(self.comms_app.urls[0])),
             path('shipping/', include(self.shipping_app.urls[0])),
+            path('login/', self.login_view.as_view(), name='login'),
+            path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
         ]
         return self.post_process_urls(urls)
 

@@ -447,7 +447,7 @@ class BricksTestCase(BrickTestCaseMixin, CremeTestCase):
         self.assertInstanceLink(brick_node1, tenma)
 
         # From view ---
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         self.assertTemplateUsed(response, 'creme_core/bricks/history.html')
 
         brick_node2 = self.get_brick_node(
@@ -490,7 +490,7 @@ class BricksTestCase(BrickTestCaseMixin, CremeTestCase):
 
         FakeOrganisation.objects.create(user=user, name='Tenma corp')
 
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         self.assertTemplateUsed(response, 'creme_core/bricks/statistics.html')
 
         tree = self.get_html_tree(response.content)

@@ -753,7 +753,7 @@ class _CremeTestCase:
         from django.template.engine import Engine
 
         if not url:
-            url = reverse('creme_core__home') if instance is None else instance.get_absolute_url()
+            url = reverse('shop_home') if instance is None else instance.get_absolute_url()
 
         request = self.build_request(url=url, user=user)
 

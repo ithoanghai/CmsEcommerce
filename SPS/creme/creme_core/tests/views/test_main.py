@@ -48,7 +48,7 @@ class MiscViewsTestCase(ViewsTestCase):
     def test_home01(self):
         # self.login()
         self.login_as_root()
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         self.assertTemplateUsed(response, 'creme_core/home.html')
 
         context = response.context
@@ -87,7 +87,7 @@ class MiscViewsTestCase(ViewsTestCase):
             brick_id=HistoryBrick.id, role=self.create_role(), order=1,
         )
 
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         bricks = response.context.get('bricks')
         self.assertEqual(len(bricks), 1)
 
@@ -115,7 +115,7 @@ class MiscViewsTestCase(ViewsTestCase):
         # create_hbl(brick_id=HistoryBrick.id_, role=role2,     order=1)
         create_hbl(brick_id=HistoryBrick.id, role=role2,     order=1)
 
-        response = self.assertGET200(reverse('creme_core__home'))
+        response = self.assertGET200(reverse('shop_home'))
         bricks = response.context.get('bricks')
         self.assertEqual(len(bricks), 1)
 
