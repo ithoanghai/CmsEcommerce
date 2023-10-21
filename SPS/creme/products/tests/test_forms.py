@@ -3,9 +3,9 @@
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext
 
-from creme.creme_config.registry import config_registry
-# from creme.creme_core.tests.forms.base import FieldTestCase
-from creme.creme_core.tests.base import CremeTestCase
+from ...creme_config.registry import config_registry
+# from ...creme_core.tests.forms.base import FieldTestCase
+from ...creme_core.tests.base import CremeTestCase
 
 # from ..forms.fields import CategoryField
 from ..models import Category, SubCategory

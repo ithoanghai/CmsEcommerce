@@ -1,11 +1,11 @@
 from functools import partial
 from unittest import skipIf
 
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from creme.creme_core.models import SetCredentials
-from creme.creme_core.tests.views.base import MassImportBaseTestCaseMixin
-from creme.documents import get_document_model
-from creme.documents.tests.base import _DocumentsTestCase
+from ...creme_core.auth.entity_credentials import EntityCredentials
+from ...creme_core.models import SetCredentials
+from ...creme_core.tests.views.base import MassImportBaseTestCaseMixin
+from ...documents import get_document_model
+from ...documents.tests.base import _DocumentsTestCase
 
 from .. import product_model_is_custom, service_model_is_custom
 

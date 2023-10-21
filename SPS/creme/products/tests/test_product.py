@@ -5,10 +5,10 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from creme.creme_core.models import FakeContact, SetCredentials
-from creme.creme_core.tests.views.base import BrickTestCaseMixin
-from creme.documents import get_document_model, get_folder_model
+from ...creme_core.auth.entity_credentials import EntityCredentials
+from ...creme_core.models import FakeContact, SetCredentials
+from ...creme_core.tests.views.base import BrickTestCaseMixin
+from ...documents import get_document_model, get_folder_model
 
 from .. import get_product_model
 from ..bricks import ImagesBrick

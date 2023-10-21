@@ -18,11 +18,11 @@
 
 # import warnings
 # from django.shortcuts import get_object_or_404
-from creme import products
-# from creme.creme_core.auth.decorators import login_required
-from creme.creme_core.utils import get_from_POST_or_404
-# from creme.creme_core.views.decorators import jsonify
-from creme.creme_core.views import generic
+from ... import products
+# from ...creme_core.auth.decorators import login_required
+from ...creme_core.utils import get_from_POST_or_404
+# from ...creme_core.views.decorators import jsonify
+from ...creme_core.views import generic
 
 from .. import custom_forms
 from ..constants import DEFAULT_HFILTER_PRODUCT

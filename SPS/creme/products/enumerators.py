@@ -16,8 +16,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from creme.creme_core.core.enumerable import QSEnumerator
-from creme.creme_core.utils.unicode_collation import collator
+from ..creme_core.core.enumerable import QSEnumerator
+from ..creme_core.utils.unicode_collation import collator
 
 
 class SubCategoryEnumerator(QSEnumerator):

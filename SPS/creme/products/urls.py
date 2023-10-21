@@ -1,7 +1,7 @@
 from django.urls import re_path
 
-from creme import products
-from creme.creme_core.conf.urls import Swappable, swap_manager
+from .. import products
+from ..creme_core.conf.urls import Swappable, swap_manager
 
 from .views import product, service
 

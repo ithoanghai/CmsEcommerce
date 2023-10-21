@@ -18,7 +18,7 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.views.generic import RelatedToEntityFormPopup
+from ...creme_core.views.generic import RelatedToEntityFormPopup
 
 from ..forms.base import AddImagesForm
 

@@ -22,25 +22,25 @@ from functools import partial
 from django.apps import apps
 from django.utils.translation import gettext as _
 
-from creme.creme_core.bricks import (
+from ..creme_core.bricks import (
     CustomFieldsBrick,
     HistoryBrick,
     PropertiesBrick,
     RelationsBrick,
 )
-from creme.creme_core.core.entity_cell import EntityCellRegularField
+from ..creme_core.core.entity_cell import EntityCellRegularField
 # from creme.creme_core.forms import LAYOUT_DUAL_FIRST, LAYOUT_DUAL_SECOND
 # from creme.creme_core.gui.custom_form import EntityCellCustomFormSpecial
-from creme.creme_core.gui.menu import ContainerEntry
-from creme.creme_core.management.commands.creme_populate import BasePopulator
-from creme.creme_core.models import (
+from ..creme_core.gui.menu import ContainerEntry
+from ..creme_core.management.commands.creme_populate import BasePopulator
+from ..creme_core.models import (
     BrickDetailviewLocation,
     CustomFormConfigItem,
     HeaderFilter,
     MenuConfigItem,
     SearchConfigItem,
 )
-from creme.documents.models import DocumentCategory
+from ..documents.models import DocumentCategory
 
 from . import (
     bricks,

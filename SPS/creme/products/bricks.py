@@ -19,8 +19,8 @@
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from creme import products
-from creme.creme_core.gui.bricks import Brick
+from .. import products
+from ..creme_core.gui.bricks import Brick
 
 Product = products.get_product_model()
 Service = products.get_service_model()

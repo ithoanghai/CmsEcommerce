@@ -4,8 +4,8 @@ from functools import partial
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.tests.views.base import BrickTestCaseMixin
-from creme.documents import get_document_model, get_folder_model
+from ...creme_core.tests.views.base import BrickTestCaseMixin
+from ...documents import get_document_model, get_folder_model
 
 from .. import get_service_model
 from ..bricks import ImagesBrick

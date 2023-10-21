@@ -18,7 +18,7 @@
 
 from django.conf import settings
 
-from creme.creme_core import get_concrete_model
+from ..creme_core import get_concrete_model
 
 
 def product_model_is_custom():
