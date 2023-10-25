@@ -163,7 +163,7 @@ class SearchConfigItem(CremeModel):
 
     def __str__(self):
         if self.superuser:
-            return gettext('Search configuration of super-users for «{model}»').format(
+            return _('Search configuration of super-users for «{model}»').format(
                 model=self.content_type,
             )
 

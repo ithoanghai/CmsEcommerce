@@ -1,5 +1,5 @@
 from django.conf import settings
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models import Account, CremeUser
 from django.db import connection
 from django.test import TestCase
 

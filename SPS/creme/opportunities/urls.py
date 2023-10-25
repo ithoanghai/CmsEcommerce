@@ -1,11 +1,20 @@
 from django.apps import apps
-from django.urls import re_path
+from django.urls import re_path, path
 
 from ..creme_core.conf.urls import Swappable, swap_manager
 from ..persons import contact_model_is_custom
 
 from . import opportunity_model_is_custom
-from .views import contact, opportunity
+from .views import contact, opportunity, OpportunityListView, OpportunityDetailView, OpportunityCommentView, OpportunityAttachmentView
+
+
+api_opportunitypatterns = [
+    path("", OpportunityListView.as_view()),
+    path("<int:pk>/", OpportunityDetailView.as_view()),
+    path("comment/<int:pk>/", OpportunityCommentView.as_view()),
+    path("attachment/<int:pk>/", OpportunityAttachmentView.as_view()),
+]
+
 
 urlpatterns = [
     *swap_manager.add_group(
@@ -71,7 +80,7 @@ urlpatterns = [
         ),
         app_name='opportunities',
     ).kept_patterns(),
-]
+] + api_opportunitypatterns
 
 if apps.is_installed('creme.billing'):
     from .views import billing

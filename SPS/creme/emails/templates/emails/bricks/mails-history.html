@@ -12,9 +12,9 @@
     {% if not relation_types_all_disabled %}
       {% has_perm_to create objects_ctype as creation_perm %}{% has_perm_to link object as link_perm %}
       {% with create_linked_perm=creation_perm|and_op:link_perm %}
-        {% brick_header_action id='add'  url='emails:create_email'|url:object.id               label=_('Send a new related email')       enabled=create_linked_perm %}
-        {% brick_header_action id='add'  url='emails:create_email_from_template'|url:object.id label=_('Send a email (with a template)') enabled=create_linked_perm %}
-        {% brick_header_action id='link' url='emails:link_emails'|url:object.id                label=_('Link to emails')                 enabled=link_perm %}
+        {% brick_header_action id='add'  url='emails__create_email'|url:object.id               label=_('Send a new related email')       enabled=create_linked_perm %}
+        {% brick_header_action id='add'  url='emails__create_email_from_template'|url:object.id label=_('Send a email (with a template)') enabled=create_linked_perm %}
+        {% brick_header_action id='link' url='emails__link_emails'|url:object.id                label=_('Link to emails')                 enabled=link_perm %}
       {% endwith %}
     {% endif %}
 {% endblock %}
@@ -45,10 +45,10 @@
         <td class="email-status">{{mail.get_status_display}}</td>
         <td class="email-sending-date" data-type="date">{% print_field object=mail field='sending_date' %}</td>
         <td {% brick_table_data_status action %}>
-            {% brick_table_action id='view' url='emails:view_email_popup'|url:mail.id label=_('Details') %}
+            {% brick_table_action id='view' url='emails__view_email_popup'|url:mail.id label=_('Details') %}
         </td>
         <td {% brick_table_data_status action %}>
-          {% if not mail.sent %}{% url 'emails:resend_emails' as resend_url %}
+          {% if not mail.sent %}{% url 'emails__resend_emails' as resend_url %}
             {% if mail.synchronised %}
               {% brick_table_action id='update' url=resend_url __ids=mail.id label=_('Re-send') icon='refresh' confirm=_('This mail was synchronized. Are you sure you want to send it?') %}
             {% else %}

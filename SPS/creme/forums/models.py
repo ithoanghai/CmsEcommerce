@@ -6,7 +6,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from .conf import settings
+from django.conf import settings
 from .hooks import hookset
 from .managers import ForumThreadManager
 
@@ -364,8 +364,8 @@ class UserPostCount(models.Model):
 
     @classmethod
     def calculate(cls):
-        User = get_user_model()
-        for user in User.objects.all():
+        CremeUser = get_user_model()
+        for user in CremeUser.objects.all():
             thread_count = ForumThread.objects.filter(author=user).count()
             reply_count = ForumReply.objects.filter(author=user).count()
             count = thread_count + reply_count
@@ -391,8 +391,8 @@ class ThreadSubscription(models.Model):
 
     @classmethod
     def setup_onsite(cls):
-        User = get_user_model()
-        for user in User.objects.all():
+        CremeUser = get_user_model()
+        for user in CremeUser.objects.all():
             threads = ForumThread.objects.filter(author=user).values_list("pk", flat=True)
             threads_by_replies = ForumReply.objects.filter(
                 author=user

@@ -59,6 +59,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     }
 
     def test_import01(self):
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         url = self._build_import_url(Activity)
@@ -112,7 +113,6 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         )
         self.assertNoFormError(response)
 
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_MEETING_OTHER)
         response = self.client.post(
             url, follow=True,
             data={
@@ -121,8 +121,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 'user': user.id,
                 'start_colselect': 2,
                 'end_colselect': 3,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
-                'type_selector': sub_type.id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
 
                 # Should not be used
                 'busy_colselect': 0,
@@ -137,10 +136,8 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         self.assertEqual(len(lines), len(results))
 
         act1 = self.get_object_or_fail(Activity, title=title1)
-        # self.assertEqual(constants.ACTIVITYTYPE_MEETING, act1.type_id)
-        # self.assertEqual(constants.ACTIVITYSUBTYPE_MEETING_OTHER, act1.sub_type_id)
-        self.assertEqual(sub_type.type_id, act1.type_id)
-        self.assertEqual(sub_type.id,      act1.sub_type_id)
+        self.assertEqual(constants.ACTIVITYTYPE_MEETING, act1.type_id)
+        self.assertEqual(constants.ACTIVITYSUBTYPE_MEETING_OTHER, act1.sub_type_id)
         self.assertIsNone(act1.start)
         self.assertIsNone(act1.end)
         self.assertEqual(constants.FLOATING, act1.floating_type)
@@ -224,9 +221,11 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         search on first_name/last_name.
         Dynamic subjects without creation.
         """
+        # user = self.login()
         user = self.login_as_root_and_get()
         user_contact = user.linked_contact
 
+        # other_user = self.other_user
         other_user = self.create_user()
         other_contact = other_user.linked_contact
 
@@ -269,13 +268,11 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         )
 
         doc = self._build_csv_doc(lines, user=user)
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_MEETING_NETWORK)
         data = {
             **self.lv_import_data,
             'document': doc.id,
             'user': other_user.id,
-            # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
-            'type_selector': sub_type.id,
+            'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
 
             'my_participation_0': True,
             'participating_users': [other_user.id, team.id],
@@ -318,10 +315,8 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
         act1 = self.get_object_or_fail(Activity, title=title1)
         self.assertEqual(other_user, act1.user)
-        # self.assertEqual(constants.ACTIVITYTYPE_MEETING, act1.type_id)
-        # self.assertEqual(constants.ACTIVITYSUBTYPE_MEETING_NETWORK, act1.sub_type_id)
-        self.assertEqual(sub_type.type_id, act1.type_id)
-        self.assertEqual(sub_type.id,      act1.sub_type_id)
+        self.assertEqual(constants.ACTIVITYTYPE_MEETING, act1.type_id)
+        self.assertEqual(constants.ACTIVITYSUBTYPE_MEETING_NETWORK, act1.sub_type_id)
 
         REL_OBJ_PART_2_ACTIVITY = constants.REL_OBJ_PART_2_ACTIVITY
         self.assertRelationCount(1, act1, REL_OBJ_PART_2_ACTIVITY, user_contact)
@@ -373,8 +368,10 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_import03(self):
         "Dynamic participants with cell splitting & pattern '$last_name $first_name'."
+        # user = self.login()
         user = self.login_as_root_and_get()
 
+        # other_user = self.other_user
         other_user = self.create_user()
         other_contact = other_user.linked_contact
 
@@ -425,8 +422,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_NETWORK).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
 
                 'participants_mode': '2',  # Search with pattern
                 'participants_separator': '/',
@@ -486,6 +482,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_import04(self):
         "Another cell splitting type: pattern '$civility $first_name $last_name'."
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         miss = self.get_object_or_fail(Civility, pk=2)
@@ -503,8 +500,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
             **self.lv_import_data,
             'document': doc.id,
             'user': user.id,
-            # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
-            'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_NETWORK).id,
+            'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
 
             'participants_mode': 2,  # Search with pattern
             'participants_separator': '/',
@@ -529,6 +525,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomOrganisation
     def test_import05(self):
         "Dynamic participants with search on first_name/last_name + creation."
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         title = 'Task#1'
@@ -545,8 +542,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_PHONECALL_OUTGOING,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_PHONECALL_OUTGOING).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_PHONECALL_OUTGOING,
 
                 'participants_mode': 1,  # Search with 1 or 2 columns
                 'participants_first_name_colselect': 2,
@@ -567,6 +563,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_import06(self):
         "Dynamic participants with cell splitting + creation."
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         aoi = Contact.objects.create(user=user, first_name='Aoi', last_name='Kunieda')
@@ -584,8 +581,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_MEETING,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_MEETING).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_MEETING,
 
                 'participants_mode': 2,  # Search with pattern
                 'participants_separator': '#',
@@ -607,7 +603,9 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
     def test_import07(self):
         "Search on first_name/last_name + not creation credentials."
+        # self.login(
         user = self.login_as_activities_user(
+            # is_superuser=False, allowed_apps=('activities', 'persons', 'documents'),
             allowed_apps=('documents',),
             creatable_models=[Activity, Document],  # Not Contact
         )
@@ -627,10 +625,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_PHONECALL_CONFERENCE,
-                'type_selector': self._get_sub_type(
-                    constants.UUID_SUBTYPE_PHONECALL_CONFERENCE,
-                ).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_PHONECALL_CONFERENCE,
 
                 'participants_mode': 1,  # Search with 1 or 2 columns
                 'participants_first_name_colselect': 2,
@@ -646,6 +641,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
     def test_import08(self):
         "Property creation (regular post creation handler should be called)"
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         ptype = CremePropertyType.objects.smart_update_or_create(
@@ -660,10 +656,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_QUALIFICATION,
-                'type_selector': self._get_sub_type(
-                    constants.UUID_SUBTYPE_MEETING_QUALIFICATION
-                ).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_QUALIFICATION,
 
                 'property_types': [ptype.id],
             },
@@ -677,7 +670,9 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_import_errors(self):
         "Link credentials for user's Contact."
+        # user = self.login(
         user = self.login_as_activities_user(
+            # is_superuser=False, allowed_apps=('activities', 'persons', 'documents'),
             allowed_apps=('documents',),
             creatable_models=[Activity, Document],
         )
@@ -705,8 +700,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_NETWORK).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
 
                 'my_participation_0': True,
                 'my_participation_1': my_calendar.pk,
@@ -732,6 +726,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         """Subject: Contact is searched if Organisation is not found.
         No creation asked.
         """
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         title1 = 'Task#1'
@@ -769,8 +764,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_OTHER).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
 
                 'subjects_colselect': 2,
                 'subjects_separator': '/',
@@ -838,6 +832,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
     def test_import_subjects02(self):
         "Subject: creation."
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         title = 'My task'
@@ -850,8 +845,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_OTHER).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
 
                 'subjects_colselect': 2,
                 'subjects_create': True,
@@ -866,7 +860,9 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
     def test_import_subjects03(self):
         "Subject: creation credentials."
+        # user = self.login(
         user = self.login_as_activities_user(
+            # is_superuser=False, allowed_apps=('activities', 'persons', 'documents'),
             allowed_apps=('documents',),
             creatable_models=[Activity, Document],  # Not Organisation
         )
@@ -885,8 +881,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_OTHER).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
 
                 'subjects_colselect': 2,
                 'subjects_create': True,  # Should not be used
@@ -901,8 +896,11 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomOrganisation
     def test_import_subjects04(self):
         "Subject: view credentials."
+        # user = self.login(
         user = self.login_as_activities_user(
-            allowed_apps=('documents',), creatable_models=[Activity, Document],
+            # is_superuser=False, allowed_apps=('activities', 'persons', 'documents'),
+            allowed_apps=('documents',),
+            creatable_models=[Activity, Document],
         )
         SetCredentials.objects.create(
             role=user.role,
@@ -915,6 +913,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
         create_orga = Organisation.objects.create
         orga1 = create_orga(user=user, name=name)
+        # orga2 = create_orga(user=self.other_user, name=name)
         orga2 = create_orga(user=self.get_root_user(), name=name)
 
         doc = self._build_csv_doc([(title, name)], user=user)
@@ -924,8 +923,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 **self.lv_import_data,
                 'document': doc.id,
                 'user': user.id,
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_OTHER).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_OTHER,
 
                 'subjects_colselect': 2,
             },
@@ -943,6 +941,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomOrganisation
     def test_import_with_update(self):
         "No duplicated Subjects/participants."
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         create_contact = partial(Contact.objects.create, user=user)
@@ -951,13 +950,11 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
         subject = Organisation.objects.create(user=user, name='Ishiyama')
 
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_MEETING_NETWORK)
         create_act = partial(
             Activity.objects.create,
             user=user,
-            # type_id=constants.ACTIVITYTYPE_MEETING,
-            # sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
-            type_id=sub_type.type_id, sub_type=sub_type,
+            type_id=constants.ACTIVITYTYPE_MEETING,
+            sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
         )
         act1 = create_act(title='Fight against demons#1')
         act2 = create_act(title='Fight against demons#2')
@@ -989,8 +986,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
                 'user': user.id,
                 'key_fields': ['title'],
 
-                # 'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
-                'type_selector': self._get_sub_type(constants.UUID_SUBTYPE_MEETING_NETWORK).id,
+                'type_selector': constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
 
                 'participants_mode': 1,  # Search with 1 or 2 columns
                 'participants_first_name_colselect': 2,
@@ -1122,6 +1118,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
     @skipIfCustomContact
     def test_participants_multicol_extractor01(self):
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         # -----
@@ -1177,6 +1174,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_participants_multicol_extractor02(self):
         "View credentials."
+        # user = self.login(is_superuser=False)
         user = self.login_as_activities_user()
         SetCredentials.objects.create(
             role=user.role,
@@ -1187,6 +1185,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         last_name = 'Kunieda'
         create_contact = partial(Contact.objects.create, last_name=last_name)
         aoi = create_contact(user=user, first_name='Aoi')
+        # create_contact(user=self.other_user, first_name='Ittôsai')
         create_contact(user=self.get_root_user(), first_name='Ittôsai')
 
         ext = MultiColumnsParticipantsExtractor(0, 1)
@@ -1197,6 +1196,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_participants_multicol_extractor03(self):
         "Link credentials."
+        # user = self.login(is_superuser=False)
         user = self.login_as_activities_user()
 
         create_sc = partial(SetCredentials.objects.create, role=user.role)
@@ -1220,6 +1220,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         )
 
         create_contact = partial(Contact.objects.create, last_name=last_name)
+        # create_contact(user=self.other_user, first_name='Ittôsai')
         create_contact(user=self.get_root_user(), first_name='Ittôsai')
 
         contacts, err_msg = extract()
@@ -1236,6 +1237,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
     def test_participants_multicol_extractor04(self):
         "Creation if not found."
+        # self.login()
         user = self.login_as_root_and_get()
 
         ext = MultiColumnsParticipantsExtractor(1, 2, create_if_unfound=True)
@@ -1259,6 +1261,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_participants_singlecol_extractor01(self):
         "SplitColumnParticipantsExtractor."
+        # user = self.login()
         user = self.login_as_root_and_get()
         ext = SplitColumnParticipantsExtractor(1, '#', _pattern_FL)
 
@@ -1266,7 +1269,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         searched = 'Aoi Kunieda'
         contacts, err_msg = ext.extract_value([searched], user)
         self.assertFalse(contacts)
-        self.assertListEqual(
+        self.assertEqual(
             [_('The participant «{}» cannot be found').format(searched)],
             err_msg,
         )
@@ -1304,6 +1307,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_participants_singlecol_extractor02(self):
         "SplitColumnParticipantsExtractor + credentials"
+        # user = self.login(is_superuser=False)
         user = self.login_as_activities_user()
         SetCredentials.objects.create(
             role=user.role,
@@ -1313,6 +1317,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
 
         create_contact = partial(Contact.objects.create, last_name='Kunieda')
         aoi = create_contact(user=user, first_name='Aoi')
+        # create_contact(user=self.other_user, first_name='Ittôsai')
         create_contact(user=self.get_root_user(), first_name='Ittôsai')
 
         ext = SplitColumnParticipantsExtractor(1, '#', _pattern_FL)
@@ -1323,6 +1328,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_participants_singlecol_extractor03(self):
         "Creation if not found + civility."
+        # user = self.login()
         user = self.login_as_root_and_get()
         ext = SplitColumnParticipantsExtractor(1, '#', _pattern_CFL, create_if_unfound=True)
 
@@ -1363,7 +1369,9 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_subjects_extractor01(self):
         "Link credentials."
+        # user = self.login(
         user = self.login_as_activities_user(
+            # is_superuser=False, allowed_apps=('activities', 'persons', 'documents'),
             allowed_apps=('documents',),
             creatable_models=[Activity, Document],
         )
@@ -1388,13 +1396,14 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
         )
 
         create_contact = partial(Contact.objects.create, last_name=last_name)
+        # create_contact(user=self.other_user, first_name='Ittôsai')
         create_contact(user=self.get_root_user(), first_name='Ittôsai')
 
         contacts, err_msg = extract()
         self.assertFalse(contacts)
         self.assertListEqual(
             [_('No linkable entity found for the search «{}»').format(last_name)],
-            err_msg,
+            err_msg
         )
 
         aoi = create_contact(user=user, first_name='Aoi')
@@ -1405,6 +1414,7 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfCustomContact
     def test_subjects_extractor02(self):
         "Limit."
+        # user = self.login()
         user = self.login_as_root_and_get()
         ext = SubjectsExtractor(1, '#')
 
@@ -1433,11 +1443,12 @@ class MassImportActivityTestCase(_ActivitiesTestCase, MassImportBaseTestCaseMixi
     @skipIfNotInstalled('creme.tickets')
     def test_subjects_extractor03(self):
         "Other ContentType."
-        from ...tickets.models import Criticity, Priority, Ticket
+        from creme.tickets.models import Criticity, Priority, Ticket
 
         rtype = self.get_object_or_fail(RelationType, pk=constants.REL_OBJ_ACTIVITY_SUBJECT)
         self.assertIn(Ticket, (ct.model_class() for ct in rtype.object_ctypes.all()))
 
+        # user = self.login()
         user = self.login_as_root_and_get()
         last_name = 'Kunieda'
         ticket = Ticket.objects.create(

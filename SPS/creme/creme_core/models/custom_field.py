@@ -363,7 +363,7 @@ class CustomFieldBoolean(CustomFieldValue):
         app_label = 'creme_core'
 
     def __str__(self):
-        return gettext('Yes') if self.value else gettext('No')
+        return _('Yes') if self.value else _('No')
 
     @staticmethod
     def _get_formfield(**kwargs):

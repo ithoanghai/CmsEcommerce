@@ -18,25 +18,26 @@
 
 from __future__ import annotations
 
-# import warnings
+import warnings
 from collections import defaultdict
 
 from django.db import models
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from ...creme_core.models import fields as core_fields
-from ...creme_core.models.base import CremeModel
+from ...creme_core.models import CremeModel
 
 
 class CalendarManager(models.Manager):
-    # def new_color(self):
-    #     warnings.warn(
-    #         'CalendarManager.new_color() is deprecated.',
-    #         DeprecationWarning,
-    #     )
-    #     from ..constants import COLOR_POOL
-    #
-    #     return COLOR_POOL[self.count() % len(COLOR_POOL)]
+    def new_color(self):
+        warnings.warn(
+            'CalendarManager.new_color() is deprecated.',
+            DeprecationWarning,
+        )
+        from ..constants import COLOR_POOL
+
+        return COLOR_POOL[self.count() % len(COLOR_POOL)]
 
     def create_default_calendar(self,
                                 user, *,
@@ -62,9 +63,10 @@ class CalendarManager(models.Manager):
         """
         kwargs = {} if not color else {'color': color}
         cal = self.model(
-            name=name or _("{user}'s calendar").format(user=user),
+            name=name or gettext("{user}'s calendar").format(user=user),
             user=user, is_default=True, is_custom=False,
             is_public=is_public,
+            # color=color or self.new_color(),
             **kwargs
         )
         cal._enable_default_checking = check_for_default
@@ -134,7 +136,10 @@ class CalendarManager(models.Manager):
 
         for user_id, user in users_per_id.items():
             if user_id not in calendars_per_users:
-                default_calendars[user_id] = self.create_default_calendar(user)
+                default_calendars[user_id] = self.create_default_calendar(
+                    user,
+                    # color=COLOR_POOL[(len(default_calendars) + user_id) % len(COLOR_POOL)],
+                )
 
         return default_calendars
 
@@ -180,15 +185,15 @@ class Calendar(CremeModel):
     def __str__(self):
         return self.name
 
-    # @property
-    # def get_color(self):
-    #     warnings.warn(
-    #         'Calendar.get_color() is deprecated; use Calendar.color instead.',
-    #         DeprecationWarning,
-    #     )
-    #     from ..constants import DEFAULT_CALENDAR_COLOR
-    #
-    #     return self.color or DEFAULT_CALENDAR_COLOR
+    @property
+    def get_color(self):
+        warnings.warn(
+            'Calendar.get_color() is deprecated; use Calendar.color instead.',
+            DeprecationWarning,
+        )
+        from ..constants import DEFAULT_CALENDAR_COLOR
+
+        return self.color or DEFAULT_CALENDAR_COLOR
 
     def delete(self, using=None, keep_parents=False):
         super().delete(using=using, keep_parents=keep_parents)
@@ -200,8 +205,13 @@ class Calendar(CremeModel):
                 def_cal._enable_default_checking = False
                 def_cal.save()
 
+    # def save(self, *args, **kwargs):
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         mngr = type(self).objects
+
+        # if not self.color:
+        #     self.color = mngr.new_color()
+
         check = self._enable_default_checking
 
         if (
@@ -213,6 +223,7 @@ class Calendar(CremeModel):
             if update_fields is not None:
                 update_fields = {'is_default', *update_fields}
 
+        # super().save(*args, **kwargs)
         super().save(
             force_insert=force_insert,
             force_update=force_update,

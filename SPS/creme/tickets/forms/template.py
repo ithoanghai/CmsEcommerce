@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from creme.creme_core.forms import CremeEntityForm
+from ...creme_core.forms import CremeEntityForm
 
 
 class BaseTemplateCustomForm(CremeEntityForm):

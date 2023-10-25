@@ -154,7 +154,7 @@ class IndexView(TemplateView):
         orders = Order.objects.all()
         alerts = StockAlert.objects.all()
         baskets = Basket.objects.filter(status=Basket.OPEN)
-        customers = User.objects.filter(orders__isnull=False).distinct()
+        customers = CremeUser.objects.filter(orders__isnull=False).distinct()
         lines = Line.objects.filter()
         products = Product.objects.all()
 
@@ -227,7 +227,7 @@ class IndexView(TemplateView):
             )
         return stats
 
-
+# 
 class MyPage(BaseHome):
     template_name = 'creme_core/my_page.html'
     def get_brick_ids(self):
@@ -245,7 +245,7 @@ StockAlert = get_model('partner', 'StockAlert')
 Product = get_model('catalogue', 'Product')
 Order = get_model('order', 'Order')
 Line = get_model('order', 'Line')
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 class PopUpWindowMixin:

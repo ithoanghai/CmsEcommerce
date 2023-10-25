@@ -15,13 +15,13 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-from django import forms
+
 from django.db.models.query_utils import Q
 
-from ...creme_core.forms import CremeEntityForm
-from ...creme_core.gui.bulk_update import FieldOverrider
-from ...creme_core.models import FieldsConfig
-from ..models import Folder
+from creme.creme_core.forms import CremeEntityForm
+from creme.creme_core.gui.bulk_update import FieldOverrider
+from creme.creme_core.models import FieldsConfig
+
 
 class BaseFolderCustomForm(CremeEntityForm):
     def __init__(self, *args, **kwargs):
@@ -60,7 +60,7 @@ class ParentFolderOverrider(FieldOverrider):
 
 
 def get_merge_form_builder():
-    from ...creme_core.forms.merge import MergeEntitiesBaseForm
+    from creme.creme_core.forms.merge import MergeEntitiesBaseForm
 
     class FolderMergeForm(MergeEntitiesBaseForm):
         # TODO: uncomment & remove the code in init which exclude the field ?
@@ -77,58 +77,3 @@ def get_merge_form_builder():
             del self.fields['parent_folder']
 
     return FolderMergeForm
-
-
-class FolderCreateForm(forms.ModelForm):
-
-    class Meta:
-        model = Folder
-        fields = ["name", "parent"]
-        widgets = {
-            "parent": forms.HiddenInput,
-        }
-
-    def clean(self):
-        name = self.cleaned_data["name"]
-        parent = self.cleaned_data.get("parent")
-        if Folder.already_exists(name, parent):
-            raise forms.ValidationError(f"{name} already exists.")
-
-    def __init__(self, *args, **kwargs):
-        folders = kwargs.pop("folders")
-        super().__init__(*args, **kwargs)
-        self.fields["parent"].queryset = folders
-
-
-try:
-    from ...creme_core.accounts.utils import user_display
-except ImportError:
-    def user_display(user):
-        return user.username
-
-
-class UserMultipleChoiceField(forms.ModelMultipleChoiceField):
-
-    def label_from_instance(self, obj):
-        return user_display(obj)
-
-
-class FolderShareForm(forms.Form):
-
-    participants = UserMultipleChoiceField(
-        queryset=None,
-        widget=forms.SelectMultiple(
-            attrs={
-                "class": "span6",
-                "data-placeholder": "Choose participants... "
-            }
-        )
-    )
-
-
-class ColleagueFolderShareForm(FolderShareForm):
-
-    def __init__(self, *args, **kwargs):
-        colleagues = kwargs.pop("colleagues")
-        super().__init__(*args, **kwargs)
-        self.fields["participants"].queryset = colleagues

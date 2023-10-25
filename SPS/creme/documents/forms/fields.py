@@ -18,10 +18,10 @@
 
 from django.db.models.query_utils import Q
 from django.urls import reverse_lazy
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
-from ...creme_core import forms
-from ...creme_core.utils.queries import QSerializer
+from creme.creme_core import forms
+from creme.creme_core.utils.queries import QSerializer
 
 from .. import get_document_model
 from ..constants import MIMETYPE_PREFIX_IMG
@@ -30,7 +30,7 @@ from ..constants import MIMETYPE_PREFIX_IMG
 class ImageFieldMixin:
     @property
     def _image_creation_url(self):
-        return reverse_lazy('documents:create_image_popup')
+        return reverse_lazy('documents__create_image_popup')
 
     def build_q_filter(self, q_filter):
         extra_filter = False

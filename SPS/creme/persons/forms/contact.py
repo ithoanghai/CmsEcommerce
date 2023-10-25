@@ -16,8 +16,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from creme import persons
-from creme.creme_core.forms import CremeEntityForm, CremeModelForm
+from ... import persons
+from ...creme_core.forms import CremeEntityForm, CremeModelForm
 
 
 class ContactNamesForm(CremeModelForm):

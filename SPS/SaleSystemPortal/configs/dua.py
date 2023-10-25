@@ -1,6 +1,6 @@
 from django.urls import re_path, include, path
 
-from creme.creme_core.accounts.forms import SignupForm, ChangePasswordForm, SettingsForm, PasswordResetForm, \
+from creme.creme_core.auth.forms import SignupForm, ChangePasswordForm, SettingsForm, PasswordResetForm, \
     PasswordResetTokenForm, LoginUsernameForm
 from django.utils.http import int_to_base36
 

@@ -24,7 +24,7 @@ from ..conference.models import Section
 from ..markdown_parser import parse
 from ..products.models import Product
 from ..speakers.models import Speaker
-from ..creme_core.models.auth import User
+from ..creme_core.models import CremeUser
 from ..creme_core.core.loading import is_model_registered
 from ..creme_core.core.compat import AUTH_USER_MODEL
 from ..creme_core.core import validators
@@ -532,7 +532,7 @@ class ReviewAssignment(models.Model):
     def create_assignments(cls, proposal, origin=AUTO_ASSIGNED_INITIAL):
         hookset.create_assignments(cls, proposal, origin)
         speakers = [proposal.speaker] + list(proposal.additional_speakers.all())
-        reviewers = User.objects.exclude(
+        reviewers = CremeUser.objects.exclude(
             pk__in=[
                 speaker.user_id
                 for speaker in speakers
@@ -648,7 +648,7 @@ class Review(models.Model):
 
 class Comment(models.Model):
     proposal = models.ForeignKey(ProposalBase, related_name="comments", verbose_name=gettext("Proposal"), on_delete=models.CASCADE)
-    commenter = models.ForeignKey(User, verbose_name=gettext("Commenter"), on_delete=models.CASCADE, related_name='comments_received')
+    commenter = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=gettext("Commenter"), on_delete=models.CASCADE, related_name='comments_received')
     text = models.TextField(verbose_name=gettext("Text"))
     text_html = models.TextField(blank=True)
 
@@ -756,7 +756,7 @@ class LatestVote(models.Model):
 
     proposal = models.ForeignKey(ProposalBase, related_name="votes", verbose_name=gettext("Proposal"),
                                  on_delete=models.CASCADE)
-    user = models.ForeignKey(User, verbose_name=gettext("User"), on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=gettext("User"), on_delete=models.CASCADE)
 
     # No way to encode "-0" vs. "+0" into an IntegerField, and I don't feel
     # like some complicated encoding system.
@@ -812,7 +812,7 @@ class SupportingDocument(models.Model):
 
     proposal = models.ForeignKey(ProposalBase, related_name="supporting_documents", verbose_name=gettext("Proposal"), on_delete=models.CASCADE)
 
-    uploaded_by = models.ForeignKey(User, verbose_name=gettext("Uploaded by"), on_delete=models.CASCADE, related_name='proposals_supporting_documents')
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=gettext("Uploaded by"), on_delete=models.CASCADE, related_name='proposals_supporting_documents')
 
     created_at = models.DateTimeField(default=now, verbose_name=gettext("Created at"))
 

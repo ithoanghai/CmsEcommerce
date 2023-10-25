@@ -19,11 +19,11 @@
 from django.db.models import Q, prefetch_related_objects
 from django.utils.translation import gettext_lazy as _
 
-from .. import documents
-from ..creme_core.core.entity_cell import EntityCellRegularField
-from ..creme_core.gui.bricks import EntityBrick, QuerysetBrick, SimpleBrick
-from ..creme_core.models import Relation, RelationType
-from ..creme_core.utils.queries import QSerializer
+from creme import documents
+from creme.creme_core.core.entity_cell import EntityCellRegularField
+from creme.creme_core.gui.bricks import EntityBrick, QuerysetBrick, SimpleBrick
+from creme.creme_core.models import Relation, RelationType
+from creme.creme_core.utils.queries import QSerializer
 
 from .constants import REL_SUB_RELATED_2_DOC
 
@@ -50,6 +50,7 @@ class DocumentBrick(EntityBrick):
 
 
 class FolderDocsBrick(QuerysetBrick):
+    # id_ = QuerysetBrick.generate_id('documents', 'folder_docs')
     id = QuerysetBrick.generate_id('documents', 'folder_docs')
     verbose_name = _('Contained documents')
     description = _(
@@ -74,6 +75,7 @@ class FolderDocsBrick(QuerysetBrick):
 
 
 class ChildFoldersBrick(QuerysetBrick):
+    # id_ = QuerysetBrick.generate_id('documents', 'child_folders')
     id = QuerysetBrick.generate_id('documents', 'child_folders')
     verbose_name = _('Child Folders')
     dependencies = (Folder,)
@@ -92,6 +94,7 @@ class ChildFoldersBrick(QuerysetBrick):
 
 
 class LinkedDocsBrick(QuerysetBrick):
+    # id_ = QuerysetBrick.generate_id('documents', 'linked_docs')
     id = QuerysetBrick.generate_id('documents', 'linked_docs')
     verbose_name = _('Linked documents')
     description = _(

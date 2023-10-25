@@ -40,7 +40,7 @@
             {% if action.is_validated %}
                 {% widget_icon name='ok' label=_('Validated') size='brick-table' class='brick-table-icon' %}
             {% else %}
-                {% brick_table_action id='update' url='assistants:validate_action'|url:action.id confirm=_('Check the box if you consider as treated') display='text' label=_('Validate') enabled=has_perm %}
+                {% brick_table_action id='update' url='assistants__validate_action'|url:action.id confirm=_('Check the box if you consider as treated') display='text' label=_('Validate') enabled=has_perm %}
             {% endif %}
         </td>
         <td {% brick_table_data_status action %}>

@@ -10,7 +10,7 @@
 
 {% block brick_header_actions %}
 {% has_perm_to change object as has_perm %}
-    {% brick_header_action id='link' url='emails:add_mlists_to_campaign'|url:object.id label=_('Add existing mailing lists') enabled=has_perm %}
+    {% brick_header_action id='link' url='emails__add_mlists_to_campaign'|url:object.id label=_('Add existing mailing lists') enabled=has_perm %}
 {% endblock %}
 
 {% block brick_table_columns %}
@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block brick_table_rows %}
-{% has_perm_to change object as has_perm %}{% url 'emails:remove_mlist_from_campaign' object.id as rm_mlist_url %}
+{% has_perm_to change object as has_perm %}{% url 'emails__remove_mlist_from_campaign' object.id as rm_mlist_url %}
     {% for mailinglist in page.object_list %}
     <tr>
         <td {% brick_table_data_status primary %}>{% widget_entity_hyperlink mailinglist user %}</td>

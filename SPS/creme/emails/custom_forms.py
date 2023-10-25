@@ -1,12 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from creme import emails
-from creme.creme_core.gui.custom_form import (
+from .. import emails
+from ..creme_core.gui.custom_form import (
     CustomFormDefault,
     CustomFormDescriptor,
 )
-from creme.emails.forms.template import EmailTemplateBaseCustomForm
+from ..emails.forms.template import EmailTemplateBaseCustomForm
 
 Campaign = emails.get_emailcampaign_model()
 EmailTemplate = emails.get_emailtemplate_model()

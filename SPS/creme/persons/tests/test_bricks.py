@@ -9,16 +9,16 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 
-from creme.creme_core.auth import EntityCredentials
-from creme.creme_core.models import (
+from ...creme_core.auth import EntityCredentials
+from ...creme_core.models import (
     BrickDetailviewLocation,
     FieldsConfig,
     Relation,
     RelationType,
     SetCredentials,
 )
-from creme.creme_core.tests.base import CremeTestCase
-from creme.creme_core.tests.views.base import BrickTestCaseMixin
+from ...creme_core.tests.base import CremeTestCase
+from ...creme_core.tests.views.base import BrickTestCaseMixin
 
 from .. import bricks, constants
 from .base import (
@@ -32,8 +32,8 @@ from .base import (
 
 if apps.is_installed('creme.activities'):
     import creme.activities.constants as act_constants
-    from creme.activities.models import Activity
-    from creme.activities.tests.base import skipIfCustomActivity
+    from ...activities.models import Activity
+    from ...activities.tests.base import skipIfCustomActivity
 
     def skipIfActivitiesIsNotInstalled(test_func):
         return skipIf(False, 'The app "activities" is not installed')(test_func)
@@ -45,16 +45,16 @@ else:
         return skipIf(True, 'The app "activities" is not installed')(test_func)
 
 if apps.is_installed('creme.opportunities'):
-    from creme.opportunities.models import Opportunity, SalesPhase
-    from creme.opportunities.tests.base import skipIfCustomOpportunity
+    from ...opportunities.models import Opportunity, SalesPhase
+    from ...opportunities.tests.base import skipIfCustomOpportunity
 else:
     def skipIfCustomOpportunity(test_func):
         return skipIf(True, 'The app "opportunities" is not installed')(test_func)
 
 if apps.is_installed('creme.commercial'):
-    from creme.commercial.constants import REL_OBJ_COMPLETE_GOAL
-    from creme.commercial.models import Act, ActType, MarketSegment
-    from creme.commercial.tests.base import skipIfCustomAct
+    from ...commercial.constants import REL_OBJ_COMPLETE_GOAL
+    from ...commercial.models import Act, ActType, MarketSegment
+    from ...commercial.tests.base import skipIfCustomAct
 else:
     def skipIfCustomAct(test_func):
         return skipIf(True, 'The app "commercial" is not installed')(test_func)

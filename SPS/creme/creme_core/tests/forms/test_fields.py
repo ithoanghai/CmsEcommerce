@@ -42,7 +42,7 @@ from ....creme_core.forms.fields import (
 )
 from ....creme_core.models import (
     CremePropertyType,
-    User,
+    CremeUser,
     Currency,
     FakeContact,
     FakeOrganisation,
@@ -73,10 +73,10 @@ class CremeUserChoiceFieldTestCase(FieldTestCase):  # DEPRECATED
         user = self.login_as_root_and_get()
         # other_user = self.other_user
         other_user = self.create_user(role=self.create_role())
-        staff = User.objects.create(username='deunan', is_staff=True)
+        staff = CremeUser.objects.create(username='deunan', is_staff=True)
 
         # Alphabetically-first user (__str__, not username)
-        first_user = User.objects.create_user(
+        first_user = CremeUser.objects.create_user(
             username='noir', email='chloe@noir.jp',
             first_name='Chloe', last_name='Noir',
             password='uselesspw',
@@ -132,7 +132,7 @@ class CremeUserChoiceFieldTestCase(FieldTestCase):  # DEPRECATED
         user = self.get_root_user()
         # other_user = self.other_user
         other_user = self.create_user()
-        staff = User.objects.create(username='deunan', is_staff=True)
+        staff = CremeUser.objects.create(username='deunan', is_staff=True)
 
         field = CremeUserChoiceField(queryset=User.objects.exclude(is_staff=True))
 

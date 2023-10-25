@@ -21,14 +21,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.auth import build_creation_perm as cperm
-from creme.creme_core.auth.decorators import (
+from ...creme_core.auth import build_creation_perm as cperm
+from ...creme_core.auth.decorators import (
     login_required,
     permission_required,
 )
-from creme.creme_core.utils import get_from_POST_or_404
-from creme.creme_core.views.utils import build_cancel_path
-from creme.persons import get_contact_model
+from ...creme_core.utils import get_from_POST_or_404
+from ...creme_core.views.utils import build_cancel_path
+from ...persons import get_contact_model
 
 from ..forms.vcf import VcfForm, VcfImportForm
 from ..vcfgenerator import VcfGenerator

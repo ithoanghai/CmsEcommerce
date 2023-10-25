@@ -23,7 +23,7 @@ from typing import Iterator
 from django.db import models
 from django.db.models.aggregates import Aggregate
 
-from creme.creme_core.models import CustomField
+from ..creme_core.models import CustomField
 
 
 class FieldAggregation:

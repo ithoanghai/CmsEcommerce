@@ -18,7 +18,7 @@
 
 from __future__ import annotations
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from ..creme_core.auth import build_creation_perm
 from ..creme_core.gui.button_menu import Button
@@ -39,17 +39,13 @@ class AddRelatedActivityButton(Button):
         'The current entity is pre-selected to be linked to the created activity.\n'
         'App: Activities'
     )
-    # activity_type: str | None = None
-    activity_type_uuid: str | None = None  # None means type is not fixed
+    activity_type: str | None = None  # None means type is not fixed
 
     def get_context(self, *, entity, request):
         context = super().get_context(entity=entity, request=request)
-        # context['activity_type'] = self.activity_type
-        type_uuid = self.activity_type_uuid
-        context['type_uuid'] = type_uuid
+        context['activity_type'] = self.activity_type
 
-        # icon_info = constants.ICONS.get(self.activity_type)
-        icon_info = constants.ICONS.get(type_uuid)
+        icon_info = constants.ICONS.get(self.activity_type)
         if icon_info:
             name, label = icon_info
         else:
@@ -64,6 +60,25 @@ class AddRelatedActivityButton(Button):
 
         return context
 
+    # def render(self, context):
+    #     context['activity_type'] = self.activity_type
+    #     context['verbose_name'] = self.verbose_name
+    #
+    #     icon_info = constants.ICONS.get(self.activity_type)
+    #     if icon_info:
+    #         name, label = icon_info
+    #     else:
+    #         name = 'calendar'
+    #         label = Activity._meta.verbose_name
+    #
+    #     theme = get_current_theme_from_context(context)
+    #     context['icon'] = get_icon_by_name(
+    #         name=name, label=label, theme=theme,
+    #         size_px=get_icon_size_px(theme=theme, size='instance-button'),
+    #     )
+    #
+    #     return super().render(context)
+
 
 class AddMeetingButton(AddRelatedActivityButton):
     id = Button.generate_id('activities', 'add_meeting')
@@ -73,8 +88,8 @@ class AddMeetingButton(AddRelatedActivityButton):
         'The current entity is pre-selected to be linked to the created meeting.\n'
         'App: Activities'
     )
-    # activity_type = constants.ACTIVITYTYPE_MEETING
-    activity_type_uuid = constants.UUID_TYPE_MEETING
+    activity_type = constants.ACTIVITYTYPE_MEETING
+    #activity_type_uuid = constants.UUID_TYPE_MEETING
 
 
 class AddPhoneCallButton(AddRelatedActivityButton):
@@ -85,8 +100,8 @@ class AddPhoneCallButton(AddRelatedActivityButton):
         'The current entity is pre-selected to be linked to the created phone call.\n'
         'App: Activities'
     )
-    # activity_type = constants.ACTIVITYTYPE_PHONECALL
-    activity_type_uuid = constants.UUID_TYPE_PHONECALL
+    activity_type = constants.ACTIVITYTYPE_PHONECALL
+    #activity_type_uuid = constants.UUID_TYPE_PHONECALL
 
 
 class AddTaskButton(AddRelatedActivityButton):
@@ -97,5 +112,5 @@ class AddTaskButton(AddRelatedActivityButton):
         'The current entity is pre-selected to be linked to the created task.\n'
         'App: Activities'
     )
-    # activity_type = constants.ACTIVITYTYPE_TASK
-    activity_type = constants.UUID_TYPE_TASK
+    activity_type = constants.ACTIVITYTYPE_TASK
+    #activity_type = constants.UUID_TYPE_TASK

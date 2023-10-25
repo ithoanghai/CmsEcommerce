@@ -3,6 +3,7 @@ from functools import partial
 from unittest import SkipTest
 
 from django.conf import settings
+# from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core import mail
 from django.core.mail.backends.locmem import EmailBackend
@@ -12,14 +13,14 @@ from django.urls import reverse
 from django.utils.timezone import localtime, now
 from django.utils.translation import gettext as _
 
-from ...creme_core.bricks import JobErrorsBrick
-from ...creme_core.core.entity_cell import EntityCellFunctionField
-from ...creme_core.core.function_field import function_field_registry
+from creme.creme_core.bricks import JobErrorsBrick
+from creme.creme_core.core.entity_cell import EntityCellFunctionField
+from creme.creme_core.core.function_field import function_field_registry
 # Should be a test queue
-from ...creme_core.core.job import get_queue
-from ...creme_core.forms.listview import TextLVSWidget
-from ...creme_core.gui.view_tag import ViewTag
-from ...creme_core.models import (
+from creme.creme_core.core.job import get_queue
+from creme.creme_core.forms.listview import TextLVSWidget
+from creme.creme_core.gui.view_tag import ViewTag
+from creme.creme_core.models import (
     BrickDetailviewLocation,
     BrickHomeLocation,
     BrickState,
@@ -31,12 +32,12 @@ from ...creme_core.models import (
     JobResult,
     SettingValue,
 )
-from ...creme_core.models.history import (
+from creme.creme_core.models.history import (
     TYPE_AUX_CREATION,
     TYPE_AUX_DELETION,
     TYPE_AUX_EDITION,
 )
-from ...creme_core.tests.views.base import BrickTestCaseMixin
+from creme.creme_core.tests.views.base import BrickTestCaseMixin
 
 from ..bricks import TodosBrick
 from ..constants import (
@@ -60,7 +61,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
     @staticmethod
     def _build_add_url(entity):
-        return reverse('assistants:create_todo', args=(entity.id,))
+        return reverse('assistants__create_todo', args=(entity.id,))
 
     def _create_todo(self, title='TITLE', description='DESCRIPTION', entity=None, user=None):
         entity = entity or self.entity
@@ -86,6 +87,9 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         )
         self._create_todo('Todo02', 'Description02', entity=entity2)
 
+        # user2 = get_user_model().objects.create_user(
+        #     username='ryoga', first_name='Ryoga', last_name='Hibiki', email='user@creme.org',
+        # )
         user2 = self.create_user(
             username='ryoga', first_name='Ryoga', last_name='Hibiki', email='user@creme.org',
         )
@@ -98,6 +102,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
     def test_create01(self):
         self.assertFalse(ToDo.objects.exists())
+        # other_user = self.other_user
         other_user = self.create_user()
 
         entity = self.entity
@@ -246,7 +251,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         todo = self._create_todo()
         self.assertFalse(todo.is_ok)
 
-        url = reverse('assistants:validate_todo', args=(todo.id,))
+        url = reverse('assistants__validate_todo', args=(todo.id,))
         self.assertGET405(url)
 
         response = self.assertPOST200(url, follow=True)
@@ -300,7 +305,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
             brick_id=TodosBrick.id, defaults={'order': 50},
         )
 
-        response2 = self.assertGET200(reverse('shop_home'))
+        response2 = self.assertGET200(reverse('creme_core__home'))
         home_brick_node = self.get_brick_node(
             self.get_html_tree(response2.content), brick=TodosBrick,
         )
@@ -313,6 +318,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         self.assertInstanceLink(home_brick_node, entity2)
 
         # Detail + hide validated ---
+        # state = BrickState.objects.get_for_brick_id(user=user, brick_id=TodosBrick.id_)
         state = BrickState.objects.get_for_brick_id(user=user, brick_id=TodosBrick.id)
         state.set_extra_data(key=BRICK_STATE_HIDE_VALIDATED_TODOS, value=True)
         state.save()
@@ -327,7 +333,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         self.assertFalse(todo_found(detail_brick_node_hidden, todo3))
 
         # Home + hide validated ---
-        response4 = self.assertGET200(reverse('shop_home'))
+        response4 = self.assertGET200(reverse('creme_core__home'))
         home_brick_node_hidden = self.get_brick_node(
             self.get_html_tree(response4.content), brick=TodosBrick,
         )
@@ -358,6 +364,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         content = response.json()
         self.assertEqual(1, len(content))
         self.assertEqual(2, len(content[0]))
+        # self.assertEqual(TodosBrick.id_, content[0][0])
         self.assertEqual(TodosBrick.id, content[0][0])
 
         with self.assertNoException():
@@ -377,6 +384,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
         response = self.assertGET200(
             reverse('creme_core__reload_home_bricks'),
+            # data={'brick_id': TodosBrick.id_},
             data={'brick_id': TodosBrick.id},
         )
         self.assertEqual('application/json', response['Content-Type'])
@@ -384,6 +392,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         content = response.json()
         self.assertEqual(1, len(content))
         self.assertEqual(2, len(content[0]))
+        # self.assertEqual(TodosBrick.id_, content[0][0])
         self.assertEqual(TodosBrick.id, content[0][0])
 
         with self.assertNoException():
@@ -512,6 +521,7 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         job = self.get_reminder_job()
         self.assertIsNone(job.type.next_wakeup(job, now_value))
 
+        # create_todo = partial(ToDo.objects.create, creme_entity=self.entity, user=user)
         create_todo = partial(ToDo.objects.create, real_entity=self.entity, user=user)
         todo1 = create_todo(title='Todo#1', deadline=now_value)
         create_todo(title='Todo#2', deadline=now_value + timedelta(days=2))
@@ -634,6 +644,14 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         user = self.user
         now_value = now()
 
+        # create_user = get_user_model().objects.create
+        # teammate = create_user(
+        #     username='luffy',
+        #     email='luffy@sunny.org', role=self.role,
+        #     first_name='Luffy', last_name='Monkey D.',
+        # )
+        # team = create_user(username='Team #1', is_team=True)
+        # team.teammates = [teammate, user]
         teammate = self.create_user(0)
         team = self.create_team('Team #1', teammate, user)
 
@@ -653,7 +671,8 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
     def test_reminder05(self):
         "Dynamic user."
-        other_user = self.create_user()
+        # other_user  = self.other_user
+        other_user  = self.create_user()
 
         entity = self.entity
         entity.user = other_user
@@ -823,6 +842,24 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
     def test_manager_filter_by_user(self):
         user = self.user
 
+        # other_user = self.other_user
+        # create_user = get_user_model().objects.create
+        # teammate1 = create_user(
+        #     username='luffy',
+        #     email='luffy@sunny.org', role=self.role,
+        #     first_name='Luffy', last_name='Monkey D.',
+        # )
+        # teammate2 = create_user(
+        #     username='zorro',
+        #     email='zorro@sunny.org', role=self.role,
+        #     first_name='Zorro', last_name='Roronoa',
+        # )
+        #
+        # team1 = create_user(username='Team #1', is_team=True)
+        # team1.teammates = [teammate1, user]
+        #
+        # team2 = create_user(username='Team #2', is_team=True)
+        # team2.teammates = [self.other_user, teammate2]
         other_user = self.create_user(0)
         teammate1  = self.create_user(1)
         teammate2  = self.create_user(2)
@@ -846,11 +883,12 @@ class TodoTestCase(BrickTestCaseMixin, AssistantsTestCase):
         user = self.user
 
         def get_state():
+            # return BrickState.objects.get_for_brick_id(user=user, brick_id=TodosBrick.id_)
             return BrickState.objects.get_for_brick_id(user=user, brick_id=TodosBrick.id)
 
         self.assertIsNone(get_state().pk)
 
-        url = reverse('assistants:hide_validated_todos')
+        url = reverse('assistants__hide_validated_todos')
         self.assertGET405(url)
 
         # ---

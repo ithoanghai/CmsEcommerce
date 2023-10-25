@@ -7,7 +7,7 @@ from ..creme_core.core.loading import get_class
 
 
 class CommunicationApplication(Application):
-    name = 'communication'
+    #name = 'communication'
 
     alert_list_view = get_class(
         'communication.alerts.views', 'ProductAlertListView')

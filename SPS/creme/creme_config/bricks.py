@@ -80,7 +80,7 @@ from ..creme_core.utils.unicode_collation import collator
 from . import constants
 
 _PAGE_SIZE = 50
-User = get_user_model()
+CremeUser = get_user_model()
 WorldSettings = get_world_settings_model()
 logger = logging.getLogger(__name__)
 
@@ -554,13 +554,13 @@ class UsersBrick(_ConfigAdminBrick):
     # id_ = _ConfigAdminBrick.generate_id('creme_config', 'users')
     id = _ConfigAdminBrick.generate_id('creme_config', 'users')
     verbose_name = _('Users')
-    dependencies = (User,)
+    dependencies = (settings.AUTH_USER_MODEL,)
     order_by = 'username'
     template_name = 'creme_config/bricks/users.html'
     search_fields = ['username', 'last_name', 'first_name', 'displayed_name']
 
     def detailview_display(self, context):
-        users = User.objects.filter(is_team=False)
+        users = CremeUser.objects.filter(is_team=False)
 
         if not context['user'].is_staff:
             users = users.exclude(is_staff=True)
@@ -586,7 +586,7 @@ class UsersBrick(_ConfigAdminBrick):
                     ),
                 ))
 
-        get_field = User._meta.get_field
+        get_field = CremeUser._meta.get_field
         btc = self.get_template_context(
             context, users,
             hide_inactive=hide_inactive,
@@ -599,7 +599,7 @@ class UsersBrick(_ConfigAdminBrick):
             any(user.time_zone != TIME_ZONE for user in page_users)
             # All users are displayed if our page
             if page.paginator.count == len(page_users) else
-            User.objects.exclude(time_zone=TIME_ZONE).exists()
+            CremeUser.objects.exclude(time_zone=TIME_ZONE).exists()
         )
 
         return self._render(btc)
@@ -609,13 +609,13 @@ class TeamsBrick(_ConfigAdminBrick):
     # id_ = _ConfigAdminBrick.generate_id('creme_config', 'teams')
     id = _ConfigAdminBrick.generate_id('creme_config', 'teams')
     verbose_name = _('Teams')
-    dependencies = (User,)
+    dependencies = (settings.AUTH_USER_MODEL,)
     order_by = 'username'
     template_name = 'creme_config/bricks/teams.html'
 
     def detailview_display(self, context):
         return self._render(self.get_template_context(
-            context, User.objects.filter(is_team=True),
+            context, CremeUser.objects.filter(is_team=True),
         ))
 
 
@@ -1080,7 +1080,7 @@ class UserSettingValuesBrick(Brick):
     # id_ = QuerysetBrick.generate_id('creme_config', 'user_setting_values')
     id = QuerysetBrick.generate_id('creme_config', 'user_setting_values')
     verbose_name = _('Setting values')
-    # dependencies  = (User,) ??
+    # dependencies  = (settings.AUTH_USER_MODEL,) ??
     template_name = 'creme_config/bricks/user-setting-values.html'
     configurable = False
 

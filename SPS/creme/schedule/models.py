@@ -7,12 +7,12 @@ from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext as _
 from django.db.models.signals import post_save
+from django.conf import settings
 
 from ..markdown_parser import parse
 from ..reviews.models import ProposalBase, ProposalResult
 from ..conference.models import Section
 from ..speakers.models import Speaker
-from ..creme_core.models.auth import User
 
 
 @deconstructible
@@ -278,7 +278,7 @@ class SessionRole(models.Model):
     ]
 
     session = models.ForeignKey(Session, verbose_name=_("Session"), on_delete=models.CASCADE)
-    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE)
     role = models.IntegerField(choices=SESSION_ROLE_TYPES, verbose_name=_("Role"))
     status = models.BooleanField(verbose_name=_("Status"), null=True)
 

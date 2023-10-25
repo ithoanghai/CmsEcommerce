@@ -21,7 +21,7 @@
                         </div>
 
                         {% for friend in friends %}
-                            <a href="{% url 'communications:messages-with-one-friend' friend.username %}"
+                            <a href="{% url 'communications__messages-with-one-friend' friend.username %}"
                                class="list-group-item list-group-item-action border-0 bg-light mt-1">
                                 <div class="d-flex align-items-start">
                                     <img src="https://bootdey.com/img/Content/avatar/avatar5.png"
@@ -129,9 +129,9 @@
     {#                                                        </figure>#}
     {#                                                        <div class="people-name">#}
     {#                                                            {% if friend.user.username == request.user.username %}#}
-    {#                                                                <a href="{% url 'communications:messages-with-one-friend' friend.friend.username %}">{{ friend.friend.username }}</a>#}
+    {#                                                                <a href="{% url 'communications__messages-with-one-friend' friend.friend.username %}">{{ friend.friend.username }}</a>#}
     {#                                                            {% else %}#}
-    {#                                                                <a href="{% url 'communications:messages-with-one-friend' friend.user.username %}">{{ friend.user.username }}</a>#}
+    {#                                                                <a href="{% url 'communications__messages-with-one-friend' friend.user.username %}">{{ friend.user.username }}</a>#}
     {#                                                            {% endif %}#}
     {#                                                        </div>#}
     {#                                                    </li>#}

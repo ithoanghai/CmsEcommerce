@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.conf import settings
-from ..creme_core.models.auth import Account, User
+from ...creme_core.models import Account, CremeUser
 from django.urls import reverse
 from django.test import TestCase
 

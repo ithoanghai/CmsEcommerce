@@ -19,8 +19,8 @@
 from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 
-from creme import persons
-from creme.creme_core.gui.actions import UIAction
+from .. import persons
+from ..creme_core.gui.actions import UIAction
 
 
 class GenerateVcfAction(UIAction):

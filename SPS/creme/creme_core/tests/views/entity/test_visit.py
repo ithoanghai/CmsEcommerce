@@ -7,10 +7,10 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from ..creme_core.auth import EntityCredentials
-from ..creme_core.core import entity_filter
-from ..creme_core.core.entity_cell import EntityCellRegularField
-from ..creme_core.models import (
+from ....auth import EntityCredentials
+from ...core import entity_filter
+from ...core.entity_cell import EntityCellRegularField
+from ...models import (
     EntityFilter,
     FakeContact,
     FakeOrganisation,
@@ -19,9 +19,9 @@ from ..creme_core.models import (
     RelationType,
     SetCredentials,
 )
-from ..creme_core.tests.views.base import ViewsTestCase
-from ..creme_core.utils.queries import QSerializer
-from ..creme_core.views.generic.detailview import EntityVisitor
+from ...tests.views.base import ViewsTestCase
+from ...utils.queries import QSerializer
+from ...views.generic.detailview import EntityVisitor
 
 
 class VisitTestCase(ViewsTestCase):

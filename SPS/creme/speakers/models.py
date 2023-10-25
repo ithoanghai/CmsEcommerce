@@ -6,8 +6,7 @@ from django.urls import reverse
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext as _
-
-from ..creme_core.models.auth import User
+from django.conf import settings
 
 from ..markdown_parser import parse
 
@@ -20,7 +19,7 @@ class Speaker(models.Model):
         (2, "Two")
     ]
 
-    user = models.OneToOneField(User, null=True, related_name="speaker_profile", verbose_name=_("User"), on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, related_name="speaker_profile", verbose_name=_("User"), on_delete=models.CASCADE)
     name = models.CharField(verbose_name=_("Name"), max_length=100,
                             help_text=_("As you would like it to appear in the"
                                         " conference program."))

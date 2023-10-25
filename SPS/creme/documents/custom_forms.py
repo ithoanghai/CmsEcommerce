@@ -1,12 +1,12 @@
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
-from .. import documents
-from ..creme_core.gui.custom_form import (
+from creme import documents
+from creme.creme_core.gui.custom_form import (
     CustomFormDefault,
     CustomFormDescriptor,
 )
-from ..documents.forms.document import BaseDocumentCustomForm
-from ..documents.forms.folder import BaseFolderCustomForm
+from creme.documents.forms.document import BaseDocumentCustomForm
+from creme.documents.forms.folder import BaseFolderCustomForm
 
 Folder = documents.get_folder_model()
 Document = documents.get_document_model()

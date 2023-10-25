@@ -4,9 +4,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django.utils import timezone
-from ..creme_core.models.auth import User
+from ..creme_core.models import CremeUser
 from ..creme_core.common.utils import EVENT_PARENT_TYPE, EVENT_STATUS
-from ..contacts.models import Contact
+from ..persons.models import Contact
 from ..leads.models import Lead
 
 
@@ -64,14 +64,14 @@ class Event(models.Model):
     priority = models.CharField(max_length=10, blank=True)  # only for task
     updated_on = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
-        User,
+        CremeUser,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="updated_user",
     )
     attendees_user = models.ManyToManyField(
-        User, blank=True, related_name="attendees_user"
+        CremeUser, blank=True, related_name="attendees_user"
     )
     attendees_contacts = models.ManyToManyField(
         Contact, blank=True, related_name="attendees_contact"
@@ -81,10 +81,10 @@ class Event(models.Model):
     )
     created_on = models.DateTimeField(_("Created on"), auto_now=True)
     created_by = models.ForeignKey(
-        User, related_name="event_created_by", on_delete=models.SET_NULL, null=True
+        CremeUser, related_name="event_created_by", on_delete=models.SET_NULL, null=True
     )
     assigned_to = models.ManyToManyField(
-        User, blank=True, related_name="event_assigned_users"
+        CremeUser, blank=True, related_name="event_assigned_users"
     )
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=False)

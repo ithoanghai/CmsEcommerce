@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -10,19 +11,17 @@ from rest_framework.views import APIView
 
 from ..creme_core.common.models import Attachments
 from ..comments.models import Comment
-from ..userprofile.models import Profile
+from ..persons.models import Profile
 # from ..creme_core.common.custom_auth import JSONWebTokenAuthentication
 from ..creme_core.common.serializer import AttachmentsSerializer, CommentSerializer
 from ..creme_core.common.utils import CASE_TYPE, PRIORITY_CHOICE, STATUS_CHOICE
 from . import swagger_params
 from .models import Case
-from .serializer import CaseCreateSerializer, CaseSerializer
+from .serializer import CaseCreateSerializer, CaseSerializer, ContactSerializer
 from .tasks import send_email_to_assigned_user
-from ..contacts.models import Contact
-from ..contacts.serializer import ContactSerializer
-from ..teams.models import Teams
+from ..persons.models import Contact, Teams
 from ..creme_core.models.auth import Account
-from ..creme_core.accounts.serializer import AccountSerializer
+from ..creme_core.auth.serializer import AccountSerializer
 
 
 class CaseListView(APIView, LimitOffsetPagination):
@@ -112,7 +111,7 @@ class CaseListView(APIView, LimitOffsetPagination):
 
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 if teams.exists():
                     cases_obj.teams.add(*teams)
 
@@ -203,7 +202,7 @@ class CaseDetailView(APIView):
             cases_object.teams.clear()
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 if teams.exists():
                     cases_object.teams.add(*teams)
 

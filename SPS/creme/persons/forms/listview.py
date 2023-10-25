@@ -20,8 +20,8 @@
 from django.db.models.query_utils import Q
 
 # from creme.creme_core.forms.listview import BaseChoiceField
-from creme.creme_core.forms import listview
-from creme.persons import get_address_model
+from ...creme_core.forms import listview
+from ...persons import get_address_model
 
 
 # NB: keep as example

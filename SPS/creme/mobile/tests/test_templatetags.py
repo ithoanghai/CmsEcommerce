@@ -2,17 +2,17 @@ from django.test.client import RequestFactory
 from django.urls.base import reverse
 from parameterized import parameterized
 
-from creme.creme_core.tests.base import (
+from ...creme_core.tests.base import (
     OverrideSettingValueContext,
     skipIfNotInstalled,
 )
-from creme.mobile import setting_keys
-from creme.mobile.templatetags.mobile_tags import (
+from ...mobile import setting_keys
+from ...mobile.templatetags.mobile_tags import (
     mobile_document_class,
     mobile_location_map_url,
 )
-from creme.mobile.tests.base import MobileBaseTestCase
-from creme.persons import get_address_model, get_contact_model
+from ...mobile.tests.base import MobileBaseTestCase
+from ...persons import get_address_model, get_contact_model
 
 Address = get_address_model()
 Contact = get_contact_model()

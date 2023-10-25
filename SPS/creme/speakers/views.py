@@ -6,10 +6,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
-from ..creme_core.accounts.decorators import login_required
+from ..creme_core.auth.decorators import login_required
 from ..reviews.models import ProposalBase
 from ..speakers.forms import SpeakerForm
 from ..speakers.models import Speaker
+from ..creme_core.models import CremeUser
 
 
 @login_required
@@ -45,7 +46,7 @@ def speaker_create(request):
 
 @login_required
 def speaker_create_staff(request, pk):
-    user = get_object_or_404(User, pk=pk)
+    user = get_object_or_404(settings.AUTH_USER_MODEL, pk=pk)
     if not request.user.is_staff:
         raise Http404
 

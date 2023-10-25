@@ -8,8 +8,8 @@ from django.template import loader, Context
 from django.contrib import messages
 from django.contrib.sites.models import Site
 
-from ..creme_core.models.auth import Account, User
-from ..creme_core.accounts.decorators import login_required
+from ..creme_core.models import Account, CremeUser
+from ..creme_core.auth.decorators import login_required
 
 from ..schedule.forms import SlotEditForm, ScheduleSectionForm
 from ..schedule.models import Schedule, Day, Slot, Session, SessionRole, Presentation

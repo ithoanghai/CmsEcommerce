@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.tests.views.base import BrickTestCaseMixin
+from ...creme_core.tests.views.base import BrickTestCaseMixin
 
 from ..bricks import MySignaturesBrick
 from ..models import EmailSignature
@@ -38,7 +38,7 @@ class SignaturesTestCase(BrickTestCaseMixin, _EmailsTestCase):
         user = self.login_as_emails_user()
         self.assertFalse(EmailSignature.objects.count())
 
-        url = reverse('emails:create_signature')
+        url = reverse('emails__create_signature')
         context = self.assertGET200(url).context
         self.assertEqual(EmailSignature.creation_label, context.get('title'))
         self.assertEqual(EmailSignature.save_label,     context.get('submit_label'))
@@ -54,7 +54,7 @@ class SignaturesTestCase(BrickTestCaseMixin, _EmailsTestCase):
 
     def test_create_not_allowed(self):
         self.login_as_standard(allowed_apps=['persons'])
-        self.assertGET403(reverse('emails:create_signature'))
+        self.assertGET403(reverse('emails__create_signature'))
 
     # TODO: create with images....
 
@@ -106,7 +106,7 @@ class SignaturesTestCase(BrickTestCaseMixin, _EmailsTestCase):
 
     def _delete(self, signature):
         return self.client.post(
-            reverse('emails:delete_signature'), data={'id': signature.id}, follow=True,
+            reverse('emails__delete_signature'), data={'id': signature.id}, follow=True,
         )
 
     def test_delete01(self):

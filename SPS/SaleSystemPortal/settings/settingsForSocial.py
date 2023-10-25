@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     "social_django",
 
     # app_list
-    'creme.creme_core.accounts',
+    'creme.creme_core.auth',
     "creme.activities",
     "creme.announcements",
-    "creme.api",
+    "creme.creme_core.api",
     "creme.badges",
     "creme.blogs",
     "creme.bookmarks",
@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     "creme.calendars",
     "creme.chatgpt",
     "creme.comments",
-    'creme.communications',
+    'creme.communication',
     "creme.conference",
     'creme.creme_core.core',
     "creme.documents",
@@ -81,9 +81,7 @@ INSTALLED_APPS = [
     "creme.speakers",
     "creme.sponsorship",
     "creme.stripe",
-    "creme.teams",
     "creme.testimonials",
-    'creme.userprofile',
     'creme.utils',
     "creme.waitinglist",
     "creme.webanalytics",
@@ -105,17 +103,17 @@ MIDDLEWARE = [
     #"django.middleware.transaction.TransactionMiddleware",
 
     # other middleware
-    "creme.creme_core.accounts.middleware.LocaleMiddleware",
-    "creme.creme_core.accounts.middleware.TimezoneMiddleware",
-    "creme.creme_core.accounts.middleware.ExpiredPasswordMiddleware",
+    "creme.creme_core.auth.middleware.LocaleMiddleware",
+    "creme.creme_core.auth.middleware.TimezoneMiddleware",
+    "creme.creme_core.auth.middleware.ExpiredPasswordMiddleware",
     "reversion.middleware.RevisionMiddleware",
     "creme.referrals.middleware.SessionJumpingMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 MIDDLEWARE_CLASSES = [
-    "creme.teams.middleware.TeamMiddleware",
-    "app_list.site_access.middleware.BasicAuthMiddleware",
+    "creme.persons.middleware.TeamMiddleware",
+    "creme.site_access.middleware.BasicAuthMiddleware",
 ]
 
 ROOT_URLCONF = 'SaleSystemPortal.urls'
@@ -140,8 +138,8 @@ TEMPLATES = [
                 "theme_bootstrap.context_processors.theme",
                 "SaleSystemPortal.context_processors.settings",
 
-                "creme.creme_core.accounts.context_processors.account",
-                "app_list.reviews.context_processors.reviews",
+                "creme.creme_core.auth.context_processors.account",
+                "creme.reviews.context_processors.reviews",
                 "creme.blogs.context_processors.scoped",
                 #"app_list.message.context_processors.user_messages"
                 "social.apps.django_app.context_processors.backends",
@@ -322,9 +320,9 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
     # Auth backends
-    "creme.creme_core.accounts.auth_backends.UsernameAuthenticationBackend",
+    "creme.creme_core.auth.auth_backends.UsernameAuthenticationBackend",
     # Permissions Backends
-    "creme.teams.backends.TeamPermissionsBackend",
+    "creme.persons.backends.TeamPermissionsBackend",
     # other backends
     "creme.likes.auth_backends.CanLikeBackend",
 ]
@@ -454,6 +452,6 @@ SITE_ACCESS_SETTINGS = {
 
 PASSWORD_USE_HISTORY = False
 ACCOUNT_LOGIN_URL = "accounts:login"
-ACCOUNT_HOOKSET = "creme.creme_core.accounts.hooks.AccountDefaultHookSet"
+ACCOUNT_HOOKSET = "creme.creme_core.auth.hooks.AccountDefaultHookSet"
 NOTIFY_ON_PASSWORD_CHANGE = True
 DEFAULT_HTTP_PROTOCOL = "https"

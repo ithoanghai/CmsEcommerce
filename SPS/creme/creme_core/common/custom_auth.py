@@ -6,7 +6,7 @@
 # from rest_framework.authentication import get_authorization_header
 # import jwt
 # from django.conf import settings
-# from ..creme_core.models.auth import User
+# from ..creme_core.models import CremeUser
 # #from rest_framework_jwt.settings import api_settings
 
 # try:
@@ -59,15 +59,15 @@
 # #     #     Returns an active user that matches the payload's user id and email.
 # #     #     """
 # #     #     account_id = payload["id"]
-# #     #     from ..creme_core.models.auth import User
+# #     #     from ..creme_core.models import CremeUser
 
 # #     #     if not account_id:
 # #     #         msg = _("Invalid payload.")
 # #     #         raise exceptions.AuthenticationFailed(msg)
 # #     #     try:
-# #     #         account = User.objects.get(pk=account_id)
+# #     #         account = CremeUser.objects.get(pk=account_id)
 
-# #     #     except User.DoesNotExist:
+# #     #     except CremeUser.DoesNotExist:
 # #     #         msg = _("Invalid signature.")
 # #     #         raise exceptions.AuthenticationFailed(msg)
 # #     #     return account

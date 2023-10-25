@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from ..creme_core.models.auth import Account, User
+from ...creme_core.models import Account, CremeUser
 from django.contrib.contenttypes.models import ContentType
 
 from ..categories import (

@@ -19,7 +19,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .. import persons
-from ..creme_core.accounts import build_creation_perm as cperm
+from ..creme_core.auth import build_creation_perm as cperm
 from ..creme_core.gui.button_menu import Button
 from ..creme_core.models import SettingValue
 

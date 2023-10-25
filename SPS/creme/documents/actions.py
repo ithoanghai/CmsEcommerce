@@ -16,10 +16,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
-from .. import documents
-from ..creme_core.gui.actions import UIAction
+from creme import documents
+from creme.creme_core.gui.actions import UIAction
 
 Folder   = documents.get_folder_model()
 Document = documents.get_document_model()

@@ -22,7 +22,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext_lazy
 
-from creme.creme_core.models import CremeEntity, CremeModel
+from ...creme_core.models import CremeEntity, CremeModel
 
 from .base import _PollLine
 from .poll_form import PollFormLine

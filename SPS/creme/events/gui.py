@@ -92,11 +92,15 @@ class _BaseEventEntityCellVolatile(EntityCellVolatile):
             ),
         )
 
+    # def render_csv(self, entity, user):
+    #     return 'Unused'
+
 
 class EntityCellVolatileInvitation(_BaseEventEntityCellVolatile):
     def __init__(self, event, value='invitation_management', **kwargs):
         super().__init__(event=event, value=value, **kwargs)
 
+    # def render_html(self, entity, user):
     def render(self, entity, user, tag):
         has_relation = self.has_relation
 
@@ -111,7 +115,7 @@ class EntityCellVolatileInvitation(_BaseEventEntityCellVolatile):
 
         return self._render_select(
             entity=entity, user=user,
-            change_url=reverse('events:set_invitation_status', args=(self.event.id, entity.id)),
+            change_url=reverse('events__set_invitation_status', args=(self.event.id, entity.id)),
             status_map=constants.INV_STATUS_MAP,
             current_status=current_status,
         )
@@ -125,6 +129,7 @@ class EntityCellVolatilePresence(_BaseEventEntityCellVolatile):
     def __init__(self, event, value='presence_management', **kwargs):
         super().__init__(event=event, value=value, **kwargs)
 
+    # def render_html(self, entity, user):
     def render(self, entity, user, tag):
         has_relation = self.has_relation
 
@@ -137,7 +142,7 @@ class EntityCellVolatilePresence(_BaseEventEntityCellVolatile):
 
         return self._render_select(
             entity=entity, user=user,
-            change_url=reverse('events:set_presence_status', args=(self.event.id, entity.id)),
+            change_url=reverse('events__set_presence_status', args=(self.event.id, entity.id)),
             status_map=constants.PRES_STATUS_MAP,
             current_status=current_status,
         )

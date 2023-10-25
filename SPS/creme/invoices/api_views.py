@@ -11,22 +11,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..creme_core.models.auth import Account, User
-from ..creme_core.accounts.serializer import AccountSerializer
+from ..creme_core.models import Account, CremeUser
+from ..creme_core.auth.serializer import AccountSerializer
 from ..creme_core.common.models import Attachments
 from ..comments.models import Comment
 # from ..creme_core.common.custom_auth import JSONWebTokenAuthentication
 from ..creme_core.common.serializer import (AttachmentsSerializer, BillingAddressSerializer,
-                               CommentSerializer, UserSerializer)
+                               CommentSerializer, UserSerializer, TeamsSerializer)
 from ..creme_core.common.utils import COUNTRIES, CURRENCY_CODES
 from . import swagger_params
 from .models import Invoice
 from .serializer import (InvoiceCreateSerializer,
                                  InvoiceHistorySerializer, InvoiceSerailizer)
-from .tasks import (create_invoice_history, send_email,
-                            send_invoice_email, send_invoice_email_cancel)
-from ..teams.models import Teams
-from ..teams.serializer import TeamsSerializer
+from .tasks import (create_invoice_history, send_email, send_invoice_email, send_invoice_email_cancel)
+from ..persons.models import Teams
 
 INVOICE_STATUS = (
     ("Draft", "Draft"),
@@ -104,7 +102,7 @@ class InvoiceListView(APIView, LimitOffsetPagination):
         )
         context["invoices"] = invoices
         context["users"] = UserSerializer(
-            User.objects.filter(is_active=True, company=self.request.company).order_by(
+            CremeUser.objects.filter(is_active=True, company=self.request.company).order_by(
                 "email"
             ),
             many=True,
@@ -206,7 +204,7 @@ class InvoiceListView(APIView, LimitOffsetPagination):
                     assinged_to_users_ids = json.loads(params.get("assigned_to"))
 
                     for user_id in assinged_to_users_ids:
-                        user = User.objects.filter(id=user_id, company=request.company)
+                        user = CremeUser.objects.filter(id=user_id, company=request.company)
                         if user.exists():
                             invoice_obj.assigned_to.add(user_id)
                         else:
@@ -347,7 +345,7 @@ class InvoiceDetailView(APIView):
                 if params.get("assigned_to"):
                     assinged_to_users_ids = json.loads(params.get("assigned_to"))
                     for user_id in assinged_to_users_ids:
-                        user = User.objects.filter(id=user_id, company=request.company)
+                        user = CremeUser.objects.filter(id=user_id, company=request.company)
                         if user.exists():
                             invoice_obj.assigned_to.add(user_id)
                         else:
@@ -436,7 +434,7 @@ class InvoiceDetailView(APIView):
 
         if self.request.user.is_superuser or self.request.user.role == "ADMIN":
             users_mention = list(
-                User.objects.filter(
+                CremeUser.objects.filter(
                     is_active=True,
                     company=self.request.company,
                 ).values("username")
@@ -462,7 +460,7 @@ class InvoiceDetailView(APIView):
                     self.invoice.accounts.all(), many=True
                 ).data,
                 "users": UserSerializer(
-                    User.objects.filter(
+                    CremeUser.objects.filter(
                         is_active=True,
                         company=self.request.company,
                     ).order_by("email"),

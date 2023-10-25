@@ -16,10 +16,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
-from ...creme_core.views import generic
-from ...creme_core.views.utils import json_update_from_widget_response
+from creme.creme_core.views import generic
+from creme.creme_core.views.utils import json_update_from_widget_response
 
 from .. import get_document_model
 from ..forms import quick as q_forms

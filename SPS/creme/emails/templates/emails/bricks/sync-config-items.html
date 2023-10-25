@@ -11,11 +11,11 @@
 {% block brick_header_actions %}
     {% translate 'New server configuration' context 'emails' as new_label %}
     {% has_perm_to admin 'emails' as admin_perm %}
-    {% brick_header_action id='add' url='emails:create_sync_config_item'|url label=new_label enabled=admin_perm %}
+    {% brick_header_action id='add' url='emails__create_sync_config_item'|url label=new_label enabled=admin_perm %}
 {% endblock %}
 
 {% block brick_before_content %}
-    <div class="help">{% blocktranslate with sync_url='emails:sync_portal'|url asvar help_text %}Emails sent to these servers can be synchronized (i.e. transformed as Creme Email entities).
+    <div class="help">{% blocktranslate with sync_url='emails__sync_portal'|url asvar help_text %}Emails sent to these servers can be synchronized (i.e. transformed as Creme Email entities).
 The emails are retrieved and stored in a sandbox. Then users can choose to transform them as entities (or to drop them) in the view <a href="{{sync_url}}">Synchronization of incoming emails</a>.
 BEWARE: these mailboxes must be dedicated to the synchronisation, because emails are deleted once they have been retrieved (the synchronisation address is generally used as Carbon Copy).{% endblocktranslate %}
         {{help_text|linebreaksbr}}
@@ -37,7 +37,7 @@ BEWARE: these mailboxes must be dedicated to the synchronisation, because emails
 
 {% block brick_table_rows %}
 {% has_perm_to admin 'emails' as admin_perm %}
-{% url 'emails:delete_sync_config_item' as delete_url %}
+{% url 'emails__delete_sync_config_item' as delete_url %}
 {% translate 'Edit this configuration' context 'emails' as edit_label %}{% translate 'Delete this configuration' context 'emails' as del_label %}
     {% for item in page.object_list %}
     <tr>

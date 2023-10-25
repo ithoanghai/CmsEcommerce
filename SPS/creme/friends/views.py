@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from django.contrib.auth.mixins import LoginRequiredMixin
-from ..creme_core.models.auth import User
+from ..creme_core.models import CremeUser
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.http import JsonResponse
@@ -23,7 +23,7 @@ class FindFriendsListView(LoginRequiredMixin, ListView):
             FriendshipRequest.objects.filter(Q(from_user=self.request.user))
             .exclude(to_user_id=self.request.user.id)
             .values_list('to_user_id', flat=True))
-        users = User.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(
+        users = CremeUser.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(
             id=self.request.user.id)
         return users
 
@@ -42,7 +42,7 @@ class FriendRequestsListView(LoginRequiredMixin, ListView):
 
 def send_request(request, username=None):
     if username is not None:
-        friend_user = User.objects.get(username=username)
+        friend_user = CremeUser.objects.get(username=username)
         try:
             friend_request = Friend.objects.add_friend(request.user, friend_user, message='Hi! I would like to add you')
         except Exception as e:
@@ -71,7 +71,7 @@ def send_request(request, username=None):
 
 def accept_request(request, friend=None):
     if friend is not None:
-        friend_user = User.objects.get(username=friend)
+        friend_user = CremeUser.objects.get(username=friend)
         friend_request = FriendshipRequest.objects.get(to_user=request.user, from_user=friend_user)
         friend_request.accept()
         # CustomNotification.objects.filter(recipient=current_user, actor=friend_user).delete()
@@ -85,7 +85,7 @@ def accept_request(request, friend=None):
 @api_view(['DELETE'])
 def cancel_request(request, friend=None):
     if friend is not None:
-        friend_user = User.objects.get(username=friend)
+        friend_user = CremeUser.objects.get(username=friend)
         friend_request = FriendshipRequest.objects.get(to_user=request.user, from_user=friend_user)
         friend_request.cancel()
         data = {

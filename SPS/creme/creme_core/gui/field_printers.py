@@ -41,7 +41,7 @@ from ..core.download import (
     FileFieldDownLoadRegistry,
     filefield_download_registry,
 )
-from ..models import CremeEntity, User, EntityFilter, fields
+from ..models import CremeEntity, CremeUser, EntityFilter, fields
 from ..templatetags.creme_widgets import widget_entity_hyperlink, widget_urlize
 from ..utils import bool_as_html
 from ..utils.collections import ClassKeyedMap
@@ -56,20 +56,20 @@ if TYPE_CHECKING:
     #   - "value" (value of the field for the 'instance' argument)
     #   - "user"
     #   - "field"
-    FieldPrinter = Callable[[Model, Any, User, Field], str]
+    FieldPrinter = Callable[[Model, Any, CremeUser, Field], str]
 
     # Only keyword arguments: "instance", "user", "field"
-    NonePrinter = Callable[[Model, User, Field], str]
+    NonePrinter = Callable[[Model, CremeUser, Field], str]
 
     # Positional arguments
-    ReducedPrinter = Callable[[Model, User], str]
+    ReducedPrinter = Callable[[Model, CremeUser], str]
 
     # Only keyword arguments:
     #   - "instance"
     #   - "manager" (M2M value of the related instance)
     #   - "user"
     #   - "field"
-    M2MEnumerator = Callable[[Model, Manager, User, Field], Iterator[Model]]
+    M2MEnumerator = Callable[[Model, Manager, CremeUser, Field], Iterator[Model]]
 
     # Only keyword arguments:
     #   - "instance" (the instance to print).
@@ -78,7 +78,7 @@ if TYPE_CHECKING:
     #   - "value" (M2M value of the related instance)
     #   - "user"
     #   - "field"
-    M2MInstancePrinter = Callable[[Model, Model, Manager, User, Field], str]
+    M2MInstancePrinter = Callable[[Model, Model, Manager, CremeUser, Field], str]
 
 # TODO: in settings
 MAX_HEIGHT: int = 200
@@ -183,7 +183,7 @@ class FileFieldPrinterForHTML:
                          dl_filefield: DownLoadableFileField,
                          # entity: Model,
                          instance: Model,
-                         user: User,
+                         user: CremeUser,
                          ) -> str:
         file_name = dl_filefield.base_name
         ext = splitext(file_name)[1]
@@ -302,7 +302,7 @@ def print_date_text(*, value, **kwargs) -> str:
 class FKPrinter:
     @staticmethod
     # def print_fk_null_html(entity: Model, user, field: Field):
-    def print_fk_null_html(*, instance: Model, user: User, field: Field):
+    def print_fk_null_html(*, instance: Model, user: CremeUser, field: Field):
         null_label = field.get_null_label()
         return format_html('<em>{}</em>', null_label) if null_label else ''
 
@@ -319,7 +319,7 @@ class FKPrinter:
     # def print_fk_entity_csv(entity: Model, fval, user, field: Field) -> str:
     #    return str(fval) if user.has_perm_to_view(fval) else settings.HIDDEN_VALUE
     @staticmethod
-    def print_fk_entity_text(*, instance: Model, value: Any, user: User, field: Field) -> str:
+    def print_fk_entity_text(*, instance: Model, value: Any, user: CremeUser, field: Field) -> str:
         # TODO: assert isinstance(instance, CremeEntity)?
         # TODO: change allowed_str() ??
 
@@ -359,7 +359,7 @@ class FKPrinter:
         self._sub_printers = ClassKeyedMap(default=default_printer)
 
     # def __call__(self, entity: Model, fval, user, field: Field):
-    def __call__(self, *, instance: Model, value: Any, user: User, field: Field) -> str:
+    def __call__(self, *, instance: Model, value: Any, user: CremeUser, field: Field) -> str:
         # if fval is None:
         #     return self.none_printer(entity, user, field)
         if value is None:
@@ -400,7 +400,7 @@ class BaseM2MPrinter:
                        instance: Model,
                        # fval: Manager,
                        manager: Manager,
-                       user: User,
+                       user: CremeUser,
                        field: Field,
                        ) -> Iterator[Model]:
         # return fval.all()
@@ -412,7 +412,7 @@ class BaseM2MPrinter:
                           instance: Model,
                           # fval: Manager,
                           manager: Manager,
-                          user: User,
+                          user: CremeUser,
                           field: Field,
                           ) -> Iterator[Model]:
         # return fval.filter(is_deleted=False)
@@ -425,7 +425,7 @@ class BaseM2MPrinter:
         self._sub_printers = ClassKeyedMap(default=(default_printer, default_enumerator))
 
     # def __call__(self, entity: Model, fval, user, field: Field) -> str:
-    def __call__(self, *, instance: Model, value, user: User, field: Field) -> str:
+    def __call__(self, *, instance: Model, value, user: CremeUser, field: Field) -> str:
         raise NotImplementedError
 
     def register(self,
@@ -443,7 +443,7 @@ class M2MPrinterForHTML(BaseM2MPrinter):
     #                  fval: Manager, user: User, field: Field,
     #                  ) -> str:
     def printer_simple(*, instance: Model, related_instance: Model,
-                       value: Manager, user: User, field: Field,
+                       value: Manager, user: CremeUser, field: Field,
                        ) -> str:
         return escape(instance)
 
@@ -452,7 +452,7 @@ class M2MPrinterForHTML(BaseM2MPrinter):
     #                         fval: Manager, user: User, field: Field,
     #                         ) -> str:
     def printer_entity(*, instance: Model, related_instance: Model,
-                       value: Manager, user: User, field: Field,
+                       value: Manager, user: CremeUser, field: Field,
                        ) -> str:
         assert isinstance(instance, CremeEntity)
 
@@ -464,7 +464,7 @@ class M2MPrinterForHTML(BaseM2MPrinter):
         ) if user.has_perm_to_view(instance) else settings.HIDDEN_VALUE
 
     # def __call__(self, entity: Model, fval, user, field: Field) -> str:
-    def __call__(self, *, instance: Model, value, user: User, field: Field) -> str:
+    def __call__(self, *, instance: Model, value, user: CremeUser, field: Field) -> str:
         # assert isinstance(fval, Manager)
         assert isinstance(value, Manager)
 
@@ -546,20 +546,20 @@ class M2MPrinterForHTML(BaseM2MPrinter):
 class M2MPrinterForText(BaseM2MPrinter):
     @staticmethod
     def printer_simple(*, instance: Model, related_instance: Model,
-                       manager: Manager, user: User, field: Field,
+                       manager: Manager, user: CremeUser, field: Field,
                        ) -> str:
         return str(instance)
 
     @staticmethod
     def printer_entity(*, instance: Model, related_instance: Model,
-                       manager: Manager, user: User, field: Field,
+                       manager: Manager, user: CremeUser, field: Field,
                        ) -> str:
         assert isinstance(instance, CremeEntity)
 
         # TODO: summary? [e.get_entity_m2m_summary(user)]
         return str(instance) if user.has_perm_to_view(instance) else settings.HIDDEN_VALUE
 
-    def __call__(self, *, instance: Model, value: Any, user: User, field: Field) -> str:
+    def __call__(self, *, instance: Model, value: Any, user: CremeUser, field: Field) -> str:
         assert isinstance(value, Manager)
 
         print_enum = self._sub_printers[value.model]
@@ -1092,7 +1092,7 @@ class _FieldPrintersRegistry:
     def get_html_field_value(self,
                              obj: models.Model,
                              field_name: str,
-                             user: User,
+                             user: CremeUser,
                              ) -> str:
         warnings.warn(
             'The method _FieldPrintersRegistry.get_html_field_value() is deprecated ; '
@@ -1108,7 +1108,7 @@ class _FieldPrintersRegistry:
     def get_csv_field_value(self,
                             obj: models.Model,
                             field_name: str,
-                            user: User,
+                            user: CremeUser,
                             ) -> str:
         warnings.warn(
             'The method _FieldPrintersRegistry.get_csv_field_value() is deprecated ; '
@@ -1124,7 +1124,7 @@ class _FieldPrintersRegistry:
     def get_field_value(self, *,
                         instance: models.Model,
                         field_name: str,
-                        user: User,
+                        user: CremeUser,
                         tag: ViewTag = ViewTag.TEXT_PLAIN,
                         ) -> str:
         return self.build_field_printer(

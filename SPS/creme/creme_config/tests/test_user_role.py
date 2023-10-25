@@ -27,7 +27,7 @@ from ...creme_core.models import (
     BrickHomeLocation,
     CremeEntity,
     CremePropertyType,
-    User,
+    CremeUser,
     CustomField,
     CustomFormConfigItem,
     DeletionCommand,
@@ -522,7 +522,7 @@ class UserRoleTestCase(CremeTestCase, BrickTestCaseMixin):
 
         role = self.create_role(name='CEO', allowed_apps=['creme_core'])
 
-        other_user = User.objects.create(username='chloe', role=role)
+        other_user = CremeUser.objects.create(username='chloe', role=role)
         contact = FakeContact.objects.create(
             user=user, first_name='Yuki', last_name='Kajiura',
         )
@@ -2104,7 +2104,7 @@ class UserRoleTestCase(CremeTestCase, BrickTestCaseMixin):
         role_2_del = self.create_role(name='CEO (old)')
         other_role = self.create_role(name='Coder')
         # Role is used
-        user_2_update = User.objects.create(username='chloe', role=role_2_del)
+        user_2_update = CremeUser.objects.create(username='chloe', role=role_2_del)
 
         url = self._build_del_role_url(role_2_del)
         response = self.assertGET200(url)
@@ -2149,7 +2149,7 @@ class UserRoleTestCase(CremeTestCase, BrickTestCaseMixin):
         self.login_as_root()
 
         role = self.create_role(name='CEO')
-        User.objects.create(username='chloe', role=role)  # <= role is used
+        CremeUser.objects.create(username='chloe', role=role)  # <= role is used
 
         response = self.assertPOST200(self._build_del_role_url(role))
         self.assertFormError(

@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 
 from ...core.compat import get_user_model
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 class Command(BaseCommand):
@@ -12,14 +12,14 @@ class Command(BaseCommand):
             'Casing is ignored.')
 
     def handle(self, *args, **options):
-        emails = User.objects.values_list('email', flat=True)
+        emails = CremeUser.objects.values_list('email', flat=True)
         emails = map(lambda x: x.lower(), emails)
         duplicates = sorted([
             (email, count) for email, count in Counter(emails).most_common()
             if count > 1])
         if duplicates:
             for email, __ in duplicates:
-                users = User.objects.filter(email__iexact=email)
+                users = CremeUser.objects.filter(email__iexact=email)
                 user_strings = [
                     "{} (#{})".format(user.get_username(), user.pk)
                     for user in users]

@@ -1,5 +1,5 @@
 from django.http import Http404
-from ..creme_core.models.auth import User
+from ..creme_core.models import CremeUser
 from .conf import settings
 
 
@@ -48,4 +48,4 @@ class HookSet(object):
 
     def get_blog(self, **kwargs):
         username = kwargs.get("username", "hoanghai")
-        return User.objects.get(username=username).blog
+        return CremeUser.objects.get(username=username).blog

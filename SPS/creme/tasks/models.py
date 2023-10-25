@@ -1,11 +1,9 @@
 import arrow
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
+from django.conf import settings
 from ..creme_core.models.auth import Account
-from ..userprofile.models import Org, Profile
-from ..contacts.models import Contact
-from ..teams.models import Teams
+from ..persons.models import Organisation, Profile, Contact, Teams
 
 
 class Task(models.Model):
@@ -33,7 +31,7 @@ class Task(models.Model):
 
     contacts = models.ManyToManyField(Contact, related_name="contacts_tasks")
 
-    assigned_to = models.ManyToManyField(Profile, related_name="users_tasks")
+    assigned_to = models.ManyToManyField(settings.PERSONS_PROFILE_MODEL, related_name="users_tasks")
 
     created_by = models.ForeignKey(
         Profile,
@@ -42,9 +40,9 @@ class Task(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    teams = models.ManyToManyField(Teams, related_name="tasks_teams")
+    teams = models.ManyToManyField(settings.PERSONS_TEAM_MODEL, related_name="tasks_teams")
     org = models.ForeignKey(
-        Org, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_org"
+        Organisation, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_org"
     )
 
     class Meta:

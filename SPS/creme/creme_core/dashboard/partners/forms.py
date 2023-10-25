@@ -7,7 +7,7 @@ from django.utils.translation import pgettext_lazy
 from ...core.compat import existing_user_fields, get_user_model
 from ...core.loading import get_class, get_model
 
-User = get_user_model()
+CremeUser = get_user_model()
 Partner = get_model('partner', 'Partner')
 PartnerAddress = get_model('partner', 'PartnerAddress')
 EmailUserCreationForm = get_class('customer.forms', 'EmailUserCreationForm')
@@ -59,7 +59,7 @@ class NewUserForm(EmailUserCreationForm):
         return user
 
     class Meta:
-        model = User
+        model = CremeUser
         fields = existing_user_fields(
             ['first_name', 'last_name', 'email']) + ['password1', 'password2']
 
@@ -117,7 +117,7 @@ class ExistingUserForm(forms.ModelForm):
         return user
 
     class Meta:
-        model = User
+        model = CremeUser
         fields = existing_user_fields(
             ['first_name', 'last_name']) + ['password1', 'password2']
 

@@ -1,9 +1,9 @@
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.gui.actions import actions_registry
-from creme.creme_core.tests.base import CremeTestCase
-from creme.vcfs.actions import GenerateVcfAction
+from ...creme_core.gui.actions import actions_registry
+from ...creme_core.tests.base import CremeTestCase
+from ...vcfs.actions import GenerateVcfAction
 
 
 class VcfsTestCase(CremeTestCase):

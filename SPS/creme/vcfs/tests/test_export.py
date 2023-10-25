@@ -1,18 +1,18 @@
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from creme.creme_core.models import (
+from ...creme_core.auth.entity_credentials import EntityCredentials
+from ...creme_core.models import (
     ButtonMenuItem,
     FieldsConfig,
     Relation,
     RelationType,
     SetCredentials,
 )
-from creme.creme_core.tests.base import CremeTestCase
-from creme.persons.constants import REL_OBJ_EMPLOYED_BY
-from creme.persons.models import Civility
-from creme.vcfs.buttons import GenerateVcfButton
+from ...creme_core.tests.base import CremeTestCase
+from ...persons.constants import REL_OBJ_EMPLOYED_BY
+from ...persons.models import Civility
+from ...vcfs.buttons import GenerateVcfButton
 
 from .base import (
     Address,

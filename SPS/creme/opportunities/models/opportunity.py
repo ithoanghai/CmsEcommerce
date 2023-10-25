@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-
+import arrow
 from functools import partial
 
 from django.apps import apps
@@ -25,16 +25,17 @@ from django.db.transaction import atomic
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext_lazy
+from django.conf import settings
 
-from ...creme_core.models import base as core_models
+from ...creme_core.common.utils import CURRENCY_CODES, SOURCES, STAGES
+from ...creme_core.models import base as core_models, fields as core_fields, Account, Tags
 from ...creme_core.models.entity import CremeEntity
 from ...creme_core.models.currency import Currency
 from ...creme_core.models.deletion import CREME_REPLACE_NULL
 from ...creme_core.constants import DEFAULT_CURRENCY_PK
-from ...creme_core.models import fields as core_fields
 from ...persons import get_organisation_model
 from ...persons.workflow import transform_target_into_prospect
-
+from ...persons.models import Organisation, Profile, Contact, Teams
 from .. import constants
 
 
@@ -80,45 +81,40 @@ class Origin(core_models.MinionModel):
 
 
 class AbstractOpportunity(CremeEntity):
-    name = models.CharField(_('Name of the opportunity'), max_length=100)
+    name = models.CharField(_('Name of the Opportunity'), max_length=100)
+    account = models.ForeignKey(Account,related_name="opportunities",on_delete=models.CASCADE,blank=True, null=True,)
+    stage = models.CharField(pgettext_lazy("Stage of Opportunity", "Stage"), max_length=64, choices=STAGES)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CODES, blank=True, null=True )
+    amount = models.DecimalField(_("Opportunity Amount"), decimal_places=2, max_digits=12, blank=True, null=True)
+    lead_source = models.CharField(_("Source of Lead"), max_length=255, choices=SOURCES, blank=True, null=True)
+    probability = models.IntegerField(default=0, blank=True, null=True)
+    contacts = models.ManyToManyField(Contact)
+    closed_by = models.ForeignKey(Profile,on_delete=models.SET_NULL,null=True,blank=True,related_name="oppurtunity_closed_by",)
+    # closed_on = models.DateTimeField(blank=True, null=True)
+    closed_on = models.DateField(blank=True, null=True)
+    assigned_to = models.ManyToManyField(Profile, related_name="opportunity_assigned_to")
+    created_by = models.ForeignKey(Profile,related_name="opportunity_created_by",on_delete=models.SET_NULL,null=True,)
+    created_on = models.DateTimeField(_("Created on"), auto_now=True)
+    is_active = models.BooleanField(default=False)
+    tags = models.ManyToManyField(Tags, blank=True)
+    teams = models.ManyToManyField(settings.PERSONS_TEAM_MODEL, related_name="oppurtunity_teams")
+    org = models.ForeignKey(settings.PERSONS_ORGANISATION_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="oppurtunity_org",)
 
-    reference = models.CharField(
-        _('Reference'), max_length=100, blank=True,
-    ).set_tags(optional=True)
+    reference = models.CharField(_('Reference'), max_length=100, blank=True,).set_tags(optional=True)
 
-    estimated_sales = models.PositiveIntegerField(
-        _('Estimated sales'), blank=True, null=True,
-    ).set_tags(optional=True)
-    made_sales = models.PositiveIntegerField(
-        _('Made sales'), blank=True, null=True,
-    ).set_tags(optional=True)
-    currency = models.ForeignKey(
-        Currency, verbose_name=_('Currency'),
-        default=DEFAULT_CURRENCY_PK, on_delete=models.PROTECT,
-    )
+    estimated_sales = models.PositiveIntegerField(_('Estimated sales'), blank=True, null=True,).set_tags(optional=True)
+    made_sales = models.PositiveIntegerField(_('Made sales'), blank=True, null=True,).set_tags(optional=True)
+    currency = models.ForeignKey(Currency, verbose_name=_('Currency'),default=DEFAULT_CURRENCY_PK, on_delete=models.PROTECT,)
 
-    sales_phase = models.ForeignKey(
-        SalesPhase, verbose_name=_('Sales phase'), on_delete=models.PROTECT,
-    )
-    chance_to_win = models.PositiveIntegerField(
-        _(r'% of chance to win'), blank=True, null=True,
-    ).set_tags(optional=True)
+    sales_phase = models.ForeignKey(SalesPhase, verbose_name=_('Sales phase'), on_delete=models.PROTECT,)
+    chance_to_win = models.PositiveIntegerField(_(r'% of chance to win'), blank=True, null=True,).set_tags(optional=True)
 
-    expected_closing_date = models.DateField(
-        _('Expected closing date'), blank=True, null=True,
-    ).set_tags(optional=True)
-    closing_date = models.DateField(
-        _('Actual closing date'), blank=True, null=True,
-    ).set_tags(optional=True)
+    expected_closing_date = models.DateField(_('Expected closing date'), blank=True, null=True,).set_tags(optional=True)
+    closing_date = models.DateField(_('Actual closing date'), blank=True, null=True,).set_tags(optional=True)
 
-    origin = models.ForeignKey(
-        Origin, verbose_name=_('Origin'),
-        blank=True, null=True, on_delete=CREME_REPLACE_NULL,
-    ).set_tags(optional=True)
+    origin = models.ForeignKey(Origin, verbose_name=_('Origin'),blank=True, null=True, on_delete=CREME_REPLACE_NULL,).set_tags(optional=True)
 
-    first_action_date = models.DateField(
-        _('Date of the first action'), blank=True, null=True,
-    ).set_tags(optional=True)
+    first_action_date = models.DateField(_('Date of the first action'), blank=True, null=True,).set_tags(optional=True)
 
     creation_label = _('Create an opportunity')
     save_label     = _('Save the opportunity')
@@ -134,7 +130,7 @@ class AbstractOpportunity(CremeEntity):
         app_label = 'opportunities'
         verbose_name = _('Opportunity')
         verbose_name_plural = _('Opportunities')
-        ordering = ('name',)
+        ordering = ('name',"-created_on")
 
     def __str__(self):
         return self.name
@@ -168,6 +164,29 @@ class AbstractOpportunity(CremeEntity):
 
     def get_absolute_url(self):
         return reverse('opportunities__view_opportunity', args=(self.id,))
+
+    @property
+    def created_on_arrow(self):
+        return arrow.get(self.created_on).humanize()
+
+    @property
+    def get_team_users(self):
+        team_user_ids = list(self.teams.values_list("users__id", flat=True))
+        return Profile.objects.filter(id__in=team_user_ids)
+
+    @property
+    def get_team_and_assigned_users(self):
+        team_user_ids = list(self.teams.values_list("users__id", flat=True))
+        assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
+        user_ids = team_user_ids + assigned_user_ids
+        return Profile.objects.filter(id__in=user_ids)
+
+    @property
+    def get_assigned_users_not_in_teams(self):
+        team_user_ids = list(self.teams.values_list("users__id", flat=True))
+        assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
+        user_ids = set(assigned_user_ids) - set(team_user_ids)
+        return Profile.objects.filter(id__in=list(user_ids))
 
     @staticmethod
     def get_create_absolute_url():

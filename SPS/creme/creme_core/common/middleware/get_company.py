@@ -5,14 +5,15 @@ from django.core.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
 
-from ....userprofile.models import Org, Profile, User
+from ....persons.models import Organisation, Profile
+from ....creme_core.models import CremeUser
 
 
 def set_profile_request(request, org, token):
     # we are decoding the token
     decoded = jwt.decode(token, (settings.SECRET_KEY), algorithms=[settings.JWT_ALGO])
 
-    request.user = User.objects.get(id=decoded["user_id"])
+    request.user = CremeUser.objects.get(id=decoded["user_id"])
 
     if request.user:
         request.profile = Profile.objects.get(
@@ -45,7 +46,7 @@ class GetProfileAndOrg(object):
             token = token1.split(" ")[1]  # getting the token value
             if request.headers.get("org"):
                 org_id = request.headers.get("org")
-                org = Org.objects.get(id=org_id)
+                org = Organisation.objects.get(id=org_id)
                 if org:
                     request.org = org
                     set_profile_request(request, org, token)

@@ -20,10 +20,10 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
-from ..creme_core.gui import listview
-from ..creme_core.gui.field_printers import FKPrinter, M2MPrinterForHTML
+from creme.creme_core.gui import listview
+from creme.creme_core.gui.field_printers import FKPrinter, M2MPrinterForHTML
 
 from . import get_folder_model
 
@@ -52,7 +52,7 @@ class FolderCreationButton(listview.CreationButton):
         parent = self.context['parent_folder']
 
         return (
-            reverse('documents:create_folder', args=(parent.id,))
+            reverse('documents__create_folder', args=(parent.id,))
             if parent else
             super().get_url(request=request, model=model)
         )
@@ -68,6 +68,22 @@ class FolderCreationButton(listview.CreationButton):
 
 
 # Field printers ---------------------------------------------------------------
+
+# def print_fk_image_html(entity, fval, user, field):
+#     if not user.has_perm_to_view(fval):
+#         return settings.HIDDEN_VALUE
+#
+#     mime_type = fval.mime_type
+#
+#     if mime_type and mime_type.is_image:
+#         return format_html(
+#             '''<a onclick="creme.dialogs.image('{url}').open();"{attrs}>{content}</a>''',
+#             url=fval.get_download_absolute_url(),
+#             attrs=mark_safe(' class="is_deleted"' if fval.is_deleted else ''),
+#             content=fval.get_entity_summary(user),
+#         )
+#
+#     return FKPrinter.print_fk_entity_html(entity, fval, user, field)
 def print_fk_image_html(*, value, user, **kwargs):
     if not user.has_perm_to_view(value):
         return settings.HIDDEN_VALUE
@@ -85,6 +101,21 @@ def print_fk_image_html(*, value, user, **kwargs):
     return FKPrinter.print_fk_entity_html(value=value, user=user, **kwargs)
 
 
+# def print_doc_summary_html(instance, related_entity, fval, user, field):
+#     if not user.has_perm_to_view(instance):
+#         return settings.HIDDEN_VALUE
+#
+#     mime_type = instance.mime_type
+#
+#     if mime_type and mime_type.is_image:
+#         return format_html(
+#             '''<a onclick="creme.dialogs.image('{url}').open();"{attrs}>{content}</a>''',
+#             url=instance.get_download_absolute_url(),
+#             attrs=mark_safe(' class="is_deleted"' if instance.is_deleted else ''),
+#             content=instance.get_entity_summary(user),
+#         )
+#
+#     return M2MPrinterForHTML.printer_entity_html(instance, related_entity, fval, user, field)
 def print_doc_summary_html(*, instance, user, **kwargs):
     if not user.has_perm_to_view(instance):
         return settings.HIDDEN_VALUE

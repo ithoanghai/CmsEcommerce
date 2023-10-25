@@ -18,8 +18,8 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from creme import emails
-from creme.creme_core.gui import actions
+from .. import emails
+from ..creme_core.gui import actions
 
 EntityEmail = emails.get_entityemail_model()
 
@@ -29,7 +29,7 @@ class EntityEmailResendAction(actions.UIAction):
 
     model = EntityEmail
     type = 'email-resend'
-    url_name = 'emails:resend_emails'
+    url_name = 'emails__resend_emails'
     label = _('Re-send email')
     icon = 'email'
 
@@ -44,6 +44,6 @@ class BulkEntityEmailResendAction(actions.BulkEntityAction):
 
     model = EntityEmail
     type = 'email-resend-selection'
-    url_name = 'emails:resend_emails'
+    url_name = 'emails__resend_emails'
     label = _('Re-send email(s)')
     icon = 'email'

@@ -3,13 +3,13 @@ from functools import partial
 from django.template import Context, Template
 from django.utils.translation import gettext as _
 
-from creme import persons
-from creme.creme_core.auth import EntityCredentials
-from creme.creme_core.forms import CremeEntityForm
-from creme.creme_core.models import Relation, SetCredentials
-# from creme.creme_core.tests.base import CremeTestCase
-from creme.persons.constants import REL_SUB_EMPLOYED_BY, REL_SUB_MANAGES
-from creme.persons.models import Civility
+from ... import persons
+from ...creme_core.auth import EntityCredentials
+from ...creme_core.forms import CremeEntityForm
+from ...creme_core.models import Relation, SetCredentials
+# from ...creme_core.tests.base import CremeTestCase
+from ...persons.constants import REL_SUB_EMPLOYED_BY, REL_SUB_MANAGES
+from ...persons.models import Civility
 
 from .base import _BaseTestCase
 

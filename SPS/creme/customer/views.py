@@ -33,7 +33,7 @@ Order = get_model('order', 'Order')
 UserAddress = get_model('address', 'UserAddress')
 Email = get_model('communication', 'Email')
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 # =======
@@ -262,7 +262,7 @@ class ProfileView(PageTitleMixin, generic.TemplateView):
         field_data = []
 
         # Check for custom user model
-        for field_name in User._meta.additional_fields:
+        for field_name in CremeUser._meta.additional_fields:
             field_data.append(
                 self.get_model_field_data(user, field_name))
 
@@ -314,8 +314,8 @@ class ProfileUpdateView(PageTitleMixin, generic.FormView):
         # Grab current user instance before we save form.  We may need this to
         # send a warning email if the email address is changed.
         try:
-            old_user = User.objects.get(id=self.request.user.id)
-        except User.DoesNotExist:
+            old_user = CremeUser.objects.get(id=self.request.user.id)
+        except CremeUser.DoesNotExist:
             old_user = None
 
         form.save()

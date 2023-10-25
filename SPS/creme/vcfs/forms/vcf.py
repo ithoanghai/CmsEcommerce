@@ -43,8 +43,8 @@ from django.forms import (
 from django.utils.functional import partition
 from django.utils.translation import gettext as _
 
-from creme import documents, persons
-from creme.creme_core.forms import (
+from ... import documents, persons
+from ...creme_core.forms import (
     LAYOUT_DUAL_FIRST,
     LAYOUT_DUAL_SECOND,
     CreatorEntityField,
@@ -52,21 +52,21 @@ from creme.creme_core.forms import (
     CremeModelForm,
     FieldBlockManager,
 )
-from creme.creme_core.forms.base import _CUSTOM_NAME
-from creme.creme_core.forms.widgets import DynamicSelect
-from creme.creme_core.models import (
+from ...creme_core.forms.base import _CUSTOM_NAME
+from ...creme_core.forms.widgets import DynamicSelect
+from ...creme_core.models import (
     CustomField,
     CustomFieldValue,
     FieldsConfig,
     Relation,
     RelationType,
 )
-from creme.creme_core.models.utils import assign_2_charfield
-from creme.creme_core.views.file_handling import handle_uploaded_file
-from creme.documents.constants import UUID_FOLDER_IMAGES
-from creme.documents.utils import get_image_format
-from creme.persons.constants import REL_SUB_EMPLOYED_BY
-from creme.persons.models import Civility, Position
+from ...creme_core.models.utils import assign_2_charfield
+from ...creme_core.views.file_handling import handle_uploaded_file
+from ...documents.constants import UUID_FOLDER_IMAGES
+from ...documents.utils import get_image_format
+from ...persons.constants import REL_SUB_EMPLOYED_BY
+from ...persons.models import Civility, Position
 
 from ..vcf_lib import readOne as read_vcf
 

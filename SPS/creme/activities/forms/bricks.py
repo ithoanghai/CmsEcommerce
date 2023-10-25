@@ -22,7 +22,7 @@ from functools import partial
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models.query_utils import Q
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
 from ...creme_core.forms import (
@@ -43,6 +43,7 @@ logger = logging.getLogger(__name__)
 Contact = get_contact_model()
 
 
+# class ParticipantCreateForm(CremeForm):
 class ParticipantsAddingForm(CremeForm):
     my_participation = act_fields.UserParticipationField(
         label=_('Do I participate to this activity?'), empty_label=None,
@@ -139,6 +140,7 @@ class ParticipantsAddingForm(CremeForm):
                 if user == me:
                     my_participation = self.cleaned_data.get('my_participation')
                     if my_participation:
+                        # calendars.append(my_participation[1])
                         calendars.append(my_participation.data)
                     else:
                         continue  # Avoid an error message about relation uniqueness
@@ -152,6 +154,7 @@ class ParticipantsAddingForm(CremeForm):
             activity.calendars.add(*calendars_chunk)
 
 
+# class SubjectCreateForm(CremeForm):
 class SubjectsAddingForm(CremeForm):
     # TODO: qfilter to exclude current subjects, see MultiGenericEntityField
     subjects = MultiGenericEntityField(label=_('Subjects'))

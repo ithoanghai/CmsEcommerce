@@ -104,7 +104,7 @@ class Line(CremeEntity):
         if discount_unit == self.Discount.PERCENT:
             if not (0 <= self.discount <= 100):
                 raise ValidationError(
-                    gettext(
+                    _(
                         'If you choose % for your discount unit, '
                         'your discount must be between 1 and 100%'
                     ),
@@ -113,7 +113,7 @@ class Line(CremeEntity):
         elif discount_unit == self.Discount.LINE_AMOUNT:  # Global discount
             if self.discount > self.unit_price * self.quantity:
                 raise ValidationError(
-                    gettext(
+                    _(
                         'Your overall discount is superior than'
                         ' the total line (unit price * quantity)'
                     ),
@@ -122,21 +122,21 @@ class Line(CremeEntity):
         else:  # DISCOUNT_ITEM_AMOUNT (Unitary discount)
             if self.discount > self.unit_price:
                 raise ValidationError(
-                    gettext('Your discount is superior than the unit price'),
+                    _('Your discount is superior than the unit price'),
                     code='discount_gt_unitprice',
                 )
 
         if self.related_item:
             if self.on_the_fly_item:
                 raise ValidationError(
-                    gettext(
+                    _(
                         'You cannot set an on the fly name to a line with a related item'
                     ),
                     code='useless_name',
                 )
         elif not self.on_the_fly_item:
             raise ValidationError(
-                gettext('You must define a name for an on the fly item'),
+                _('You must define a name for an on the fly item'),
                 code='required_name',
             )
 

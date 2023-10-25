@@ -18,8 +18,8 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from creme import emails
-from creme.creme_core.gui import menu
+from .. import emails
+from ..creme_core.gui import menu
 
 EmailCampaign = emails.get_emailcampaign_model()
 MailingList = emails.get_mailinglist_model()
@@ -65,4 +65,4 @@ class EmailSyncEntry(menu.FixedURLEntry):
     id = 'emails-sync'
     label = _('Synchronization of incoming emails')
     permissions = 'emails'
-    url_name = 'emails:sync_portal'
+    url_name = 'emails__sync_portal'

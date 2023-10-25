@@ -4,7 +4,7 @@ from django.core.management.base import CommandError
 from ....creme_core.management.commands.creme_createstaffuser import (
     Command as StaffCommand,
 )
-from ....creme_core.models import User
+from ...models import CremeUser
 
 from .. import base
 
@@ -16,7 +16,7 @@ class CreateStaffUserTestCase(base.CremeTestCase):
         call_command(StaffCommand(), verbosity=0, interactive=False, **kwargs)
 
     def test_errors(self):
-        count = User.objects.count()
+        count = CremeUser.objects.count()
 
         with self.assertRaises(CommandError):
             self.call_command()
@@ -32,10 +32,10 @@ class CreateStaffUserTestCase(base.CremeTestCase):
                 username='staff1', first_name='John', last_name='Staffman',
             )
 
-        self.assertEqual(count, User.objects.count())
+        self.assertEqual(count, CremeUser.objects.count())
 
     def test_ok(self):
-        count = User.objects.count()
+        count = CremeUser.objects.count()
 
         username = 'staff1'
         first_name = 'John'
@@ -50,9 +50,9 @@ class CreateStaffUserTestCase(base.CremeTestCase):
                 email=email,
             )
 
-        self.assertEqual(count + 1, User.objects.count())
+        self.assertEqual(count + 1, CremeUser.objects.count())
 
-        user = self.get_object_or_fail(User, username=username)
+        user = self.get_object_or_fail(settings.AUTH_USER_MODEL, username=username)
         self.assertEqual(first_name, user.first_name)
         self.assertEqual(last_name,  user.last_name)
         self.assertEqual(email,      user.email)

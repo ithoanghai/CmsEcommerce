@@ -19,7 +19,7 @@
 from django.contrib.auth import get_user_model
 from django.db.transaction import atomic
 from django.forms import ModelChoiceField
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from ...creme_config.forms import generics as gen_forms
 from ...creme_core.core.exceptions import ConflictError
@@ -35,6 +35,12 @@ class CalendarForm(base.CremeModelForm):
     class Meta:
         model = Calendar
         exclude = ('user',)
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #
+    #     if not self.instance.pk:
+    #         self.fields['color'].initial = Calendar.objects.new_color()
 
     def get_user(self):
         return self.user

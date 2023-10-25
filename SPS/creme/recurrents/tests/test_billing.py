@@ -5,10 +5,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.constants import DEFAULT_VAT
-from creme.creme_core.models import Currency, Vat
-from creme.creme_core.tests.base import skipIfNotInstalled
-from creme.persons import get_address_model, get_organisation_model
+from ...creme_core.constants import DEFAULT_VAT
+from ...creme_core.models import Currency, Vat
+from ...creme_core.tests.base import skipIfNotInstalled
+from ...persons import get_address_model, get_organisation_model
 
 from .base import RecurrentGenerator, RecurrentsTestCase, skipIfCustomGenerator
 

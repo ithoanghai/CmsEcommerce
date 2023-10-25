@@ -18,9 +18,9 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.auth import build_creation_perm
-from creme.creme_core.gui.menu import FixedURLEntry
-from creme.persons import get_contact_model
+from ..creme_core.auth import build_creation_perm
+from ..creme_core.gui.menu import FixedURLEntry
+from ..persons import get_contact_model
 
 
 class VFCsImportEntry(FixedURLEntry):

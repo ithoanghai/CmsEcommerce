@@ -40,6 +40,7 @@ from django.utils.translation import gettext as _
 
 from ...creme_config.registry import NotRegisteredInConfig, config_registry
 from ...documents import get_document_model
+from ...documents.models import Document
 
 from ..backends import import_backend_registry
 from ..core.field_tags import FieldTag
@@ -78,7 +79,7 @@ if TYPE_CHECKING:
     ValueCastor = Callable[[str], Any]
 
 logger = logging.getLogger(__name__)
-Document = get_document_model()
+#Document = get_document_model()
 
 
 def get_import_backend_class(filedata):
@@ -86,7 +87,7 @@ def get_import_backend_class(filedata):
     pathname, extension = splitext(filename)
     backend_cls = import_backend_registry.get_backend_class(extension.replace('.', ''))
 
-    error_msg = gettext(
+    error_msg = _(
         'Error reading document, unsupported file type: {file}.'
     ).format(file=filename) if backend_cls is None else None
 
@@ -108,7 +109,7 @@ def get_header(filedata, has_header):
         except Exception as e:
             logger.exception('Error when reading doc header in clean()')
             raise ValidationError(
-                gettext('Error reading document: {error}.').format(error=e)
+                _('Error reading document: {error}.').format(error=e)
             ) from e
         finally:
             filedata.close()
@@ -264,7 +265,7 @@ class RegularFieldExtractor(SingleColumnExtractor):
                                 value = creator.instance
                             else:
                                 # TODO: form errors in the message too
-                                err_msg = gettext(
+                                err_msg = _(
                                     'Error while extracting value: tried to retrieve '
                                     'and then build «{value}» (column {column}) on {model}. '
                                     'Raw error: [{raw_error}]'
@@ -275,7 +276,7 @@ class RegularFieldExtractor(SingleColumnExtractor):
                                     model=self._fk_model._meta.verbose_name,
                                 )
                         else:
-                            err_msg = gettext(
+                            err_msg = _(
                                 'Error while extracting value: tried to retrieve '
                                 '«{value}» (column {column}) on {model}. '
                                 'Raw error: [{raw_error}]'
@@ -833,7 +834,7 @@ class RelationExtractor(SingleColumnExtractor):
                     user, model.objects.filter(**data),
                 ).first()
             except Exception as e:
-                err_msg = gettext(
+                err_msg = _(
                     'Error while extracting value to build a Relation: '
                     'tried to retrieve {field}=«{value}» (column {column}) on {model}. '
                     'Raw error: [{raw_error}]'
@@ -853,7 +854,7 @@ class RelationExtractor(SingleColumnExtractor):
                         if creator.is_valid():
                             object_entity = creator.save()
                         else:
-                            err_msg = gettext(
+                            err_msg = _(
                                 'Error while extracting value: '
                                 'tried to build {model} with data={data} '
                                 '(column {column}) ➔ errors={errors}'
@@ -864,7 +865,7 @@ class RelationExtractor(SingleColumnExtractor):
                                 errors=creator.errors,
                             )
                     else:
-                        err_msg = gettext(
+                        err_msg = _(
                             'Error while extracting value to build a Relation: '
                             'tried to retrieve {field}=«{value}» '
                             '(column {column}) on {model}'
@@ -911,7 +912,7 @@ class RelationExtractorSelector(SelectorList):
         )
         add_dselect(
             'rtype',
-            options=self.relation_types, label=gettext('The entity'),
+            options=self.relation_types, label=_('The entity'),
         )
         add_dselect(
             'ctype',
@@ -924,9 +925,9 @@ class RelationExtractorSelector(SelectorList):
             options=TemplateURLBuilder(
                 ct_id=(TemplateURLBuilder.Int, '${ctype}'),
             ).resolve('creme_core__entity_info_fields'),
-            label=gettext('which field'),
+            label=_('which field'),
         )
-        add_dselect('column', options=self.columns, label=gettext('equals to'))
+        add_dselect('column', options=self.columns, label=_('equals to'))
 
         context = super().get_context(
             name=name,
@@ -1126,7 +1127,7 @@ class CustomFieldExtractor(SingleColumnExtractor):
                     else:
                         return (
                             value,
-                            gettext(
+                            _(
                                 'Error while extracting value: the choice «{value}» '
                                 'was not found in existing choices (column {column}). '
                                 'Hint: fix your imported file, or configure the import to '
@@ -1708,14 +1709,14 @@ def form_factory(ct, header):
     header_dict = {}
 
     if header:
-        fstring = gettext('Column {index} - {name}')
+        fstring = _('Column {index} - {name}')
 
         for i, col_name in enumerate(header):
             i += 1
             choices.append((i, fstring.format(index=i, name=col_name)))
             header_dict[slugify(col_name)] = i
     else:
-        fstring = gettext('Column {}')
+        fstring = _('Column {}')
         choices.extend((i, fstring.format(i)) for i in range(1, 21))
 
     model_class = ct.model_class()

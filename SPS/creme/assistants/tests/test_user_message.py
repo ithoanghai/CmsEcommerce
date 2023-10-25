@@ -36,9 +36,9 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
     @staticmethod
     def _build_add_url(entity=None):
         return reverse(
-            'assistants:create_related_message', args=(entity.id,),
+            'assistants__create_related_message', args=(entity.id,),
         ) if entity else reverse(
-            'assistants:create_message',
+            'assistants__create_message',
         )
 
     def _create_usermessage(self, title, body, priority, users, entity):
@@ -83,6 +83,10 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
         title = 'TITLE'
         body = 'BODY'
         priority = UserMessagePriority.objects.create(title='Important')
+        # user1 = CremeUser.objects.create_user(
+        #     'User01',
+        #     email='user01@foobar.com', first_name='User01', last_name='Foo',
+        # )
         user1 = self.create_user(
             username='User01', email='user01@foobar.com', first_name='User01', last_name='Foo',
         )
@@ -171,6 +175,7 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
         message = self.get_alone_element(UserMessage.objects.all())
         self.assertIsNone(message.entity_id)
         self.assertIsNone(message.entity_content_type_id)
+        # self.assertIsNone(message.creme_entity)
         self.assertIsNone(message.real_entity)
 
     def test_create04(self):
@@ -210,8 +215,10 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
                 body='My body is ready',
                 creation_date=now(),
                 priority=priority,
+                # sender=self.other_user,
                 sender=other_user,
                 recipient=user,
+                # creme_entity=entity,
                 real_entity=entity,
             )
 
@@ -243,10 +250,11 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
         # ---
         BrickHomeLocation.objects.get_or_create(
+            # brick_id=UserMessagesBrick.id_, defaults={'order': 50},
             brick_id=UserMessagesBrick.id, defaults={'order': 50},
         )
 
-        response2 = self.assertGET200(reverse('shop_home'))
+        response2 = self.assertGET200(reverse('creme_core__home'))
         home_brick_node = self.get_brick_node(
             self.get_html_tree(response2.content), brick=UserMessagesBrick,
         )
@@ -268,6 +276,7 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
     def test_delete(self):
         user = self.user
+        # other_user = self.other_user
         other_user = self.create_user()
 
         priority = UserMessagePriority.objects.create(title='Important')
@@ -278,7 +287,7 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
         messages = {msg.recipient_id: msg for msg in UserMessage.objects.all()}
         self.assertEqual(2, len(messages))
 
-        url = reverse('assistants:delete_message')
+        url = reverse('assistants__delete_message')
 
         msg1 = messages[user.id]
         self.assertPOST200(url, data={'id': msg1.id}, follow=True)
@@ -309,6 +318,7 @@ class UserMessageTestCase(BrickTestCaseMixin, AssistantsTestCase):
             self.assertEqual(2, len(messages))
 
             for msg in messages:
+                # self.assertEqual(contact01, msg.creme_entity)
                 self.assertEqual(contact01, msg.real_entity)
 
         self.aux_test_merge(creator, assertor, moved_count=0)

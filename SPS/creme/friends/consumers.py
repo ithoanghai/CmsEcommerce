@@ -9,7 +9,7 @@ from django.core import serializers
 from .models import CustomNotification, Friend
 from .serializers import NotificationSerializer, FriendshipRequestSerializer
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 class FriendRequestConsumer(AsyncJsonWebsocketConsumer):

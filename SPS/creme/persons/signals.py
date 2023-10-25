@@ -22,14 +22,24 @@ from django.conf import settings
 from django.db.models import signals
 from django.db.utils import DatabaseError
 from django.dispatch import receiver
+from django import dispatch
 
-from creme.creme_core.utils import update_model_instance
+from ..creme_core.utils import update_model_instance
 
 from . import get_contact_model
 from .constants import UUID_FIRST_CONTACT
 
 logger = logging.getLogger(__name__)
 
+
+added_member = dispatch.Signal()
+invited_user = dispatch.Signal()
+promoted_member = dispatch.Signal()
+demoted_member = dispatch.Signal()
+accepted_membership = dispatch.Signal()
+rejected_membership = dispatch.Signal()
+resent_invite = dispatch.Signal()
+removed_membership = dispatch.Signal()
 
 @receiver(signals.post_save, sender=settings.AUTH_USER_MODEL)
 def sync_with_user(sender, instance, created, **kwargs):

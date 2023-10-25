@@ -9,8 +9,8 @@
 {% endblock %}
 
 {% block brick_header_actions %}
-    {% brick_header_action id='emailsync-delete-multi' url='emails:delete_email_to_sync'|url type='delete' label=_('Delete selected emails') icon='cancel' %}
-    {% brick_header_action id='emailsync-accept-multi' url='emails:accept_email_to_sync'|url type='add'    label=_('Accept selected emails') icon='ok' %}
+    {% brick_header_action id='emailsync-delete-multi' url='emails__delete_email_to_sync'|url type='delete' label=_('Delete selected emails') icon='cancel' %}
+    {% brick_header_action id='emailsync-accept-multi' url='emails__accept_email_to_sync'|url type='add'    label=_('Accept selected emails') icon='ok' %}
 {% endblock %}
 
 {% block brick_table_columns %}
@@ -37,7 +37,7 @@
 {% endblock %}
 
 {% block brick_table_rows %}
-{% url 'emails:accept_email_to_sync' as accept_url %}{% url 'emails:delete_email_to_sync' as delete_url %}
+{% url 'emails__accept_email_to_sync' as accept_url %}{% url 'emails__delete_email_to_sync' as delete_url %}
 {% translate 'Only the recipient marked as main is used to fill the field «Recipient» of the final email. All recipients are linked to the email anyway.' as mark_help_text %}
     {% for email_to_sync in page.object_list %}
     <tr>
@@ -62,7 +62,7 @@
             </div>
         </td>
         <td>
-            <ul class="emails-sync-recipients">{% url 'emails:mark_email_to_sync_recipient' email_to_sync.id as mark_url %}{% url 'emails:delete_email_to_sync_recipient' email_to_sync.id as del_recipient_url %}
+            <ul class="emails-sync-recipients">{% url 'emails__mark_email_to_sync_recipient' email_to_sync.id as mark_url %}{% url 'emails__delete_email_to_sync_recipient' email_to_sync.id as del_recipient_url %}
             {% for recipient in email_to_sync.recipients %}
                 <li>
                   {% if recipient.person %}
@@ -82,7 +82,7 @@
                     </div>
                 </li>
             {% empty %}
-                {% brick_table_action id='edit' url='emails:fix_email_to_sync'|url:email_to_sync.id label=_('Fix the forwarded email') display='text' class='emails-sync-fix' help_text=_('This email has only been sent to the synchronisation address ; fix it by setting the true sender & recipient.') %}
+                {% brick_table_action id='edit' url='emails__fix_email_to_sync'|url:email_to_sync.id label=_('Fix the forwarded email') display='text' class='emails-sync-fix' help_text=_('This email has only been sent to the synchronisation address ; fix it by setting the true sender & recipient.') %}
             {% endfor %}
             </ul>
         </td>
@@ -111,7 +111,7 @@
         <td>
         {% with attachments=email_to_sync.attachments.all %}
           {% if attachments %}
-            <ul class="emails-sync-attachments">{% url 'emails:delete_email_to_sync_attachment' email_to_sync.id as del_attachment_url %}
+            <ul class="emails-sync-attachments">{% url 'emails__delete_email_to_sync_attachment' email_to_sync.id as del_attachment_url %}
               {% for fileref in email_to_sync.attachments.all %}
                 <li>
                     {{fileref.basename}}

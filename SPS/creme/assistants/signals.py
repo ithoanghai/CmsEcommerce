@@ -22,7 +22,7 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 
 from ..creme_core.core.entity_cell import CELLS_MAP
-from ..creme_core.models.entity import CremeEntity
+from ..creme_core.models import CremeEntity
 from ..creme_core.utils import update_model_instance
 from ..creme_core.utils.date_period import date_period_registry
 
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 @receiver(post_save, sender=Alert)
 @receiver(post_save, sender=ToDo)
 def _refresh_alert_reminder_job(sender, instance, **kwargs):
-    from ..creme_core.creme_jobs import reminder_type
+    from creme.creme_core.creme_jobs import reminder_type
 
     if instance.to_be_reminded:
         reminder_type.refresh_job()

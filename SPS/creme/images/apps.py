@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from imagekit import register
 
-from .utils import load_path_attr
+from ..utils import load_path_attr
 
 
 class AppConfig(BaseAppConfig):

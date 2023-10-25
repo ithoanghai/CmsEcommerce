@@ -18,8 +18,8 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.auth import build_link_perm
-from creme.creme_core.gui.button_menu import Button
+from ..creme_core.auth import build_link_perm
+from ..creme_core.gui.button_menu import Button
 
 from . import constants, get_entityemail_model
 

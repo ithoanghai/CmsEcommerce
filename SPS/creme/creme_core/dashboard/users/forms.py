@@ -5,7 +5,7 @@ from django.utils.translation import pgettext_lazy
 from ...core.compat import get_user_model
 from ...core.loading import get_model
 
-User = get_user_model()
+CremeUser = get_user_model()
 ProductAlert = get_model('customer', 'ProductAlert')
 
 

@@ -4,8 +4,8 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from ..creme_core.tests.base import CremeTestCase
-from creme.opportunities.models import SalesPhase
+from ...creme_core.tests.base import CremeTestCase
+from ..models import SalesPhase
 
 from .base import Opportunity, Organisation, skipIfCustomOpportunity
 

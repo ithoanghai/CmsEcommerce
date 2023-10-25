@@ -43,10 +43,10 @@ from .signals import review_added
 from .forms import (AddSpeakerForm, SupportingDocumentCreateForm)
 
 # @@@ switch to pinax-teams
-from ..creme_core.models.auth import User, EmailAddress
-from ..creme_core.accounts.decorators import login_required
+from ..creme_core.models import CremeUser, EmailAddress
+from ..creme_core.auth.decorators import login_required
 from ..speakers.models import Speaker
-from ..teams.models import Team
+from ..persons.models import Team
 from ..utils.mail import send_email
 from ..creme_core.core.loading import get_classes, get_model, get_form
 from ..creme_core.core.utils import redirect_to_referrer

@@ -32,7 +32,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.utils.timezone import now
 
-from creme.documents.models import AbstractDocument
+from ..documents.models import AbstractDocument
 
 logger = logging.getLogger(__name__)
 ALLOWED_CHARS = ascii_letters + digits

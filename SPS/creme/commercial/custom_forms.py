@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from creme import commercial
+from .. import commercial
 from ..creme_core.gui.custom_form import (
     CustomFormDefault,
     CustomFormDescriptor,

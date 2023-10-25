@@ -1,10 +1,8 @@
 from rest_framework import serializers
 
 from ..creme_core.common.serializer import (AttachmentsSerializer, CommentSerializer,
-                               ProfileSerializer)
-from ..contacts.serializer import ContactSerializer
+                               ProfileSerializer, ContactSerializer, TeamsSerializer)
 from .models import Task
-from ..teams.serializer import TeamsSerializer
 
 
 class TaskSerializer(serializers.ModelSerializer):

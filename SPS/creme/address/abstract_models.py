@@ -505,7 +505,7 @@ class AbstractUserAddress(AbstractShippingAddress):
         AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='addresses',
-        verbose_name=_("User"))
+        verbose_name=_("CremeUser"))
 
     #: Whether this address is the default for shipping
     is_default_for_shipping = models.BooleanField(

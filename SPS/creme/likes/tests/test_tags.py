@@ -1,4 +1,4 @@
-from ..creme_core.models.auth import Account, User
+from ...creme_core.models import Account, CremeUser
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 

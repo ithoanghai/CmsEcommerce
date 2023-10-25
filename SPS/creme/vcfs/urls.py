@@ -1,7 +1,7 @@
 from django.urls import re_path
 
-from creme import persons
-from creme.creme_core.conf.urls import Swappable, swap_manager
+from .. import persons
+from ..creme_core.conf.urls import Swappable, swap_manager
 
 from .views import vcf  # TODO: merge in a views.py ??
 

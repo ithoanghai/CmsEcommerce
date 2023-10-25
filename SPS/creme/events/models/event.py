@@ -19,14 +19,17 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from ...creme_core.models import Relation
-from ...creme_core.models.deletion import (CREME_REPLACE,)
-from ...creme_core.models.entity import (CremeEntity,)
-from ...creme_core.models.base import (MinionModel,)
-from ...creme_core.models.relation import (RelationType,)
+from ...creme_core.models import (
+    CREME_REPLACE,
+    CremeEntity,
+    MinionModel,
+    Relation,
+    RelationType,
+)
 
 from .. import constants
 
@@ -107,18 +110,18 @@ class AbstractEvent(CremeEntity):
             )
 
     def get_absolute_url(self):
-        return reverse('events:view_event', args=(self.id,))
+        return reverse('events__view_event', args=(self.id,))
 
     @staticmethod
     def get_create_absolute_url():
-        return reverse('events:create_event')
+        return reverse('events__create_event')
 
     def get_edit_absolute_url(self):
-        return reverse('events:edit_event', args=(self.id,))
+        return reverse('events__edit_event', args=(self.id,))
 
     @staticmethod
     def get_lv_absolute_url():
-        return reverse('events:list_events')
+        return reverse('list_events')
 
     def get_stats(self):
         types_count = dict(

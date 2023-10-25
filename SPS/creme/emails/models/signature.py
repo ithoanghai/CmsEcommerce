@@ -22,8 +22,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from creme.creme_core.models.base import CremeModel
-from creme.documents.models.fields import ImageEntityManyToManyField
+from ...creme_core.models.base import CremeModel
+from ...documents.models.fields import ImageEntityManyToManyField
 
 
 class EmailSignature(CremeModel):  # TODO: MinionModel?
@@ -61,4 +61,4 @@ class EmailSignature(CremeModel):  # TODO: MinionModel?
         return self.user_id == user.id or user.is_superuser
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_signature', args=(self.id,))
+        return reverse('emails__edit_signature', args=(self.id,))

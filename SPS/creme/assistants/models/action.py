@@ -21,9 +21,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from ...creme_core.models import base as core_models
+from ...creme_core import models as core_models
 from ...creme_core.models import fields as core_fields
-from ...creme_core.models import entity as core_entitys
 
 
 class ActionManager(models.Manager):
@@ -48,7 +47,7 @@ class Action(core_models.CremeModel):
 
     entity_content_type = core_fields.EntityCTypeForeignKey(related_name='+', editable=False)
     entity = models.ForeignKey(
-        core_entitys.CremeEntity,
+        core_models.CremeEntity,
         related_name='assistants_actions',
         editable=False, on_delete=models.CASCADE,
     ).set_tags(viewable=False)
@@ -70,7 +69,7 @@ class Action(core_models.CremeModel):
         return self.title
 
     def get_edit_absolute_url(self):
-        return reverse('assistants:edit_action', args=(self.id,))
+        return reverse('assistants__edit_action', args=(self.id,))
 
     def get_related_entity(self):  # For generic views
         return self.real_entity

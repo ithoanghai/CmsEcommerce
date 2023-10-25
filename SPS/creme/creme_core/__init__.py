@@ -56,7 +56,6 @@ def get_concrete_model(model_setting: str) -> type[Model]:
     from django.core.exceptions import ImproperlyConfigured
 
     model_str = getattr(settings, model_setting)
-
     try:
         return apps.get_model(model_str)
     except ValueError as e:

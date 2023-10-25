@@ -15,12 +15,14 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-
+import functools
 from functools import partial
 
-from django.contrib.auth import decorators as original_decorators
+from django.contrib.auth import decorators as original_decorators, REDIRECT_FIELD_NAME
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext as _
+
+from .utils import handle_redirect_to_login
 
 # Alias in order the user to only import this module (& not the django one)
 login_required = original_decorators.login_required
@@ -37,3 +39,24 @@ def _check_superuser(user):
 
 
 superuser_required = original_decorators.user_passes_test(_check_superuser)
+
+
+def login_required(func=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
+    """
+    Decorator for views that checks that the user is logged in, redirecting
+    to the log in page if necessary.
+    """
+    def decorator(view_func):
+        @functools.wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            if request.user.is_authenticated:
+                return view_func(request, *args, **kwargs)
+            return handle_redirect_to_login(
+                request,
+                redirect_field_name=redirect_field_name,
+                login_url=login_url
+            )
+        return _wrapped_view
+    if func:
+        return decorator(func)
+    return decorator

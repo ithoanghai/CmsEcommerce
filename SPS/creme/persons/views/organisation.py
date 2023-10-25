@@ -83,7 +83,7 @@ class ContactRelatedToOrganisationMixin:
 
         if not descriptions:
             raise ConflictError(
-                gettext(
+                _(
                     'All the concerned types of relationship are disabled: {}'
                 ).format(', '.join(f'«{rtype.predicate}»' for rtype in rtypes.values()))
             )
@@ -271,5 +271,5 @@ class OrganisationUnmanage(generic.base.EntityRelatedMixin, generic.CheckedView)
                 orga.save()
             else:
                 raise ConflictError(
-                    gettext('You must have at least one managed organisation.')
+                    _('You must have at least one managed organisation.')
                 )

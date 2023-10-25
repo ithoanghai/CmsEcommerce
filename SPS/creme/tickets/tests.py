@@ -71,7 +71,7 @@ class TicketTestCase(views_base.MassImportBaseTestCaseMixin,
 
         # Contribution to activities
         if apps.is_installed('creme.activities'):
-            from creme.activities.constants import REL_SUB_ACTIVITY_SUBJECT
+            from ..activities.constants import REL_SUB_ACTIVITY_SUBJECT
 
             rtype = self.get_object_or_fail(RelationType, pk=REL_SUB_ACTIVITY_SUBJECT)
             self.assertTrue(

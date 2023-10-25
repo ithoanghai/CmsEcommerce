@@ -30,8 +30,14 @@ from django.db.transaction import atomic
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.timezone import get_current_timezone, make_naive, now
-from django.utils.translation import gettext as _
+from django.utils.timezone import (
+    get_current_timezone,
+    make_aware,
+    make_naive,
+    now,
+)
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from ...creme_core.core.exceptions import ConflictError
 from ...creme_core.http import CremeJsonResponse
@@ -49,28 +55,11 @@ logger = logging.getLogger(__name__)
 Activity = get_activity_model()
 
 
-def fromRFC3339(timestamp: str) -> datetime:
+def _js_timestamp_to_datetime(timestamp):
     # "@raise ValueError."
     # JS gives us milliseconds
     # return make_aware_dt(datetime.fromtimestamp(float(timestamp) / 1000))
-    if timestamp is None:
-        return None
-
-    res = datetime.fromisoformat(timestamp[:-2] if timestamp[-1] == 'Z' else timestamp)
-    return res.replace(tzinfo=get_current_timezone())
-    # return make_aware(datetime.fromtimestamp(float(timestamp) / 1000))
-
-
-def toRFC3339(value: datetime) -> str:
-    if value is None:
-        return None
-
-    value = make_naive(value).replace(tzinfo=get_current_timezone())
-
-    return '%4d-%02d-%02dT%02d:%02d:%02d' % (
-        value.year, value.month, value.day,
-        value.hour, value.minute, value.second
-    )
+    return make_aware(datetime.fromtimestamp(float(timestamp) / 1000))
 
 
 class CalendarView(generic.CheckedTemplateView):
@@ -233,11 +222,12 @@ class ActivitiesData(CalendarsMixin, generic.CheckedView):
 
     def _activity_2_dict(self, activity, user):
         "Returns a 'jsonifiable' dictionary."
-        start = activity.start
-        end = activity.end
+        tz = get_current_timezone()
+        start = make_naive(activity.start, tz)
+        end = make_naive(activity.end, tz)
 
         if activity.is_all_day:
-            end += timedelta(minutes=1)
+            end = datetime(year=end.year, month=end.month, day=end.day) + timedelta(days=1)
 
         # NB: _get_one_activity_per_calendar() adds this 'attribute'
         calendar = activity.calendar
@@ -246,17 +236,16 @@ class ActivitiesData(CalendarsMixin, generic.CheckedView):
             'id':    activity.id,
             'title': self.get_activity_label(activity),
 
-            'start':  toRFC3339(start),
-            'end':    toRFC3339(end),
+            'start':  start.isoformat(),
+            'end':    end.isoformat(),
             'allDay': activity.is_all_day,
 
-            'url': reverse('activities:view_activity_popup', args=(activity.id,)),
+            'url': reverse('activities__view_activity_popup', args=(activity.id,)),
 
             'color':    f'#{calendar.color}',
             'editable': user.has_perm_to_change(activity),
             'calendar': calendar.id,
             'type':     activity.type.name,
-            'busy':     activity.busy,
         }
 
     @staticmethod
@@ -265,7 +254,8 @@ class ActivitiesData(CalendarsMixin, generic.CheckedView):
 
         if timestamp is not None:
             try:
-                return fromRFC3339(timestamp)
+                # return make_aware_dt(datetime.fromtimestamp(float(timestamp)))
+                return make_aware(datetime.fromtimestamp(float(timestamp)))
             except Exception:
                 logger.exception('ActivitiesData._get_datetime(key=%s)', key)
 
@@ -383,10 +373,10 @@ class ActivityDatesSetting(generic.base.EntityRelatedMixin, generic.CheckedView)
     def post(self, request, *args, **kwargs):
         POST = request.POST
         start = get_from_POST_or_404(
-            POST, key=self.start_arg, cast=fromRFC3339,
+            POST, key=self.start_arg, cast=_js_timestamp_to_datetime,
         )
         end = get_from_POST_or_404(
-            POST, key=self.end_arg, cast=fromRFC3339
+            POST, key=self.end_arg, cast=_js_timestamp_to_datetime
         )
         is_all_day = get_from_POST_or_404(
             POST, key=self.all_day_arg,
@@ -448,14 +438,14 @@ class CalendarDeletion(generic.CremeModelEditionPopup):
     def check_instance_permissions(self, instance, user):
         if not instance.is_custom:
             raise ConflictError(
-                _('You cannot delete this calendar: it is not custom.')
+                gettext('You cannot delete this calendar: it is not custom.')
             )
 
         if instance.user_id != user.id:
-            raise PermissionDenied(_('You are not allowed to delete this calendar.'))
+            raise PermissionDenied(gettext('You are not allowed to delete this calendar.'))
 
         if not Calendar.objects.filter(user=user).exclude(id=instance.id).exists():
-            raise ConflictError(_('You cannot delete your last calendar.'))
+            raise ConflictError(gettext('You cannot delete your last calendar.'))
 
         ctype = ContentType.objects.get_for_model(Calendar)
         dcom = DeletionCommand.objects.filter(content_type=ctype).first()

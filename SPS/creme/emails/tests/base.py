@@ -66,7 +66,7 @@ class _EmailsTestCase(CremeTestCase):
 
     @staticmethod
     def _build_create_entitymail_url(entity):
-        return reverse('emails:create_email', args=(entity.id,))
+        return reverse('emails__create_email', args=(entity.id,))
 
     def _create_email(self,
                       user,

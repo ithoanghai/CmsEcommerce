@@ -147,7 +147,7 @@ class AbstractEntityEmail(AbstractMail, CremeEntity):
         )
 
     def get_absolute_url(self):
-        return reverse('emails:view_email', args=(self.pk,))
+        return reverse('emails__view_email', args=(self.pk,))
 
     @staticmethod
     def get_clone_absolute_url():
@@ -155,7 +155,7 @@ class AbstractEntityEmail(AbstractMail, CremeEntity):
 
     @staticmethod
     def get_lv_absolute_url():
-        return reverse('emails:list_emails')
+        return reverse('emails__list_emails')
 
     # TODO: in a manager ?
     @classmethod

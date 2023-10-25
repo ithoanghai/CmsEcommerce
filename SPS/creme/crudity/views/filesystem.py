@@ -22,7 +22,7 @@ from io import StringIO
 from django.contrib.auth import get_user_model
 from django.http import Http404, HttpResponse
 
-from ...creme_core.accounts.decorators import (
+from ...creme_core.auth.decorators import (
     login_required,
     permission_required,
 )

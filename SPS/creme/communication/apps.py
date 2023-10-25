@@ -7,3 +7,4 @@ class CommunicationConfig(OscarConfig):
     label = 'communication'
     name = 'creme.communication'
     verbose_name = _('Communication')
+

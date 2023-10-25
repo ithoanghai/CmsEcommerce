@@ -19,7 +19,7 @@ from ...models import (
     CremeEntity,
     CremeProperty,
     CremePropertyType,
-    User,
+    CremeUser,
     CustomField,
     CustomFieldBoolean,
     CustomFieldDateTime,

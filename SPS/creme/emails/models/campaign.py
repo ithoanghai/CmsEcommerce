@@ -47,18 +47,18 @@ class AbstractEmailCampaign(CremeEntity):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('emails:view_campaign', args=(self.id,))
+        return reverse('emails__view_campaign', args=(self.id,))
 
     @staticmethod
     def get_create_absolute_url():
-        return reverse('emails:create_campaign')
+        return reverse('emails__create_campaign')
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_campaign', args=(self.id,))
+        return reverse('emails__edit_campaign', args=(self.id,))
 
     @staticmethod
     def get_lv_absolute_url():
-        return reverse('emails:list_campaigns')
+        return reverse('emails__list_campaigns')
 
     def all_recipients(self):
         # Merge all the mailing_lists and their children

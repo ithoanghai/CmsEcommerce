@@ -19,13 +19,13 @@
 from django.core.exceptions import ValidationError
 from django.forms.fields import CharField
 from django.utils.translation import gettext as _
-
-from creme import persons
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from creme.creme_core.forms import CremeEntityQuickForm
-from creme.creme_core.forms.validators import validate_linkable_model
-from creme.creme_core.forms.widgets import Label
-from creme.creme_core.models import Relation
+from django.conf import settings
+from ... import persons
+from ...creme_core.auth.entity_credentials import EntityCredentials
+from ...creme_core.forms import CremeEntityQuickForm
+from ...creme_core.forms.validators import validate_linkable_model
+from ...creme_core.forms.widgets import Label
+from ...creme_core.models import Relation
 
 from ..constants import REL_SUB_EMPLOYED_BY
 
@@ -63,9 +63,9 @@ class ContactQuickForm(CremeEntityQuickForm):
             orga_field.widget = Label()
             orga_field.help_text = ''
             orga_field.initial = (
-                gettext('You are not allowed to link with a Contact')
+                _('You are not allowed to link with a Contact')
                 if not c_link_perm else
-                gettext('You are not allowed to link with an Organisation')
+                _('You are not allowed to link with an Organisation')
             )
         elif not self.can_create():
             self.fields['organisation'].help_text = _(

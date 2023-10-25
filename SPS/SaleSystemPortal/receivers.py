@@ -1,8 +1,8 @@
 from django.dispatch import receiver
 
-from creme.creme_core.accounts.signals import password_changed
-from creme.creme_core.accounts.signals import user_sign_up_attempt, user_signed_up
-from creme.creme_core.accounts.signals import user_login_attempt, user_logged_in
+from creme.creme_core.auth.signals import password_changed
+from creme.creme_core.auth.signals import user_sign_up_attempt, user_signed_up
+from creme.creme_core.auth.signals import user_login_attempt, user_logged_in
 
 from creme.eventlog.models import log
 

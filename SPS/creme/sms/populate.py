@@ -22,13 +22,13 @@ from functools import partial
 from django.apps import apps
 from django.utils.translation import gettext as _
 
-import creme.creme_core.bricks as core_bricks
-from creme import sms
-from creme.creme_core.core.entity_cell import EntityCellRegularField
-# from creme.creme_core.gui.custom_form import EntityCellCustomFormSpecial
-from creme.creme_core.gui.menu import ContainerEntry, Separator1Entry
-from creme.creme_core.management.commands.creme_populate import BasePopulator
-from creme.creme_core.models import (
+from ..creme_core import bricks as core_bricks
+from .. import sms
+from ..creme_core.core.entity_cell import EntityCellRegularField
+# from ..creme_core.gui.custom_form import EntityCellCustomFormSpecial
+from ..creme_core.gui.menu import ContainerEntry, Separator1Entry
+from ..creme_core.management.commands.creme_populate import BasePopulator
+from ..creme_core.models import (
     BrickDetailviewLocation,
     CustomFormConfigItem,
     HeaderFilter,
@@ -262,7 +262,7 @@ class Populator(BasePopulator):
                 # logger.info("Documents app is installed =>
                 # we use the documents block on SMSCampaign's detail views")
 
-                from creme.documents.bricks import LinkedDocsBrick
+                from ..documents.bricks import LinkedDocsBrick
 
                 BrickDetailviewLocation.objects.create_if_needed(
                     brick=LinkedDocsBrick, order=600, zone=RIGHT, model=SMSCampaign,

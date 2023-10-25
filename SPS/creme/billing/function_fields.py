@@ -24,7 +24,7 @@ from decimal import Decimal
 from django.utils.translation import gettext as _
 
 from .. import billing, persons
-from ..creme_core.accounts.entity_credentials import EntityCredentials
+from ..creme_core.auth.entity_credentials import EntityCredentials
 from ..creme_core.core.function_field import (
     FunctionField,
     FunctionFieldColorAndLabel,

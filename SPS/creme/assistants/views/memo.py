@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from ...creme_core.views import generic
 

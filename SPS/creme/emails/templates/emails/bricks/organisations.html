@@ -10,8 +10,8 @@
 
 {% block brick_header_actions %}
 {% has_perm_to change object as has_perm %}
-    {% brick_header_action id='link' url='emails:add_orgas_to_mlist_from_filter'|url:object.id label=_('Add from a filter') enabled=has_perm %}
-    {% brick_header_action id='link' url='emails:add_orgas_to_mlist'|url:object.id             label=_('Add organisations') enabled=has_perm %}
+    {% brick_header_action id='link' url='emails__add_orgas_to_mlist_from_filter'|url:object.id label=_('Add from a filter') enabled=has_perm %}
+    {% brick_header_action id='link' url='emails__add_orgas_to_mlist'|url:object.id             label=_('Add organisations') enabled=has_perm %}
 {% endblock %}
 
 {% block brick_table_columns %}
@@ -34,7 +34,7 @@
             {% if view_perm %}&nbsp;:&nbsp;{{orga.email|default:_('no email address')}}{% endif %}
         </td>
         <td {% brick_table_data_status action %}>
-            {% brick_table_action id='delete' url='emails:remove_orga_from_mlist'|url:object.id __id=orga.pk label=_('Remove this organisation') icon='unlink' enabled=has_perm %}
+            {% brick_table_action id='delete' url='emails__remove_orga_from_mlist'|url:object.id __id=orga.pk label=_('Remove this organisation') icon='unlink' enabled=has_perm %}
         </td>
     </tr>
     {% endfor %}

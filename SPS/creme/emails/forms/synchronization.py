@@ -21,8 +21,8 @@ from django.core.exceptions import ValidationError
 from django.db.transaction import atomic
 from django.utils.translation import gettext as _
 
-from creme import persons
-from creme.creme_core import forms as core_forms
+from ... import persons
+from ...creme_core import forms as core_forms
 
 from ..models import EmailSyncConfigItem, EmailToSync, EmailToSyncPerson
 

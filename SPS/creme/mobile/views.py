@@ -47,7 +47,7 @@ from ..creme_core.core.exceptions import ConflictError
 from ..creme_core.models import CremeEntity, EntityCredentials, Relation
 from ..creme_core.utils import get_from_GET_or_404, get_from_POST_or_404
 from ..creme_core.utils.chunktools import iter_as_chunk
-# from creme.creme_core.utils.dates import make_aware_dt
+# from ..creme_core.utils.dates import make_aware_dt
 from ..creme_core.utils.dates import dt_from_ISO8601
 from ..creme_core.views.decorators import jsonify
 from ..creme_core.views.utils import build_cancel_path

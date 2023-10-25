@@ -20,7 +20,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import ForeignKey, Model
 from django.utils.translation import gettext_lazy as _
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 class ConditionDynamicOperand:
@@ -52,7 +52,7 @@ class CurrentUserOperand(ConditionDynamicOperand):
     """
     type_id = '__currentuser__'
     verbose_name = _('Current user')
-    model = User
+    model = CremeUser
 
     def resolve(self):
         user = self.user
@@ -66,7 +66,7 @@ class CurrentUserOperand(ConditionDynamicOperand):
 
     def validate(self, *, field, value):
         if isinstance(field, ForeignKey) and \
-           issubclass(field.remote_field.model, User) and \
+           issubclass(field.remote_field.model, CremeUser) and \
            value == self.type_id:
             return
 

@@ -15,6 +15,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
+# @@@ Mix this with pinax-teams
 
 from __future__ import annotations
 
@@ -25,7 +26,7 @@ from django.conf import settings
 from ..creme_core import get_concrete_model
 
 if TYPE_CHECKING:
-    from .models import AbstractAddress, AbstractContact, AbstractOrganisation
+    from .models import AbstractAddress, AbstractContact, AbstractOrganisation, AbstractProfile, AbstractTeams
 
 
 def address_model_is_custom() -> bool:
@@ -49,6 +50,20 @@ def organisation_model_is_custom() -> bool:
     )
 
 
+def profile_model_is_custom() -> bool:
+    return (
+        settings.PERSONS_PROFILE_MODEL != 'persons.Profile'
+        and not settings.PERSONS_PROFILE_FORCE_NOT_CUSTOM
+    )
+
+
+def team_model_is_custom() -> bool:
+    return (
+        settings.PERSONS_TEAM_MODEL != 'persons.Team'
+        and not settings.PERSONS_TEAM_FORCE_NOT_CUSTOM
+    )
+
+
 def get_address_model() -> type[AbstractAddress]:
     """Returns the Address model that is active in this project."""
     return get_concrete_model('PERSONS_ADDRESS_MODEL')
@@ -62,3 +77,28 @@ def get_contact_model() -> type[AbstractContact]:
 def get_organisation_model() -> type[AbstractOrganisation]:
     """Returns the Organisation model that is active in this project."""
     return get_concrete_model('PERSONS_ORGANISATION_MODEL')
+
+
+def profile_model_is_custom() -> bool:
+    return (
+        settings.PERSONS_PROFILE_MODEL != 'persons.Profile'
+        and not settings.PERSONS_PROFILE_FORCE_NOT_CUSTOM
+    )
+
+
+def team_model_is_custom() -> bool:
+    return (
+        settings.PERSONS_TEAM_MODEL != 'persons.Team'
+        and not settings.PERSONS_TEAM_FORCE_NOT_CUSTOM
+    )
+
+
+
+def get_profile_model() -> type[AbstractProfile]:
+    """Returns the Profile model that is active in this project."""
+    return get_concrete_model('PERSONS_PROFILE_MODEL')
+
+def get_team_model() -> type[AbstractTeams]:
+    """Returns the Team model that is active in this project."""
+    return get_concrete_model('PERSONS_TEAM_MODEL')
+

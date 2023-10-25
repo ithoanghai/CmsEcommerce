@@ -881,7 +881,7 @@ class HeaderFiltersImporter(Importer):
     cells_proxies_registry = CELL_PROXIES
 
     def _validate_section(self, deserialized_section, validated_data):
-        User = get_user_model()
+        CremeUser = get_user_model()
 
         def load_hfilter(hfilter_info):
             hfilter_id = hfilter_info['id']
@@ -1319,7 +1319,7 @@ class EntityFiltersImporter(Importer):
     conditions_proxies_registry = COND_PROXIES
 
     def _validate_section(self, deserialized_section, validated_data):
-        User = get_user_model()
+        CremeUser = get_user_model()
 
         def load_efilter(efilter_info):
             efilter_id = efilter_info['id']

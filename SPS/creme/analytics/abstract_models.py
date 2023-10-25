@@ -44,7 +44,7 @@ class AbstractUserRecord(models.Model):
     A record of a user's activity.
     """
 
-    user = models.OneToOneField(AUTH_USER_MODEL, verbose_name=_("User"),
+    user = models.OneToOneField(AUTH_USER_MODEL, verbose_name=_("CremeUser"),
                                 on_delete=models.CASCADE)
 
     # Browsing stats
@@ -75,7 +75,7 @@ class AbstractUserRecord(models.Model):
 class AbstractUserProductView(models.Model):
 
     user = models.ForeignKey(
-        AUTH_USER_MODEL, verbose_name=_("User"),
+        AUTH_USER_MODEL, verbose_name=_("CremeUser"),
         on_delete=models.CASCADE)
     product = models.ForeignKey(
         'catalogue.Product',
@@ -100,7 +100,7 @@ class AbstractUserSearch(models.Model):
     user = models.ForeignKey(
         AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        verbose_name=_("User"))
+        verbose_name=_("CremeUser"))
     query = models.CharField(_("Search term"), max_length=255, db_index=True)
     date_created = models.DateTimeField(_("Date Created"), auto_now=True)
 

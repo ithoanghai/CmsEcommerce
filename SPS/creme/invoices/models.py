@@ -4,11 +4,10 @@ import arrow
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-from django.utils import timezone
-from ..creme_core.models.auth import Account, User
-from ..userprofile.models import Address, Org
+from django.conf import settings
+from ..creme_core.models import Account, CremeUser
+from ..persons.models import Organisation, Teams, Address
 from ..creme_core.common.utils import CURRENCY_CODES
-from ..teams.models import Teams
 
 
 class Invoice(models.Model):
@@ -35,7 +34,7 @@ class Invoice(models.Model):
     )
     name = models.CharField(_("Name"), max_length=100)
     email = models.EmailField(_("Email"))
-    assigned_to = models.ManyToManyField(User, related_name="invoice_assigned_to")
+    assigned_to = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="invoice_assigned_to")
     # quantity is the number of hours worked
     quantity = models.PositiveIntegerField(default=0)
     # rate is the rate charged
@@ -51,7 +50,7 @@ class Invoice(models.Model):
     phone = PhoneNumberField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
-        User, related_name="invoice_created_by", on_delete=models.SET_NULL, null=True
+        CremeUser, related_name="invoice_created_by", on_delete=models.SET_NULL, null=True
     )
 
     amount_due = models.DecimalField(
@@ -65,9 +64,9 @@ class Invoice(models.Model):
     details = models.TextField(_("Details"), null=True, blank=True)
     due_date = models.DateField(blank=True, null=True)
     accounts = models.ManyToManyField(Account, related_name="accounts_invoices")
-    teams = models.ManyToManyField(Teams, related_name="invoices_teams")
+    teams = models.ManyToManyField(settings.PERSONS_TEAM_MODEL, related_name="invoices_teams")
 
-    org = models.ForeignKey(Org, on_delete=models.SET_NULL, null=True, blank=True)
+    org = models.ForeignKey(settings.PERSONS_ORGANISATION_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     tax = models.DecimalField(blank=True, null=True, max_digits=12, decimal_places=2)
 
     class Meta:
@@ -136,21 +135,21 @@ class Invoice(models.Model):
     @property
     def get_team_users(self):
         team_user_ids = list(self.teams.values_list("users__id", flat=True))
-        return User.objects.filter(id__in=team_user_ids)
+        return CremeUser.objects.filter(id__in=team_user_ids)
 
     @property
     def get_team_and_assigned_users(self):
         team_user_ids = list(self.teams.values_list("users__id", flat=True))
         assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
         user_ids = team_user_ids + assigned_user_ids
-        return User.objects.filter(id__in=user_ids)
+        return CremeUser.objects.filter(id__in=user_ids)
 
     @property
     def get_assigned_users_not_in_teams(self):
         team_user_ids = list(self.teams.values_list("users__id", flat=True))
         assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
         user_ids = set(assigned_user_ids) - set(team_user_ids)
-        return User.objects.filter(id__in=list(user_ids))
+        return CremeUser.objects.filter(id__in=list(user_ids))
 
 
 class InvoiceHistory(models.Model):
@@ -184,7 +183,7 @@ class InvoiceHistory(models.Model):
     name = models.CharField(_("Name"), max_length=100)
     email = models.EmailField(_("Email"))
     assigned_to = models.ManyToManyField(
-        User, related_name="invoice_history_assigned_to"
+        CremeUser, related_name="invoice_history_assigned_to"
     )
     # quantity is the number of hours worked
     quantity = models.PositiveIntegerField(default=0)
@@ -203,7 +202,7 @@ class InvoiceHistory(models.Model):
     #     User, related_name='invoice_history_created_by',
     #     on_delete=models.SET_NULL, null=True)
     updated_by = models.ForeignKey(
-        User,
+        CremeUser,
         related_name="invoice_history_created_by",
         on_delete=models.SET_NULL,
         null=True,

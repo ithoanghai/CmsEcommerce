@@ -12,7 +12,7 @@ class CampaignTestCase(BrickTestCaseMixin, _EmailsTestCase):
     def test_create(self):
         user = self.login_as_root_and_get()
 
-        url = reverse('emails:create_campaign')
+        url = reverse('emails__create_campaign')
         self.assertGET200(url)
 
         # ---

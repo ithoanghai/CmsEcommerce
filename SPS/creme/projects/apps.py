@@ -38,7 +38,7 @@ class ProjectsConfig(CremeAppConfig):
         creme_registry.register_entity_models(self.Project, self.ProjectTask)
 
     def register_actions(self, actions_registry):
-        from creme.projects import actions
+        from ..projects import actions
 
         actions_registry.register_instance_actions(actions.ProjectCloseAction)
 

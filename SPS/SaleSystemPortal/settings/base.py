@@ -184,9 +184,7 @@ AUTHENTICATION_BACKENDS = [
 
     'creme.creme_core.auth.backend.EntityBackend',
 ]
-#AUTH_USER_MODEL = 'creme_core.CremeUser'
-AUTH_USER_MODEL = BLOG_SCOPING_MODEL = "creme_core.User"
-# AUTH_USER_MODEL = 'creme_core.CremeUser' #for creme
+AUTH_USER_MODEL = BLOG_SCOPING_MODEL = "creme_core.CremeUser"
 # AUTH_USER_MODEL = "common.User"
 
 # Password validation
@@ -255,8 +253,7 @@ ROOT_URLCONF = 'SaleSystemPortal.urls' # Means urls.py
 #ROOT_URLCONF = 'creme.urls'
 
 LOGIN_REDIRECT_URL = 'shop_home'     #LOGIN_REDIRECT_URL = "dashboard"
-LOGIN_URL = 'creme_login'
-# ACCOUNT_LOGIN_URL = LOGIN_URL = "accounts:login"
+LOGIN_URL = ACCOUNT_LOGIN_URL = 'creme_login'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files,
 # and files that are generated dynamically (CSV, PDF...).
@@ -393,6 +390,8 @@ MIDDLEWARE = [
     'creme.creme_core.common.middleware.swagger_post.SwaggerMiddleware',
 
     # other middleware of social network
+    #'creme.persons.wsgi_middleware.WSGITeamMiddleware',
+    #'creme.persons.middleware.TeamMiddleware',
     'reversion.middleware.RevisionMiddleware',
 
     # add extra wagtail and cms
@@ -433,6 +432,7 @@ THIRD_PARTIES_APPS = [
     # external other lib for social
     'channels',
     'easy_thumbnails',
+    'sorl.thumbnail',
     'markitup',
     'sitetree',
     'metron',
@@ -536,9 +536,10 @@ INSTALLED_CREME_APPS = [
     # MANDATORY CREME APPS #
     # ----------------------
     'creme.creme_core',
-    'creme.creme_core.accounts',
+    'creme.creme_core.auth',
     # app module for django CRM
     "creme.creme_core.common",
+    'creme.creme_core.core',
 
     # Manages the Configuration portal.
     'creme.creme_config',       #mix Oscar and Creme
@@ -549,7 +550,7 @@ INSTALLED_CREME_APPS = [
     'creme.documents',
 
     # Manages Contacts & Organisations entities.
-    'creme.persons',
+    'creme.persons',  #mix with team, userprofile, contact in Django CRM
 
     # -----------------------------------------------
     # CREME OPTIONAL APPS (can be safely commented) #
@@ -677,18 +678,13 @@ INSTALLED_CREME_APPS = [
     "creme.announcements",
     "creme.stripe",
     "creme.waitinglist",
-    "creme.teams",  # "app_CRM.teams",
     "creme.leads",
-    "creme.opportunity",
     "creme.planner",
     "creme.tasks",
     "creme.invoices",
     "creme.cases",
-    "creme.contacts",
-    'creme.userprofile',
     'creme.friends',
     'creme.newsfeed',
-    'creme.communications',
     "creme.speakers",
     "creme.conference",
     "creme.sponsorship",
@@ -703,7 +699,6 @@ INSTALLED_CREME_APPS = [
     "creme.bookmarks",
     "creme.chatgpt",
     "creme.comments",
-    # 'creme.creme_core.core',
     "creme.flag",
     "creme.forums",
     'creme.images',
@@ -2116,6 +2111,8 @@ DOCUMENTS_DOCUMENT_FORCE_NOT_CUSTOM = False
 PERSONS_ADDRESS_MODEL      = 'persons.Address'
 PERSONS_CONTACT_MODEL      = 'persons.Contact'
 PERSONS_ORGANISATION_MODEL = 'persons.Organisation'
+PERSONS_PROFILE_MODEL      = 'persons.Profile'
+PERSONS_TEAM_MODEL         = 'persons.Team'
 
 PERSONS_ADDRESS_FORCE_NOT_CUSTOM      = False
 PERSONS_CONTACT_FORCE_NOT_CUSTOM      = False
@@ -2400,3 +2397,4 @@ GENERATED_MEDIA_NAMES_FILE = BASE_DIR / "_generated_media_names.py"
 GENERATED_MEDIA_NAMES_MODULE = "SaleSystemPortal.settings._generated_media_names"
 
 DOCUMENTS_HOOKSET = "creme.documents.hooks.DocumentsDefaultHookSet"
+TEAMS_HOOKSET = "creme.persons.hooks.TeamDefaultHookset"

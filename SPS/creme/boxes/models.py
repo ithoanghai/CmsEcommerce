@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
-from ..creme_core.models.auth import User
+from django.conf import settings
 
 from .hooks import hookset
 
@@ -11,8 +10,8 @@ class Box(models.Model):
     label = models.CharField(max_length=100, db_index=True)
     content = models.TextField(blank=True)
     content_html = models.TextField(blank=True)
-    created_by = models.ForeignKey(User, related_name="boxes", on_delete=models.CASCADE)
-    last_updated_by = models.ForeignKey(User, related_name="updated_boxes", on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="boxes", on_delete=models.CASCADE)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="updated_boxes", on_delete=models.CASCADE)
     last_updated = models.DateTimeField(default=timezone.now)
 
     def __unicode__(self):

@@ -4,12 +4,12 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models import Account, CremeUser
 from ..creme_core.common.models import Attachments
 from ..comments.models import Comment
-from ..userprofile.models import Address, Company
+from ..persons.models import Address, Teams
+from ..leads.models import Company
 from .models import Invoice, InvoiceHistory
-from ..teams.models import Teams
 
 
 class InvoiceCreateTest(object):
@@ -20,7 +20,7 @@ class InvoiceCreateTest(object):
             sub_domain="test",
             country="IN",
         )
-        self.user = User.objects.create(
+        self.user = CremeUser.objects.create(
             first_name="johnInvoice",
             username="johnDoeInvoice",
             email="johnDoeInvoice@example.com",
@@ -30,7 +30,7 @@ class InvoiceCreateTest(object):
         self.user.set_password("password")
         self.user.save()
 
-        self.user1 = User.objects.create(
+        self.user1 = CremeUser.objects.create(
             first_name="janeInvoice",
             username="janeDoeInvoice",
             email="janeDoeInvoice@example.com",
@@ -41,7 +41,7 @@ class InvoiceCreateTest(object):
         self.user1.set_password("password")
         self.user1.save()
 
-        self.user2 = User.objects.create(
+        self.user2 = CremeUser.objects.create(
             first_name="joeInvoice",
             username="joeInvoice",
             email="joeInvoice@example.com",

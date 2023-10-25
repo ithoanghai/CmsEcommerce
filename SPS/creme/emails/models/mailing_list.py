@@ -57,18 +57,18 @@ class AbstractMailingList(CremeEntity):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('emails:view_mlist', args=(self.id,))
+        return reverse('emails__view_mlist', args=(self.id,))
 
     @staticmethod
     def get_create_absolute_url():
-        return reverse('emails:create_mlist')
+        return reverse('emails__create_mlist')
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_mlist', args=(self.id,))
+        return reverse('emails__edit_mlist', args=(self.id,))
 
     @staticmethod
     def get_lv_absolute_url():
-        return reverse('emails:list_mlists')
+        return reverse('emails__list_mlists')
 
     def already_in_parents(self, other_ml_id):
         parents = self.parents_set.all()

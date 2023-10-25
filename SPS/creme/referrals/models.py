@@ -10,7 +10,7 @@ from django.utils import timezone
 from .conf import settings
 from .signals import user_linked_to_response
 
-AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "accounts.User")
+AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "creme_core.CremeUser")
 
 
 class Referral(models.Model):

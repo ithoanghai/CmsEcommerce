@@ -75,4 +75,4 @@ class ButtonMenuItem(CremeModel):
         from creme.creme_core.gui.button_menu import button_registry
 
         button = button_registry.get_button(self.button_id)
-        return str(button.verbose_name) if button else gettext('Deprecated button')
+        return str(button.verbose_name) if button else _('Deprecated button')

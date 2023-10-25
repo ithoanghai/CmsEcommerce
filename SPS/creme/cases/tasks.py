@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
-from creme.userprofile.models import Profile
+from ..persons.models import Profile
 from .models import Case
 
 app = Celery("redis://")

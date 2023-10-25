@@ -33,7 +33,7 @@ from ..models import (
     CremeEntity,
     CremeProperty,
     CremePropertyType,
-    User,
+    CremeUser,
     DeletionCommand,
     Relation,
     RelationType,
@@ -158,7 +158,7 @@ class _CremeTestCase:
 
     @classmethod
     def create_team(cls, name, *users):
-        team = User.objects.create(username=name, is_team=True)
+        team = CremeUser.objects.create(username=name, is_team=True)
         team.teammates = users
 
         return team
@@ -185,7 +185,7 @@ class _CremeTestCase:
     @classmethod
     def get_root_user(cls) -> User:
         # Should exist (see 'creme_core.populate.py')
-        return User.objects.get(username=ROOT_USERNAME)
+        return CremeUser.objects.get(username=ROOT_USERNAME)
 
     def login_as_root(self) -> None:
         # Should exist (see 'creme_core.populate.py')

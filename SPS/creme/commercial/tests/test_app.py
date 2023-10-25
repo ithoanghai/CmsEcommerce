@@ -2,6 +2,7 @@ from django.apps import apps
 from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.conf import settings
 
 from ...creme_core.models import (
     CremeProperty,
@@ -37,11 +38,11 @@ class CommercialTestCase(CremeTestCase):
         self.assertListEqual([Act], [*complete_goal.object_models])
 
         subject_models = {*complete_goal.subject_models}
-        self.assertIn(Contact,      subject_models)
+        self.assertIn(settings.PERSONS_CONTACT_MODEL,      subject_models)
         self.assertIn(Organisation, subject_models)
 
         if apps.is_installed('creme.billing'):
-            from creme import billing
+            from .. import billing
             self.assertIn(billing.get_invoice_model(),     subject_models)
             self.assertIn(billing.get_quote_model(),       subject_models)
             self.assertIn(billing.get_sales_order_model(), subject_models)

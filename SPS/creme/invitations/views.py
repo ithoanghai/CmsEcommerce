@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.generic.edit import FormMixin
 
-from ..creme_core.accounts.mixins import LoginRequiredMixin
+from ..creme_core.auth.mixins import LoginRequiredMixin
 
 from .forms import InviteForm
 from .models import InvitationStat, JoinInvitation

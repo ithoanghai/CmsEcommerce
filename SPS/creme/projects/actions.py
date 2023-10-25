@@ -19,8 +19,8 @@
 from django.urls.base import reverse
 from django.utils.translation import gettext as _
 
-from creme import projects
-from creme.creme_core.gui import actions
+from .. import projects
+from ..creme_core.gui import actions
 
 
 class ProjectCloseAction(actions.UIAction):

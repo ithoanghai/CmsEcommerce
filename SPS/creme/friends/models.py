@@ -11,7 +11,7 @@ from ..friends.exceptions import AlreadyFriendsError, AlreadyExistsError
 from ..friends.signals import friendship_request_created, friendship_removed, friendship_request_viewed, \
     friendship_request_canceled, friendship_request_accepted
 
-from ..creme_core.models.auth import User
+from ..creme_core.models import CremeUser
 
 
 class NotificationManager(models.Manager):
@@ -187,12 +187,12 @@ class FriendshipRequest(models.Model):
     """ Model to represent friendship requests """
 
     from_user = models.ForeignKey(
-        User,
+        CremeUser,
         on_delete=models.CASCADE,
         related_name="friendship_requests_sent",
     )
     to_user = models.ForeignKey(
-        User,
+        CremeUser,
         on_delete=models.CASCADE,
         related_name="friendship_requests_received",
     )
@@ -247,8 +247,8 @@ class FriendshipRequest(models.Model):
 
 
 class Friend(models.Model):
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='friends')
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
 
     objects = FriendshipManager()

@@ -15,8 +15,7 @@ from ..models import ActivitySubType, ActivityType
 from .base import Activity, _ActivitiesTestCase, skipIfCustomActivity
 
 
-# class ActivityRangeFieldTestCase(FieldTestCase):
-class ActivityRangeFieldTestCase(CremeTestCase):
+class ActivityRangeFieldTestCase(FieldTestCase):
     def test_range(self):
         DWOT = DateWithOptionalTimeField.DateWithOptionalTime
 
@@ -48,13 +47,13 @@ class ActivityRangeFieldTestCase(CremeTestCase):
         self.assertNotEqual(build_range(start=None),   act_range)
 
     def test_clean_empty_required(self):
-        field = ActivityRangeField(required=True)
-        msg = _('This field is required.')
-        self.assertFormfieldError(field=field, messages=msg, codes='required', value=None)
-        self.assertFormfieldError(field=field, messages=msg, codes='required', value=[])
+        clean = ActivityRangeField(required=True).clean
+        self.assertFieldValidationError(ActivityRangeField, 'required', clean, None)
+        self.assertFieldValidationError(ActivityRangeField, 'required', clean, [])
 
     def test_clean_empty_not_required(self):
         field = ActivityRangeField(required=False)
+        # self.assertListEqual([None, None, None, None], field.clean([]))
         self.assertIsNone(field.clean([]))
         self.assertIsNone(field.clean(['']))
         self.assertIsNone(field.clean(['', '']))
@@ -62,6 +61,20 @@ class ActivityRangeFieldTestCase(CremeTestCase):
     def test_clean_complete(self):
         field = ActivityRangeField()
 
+        # self.assertListEqual(
+        #     [
+        #         (date(year=2022, month=10, day=20), time(hour=18, minute=30)),
+        #         (date(year=2022, month=10, day=21), time(hour=12, minute=00)),
+        #         False,
+        #         True,
+        #     ],
+        #     field.clean([
+        #         [self.formfield_value_date(2022, 10, 20), '18:30:00'],
+        #         [self.formfield_value_date(2022, 10, 21), '12:00:00'],
+        #         '',
+        #         'on',
+        #     ]),
+        # )
         DWOT = DateWithOptionalTimeField.DateWithOptionalTime
         self.assertEqual(
             field.Range(
@@ -81,6 +94,20 @@ class ActivityRangeFieldTestCase(CremeTestCase):
     def test_clean_partial_datetime(self):
         field = ActivityRangeField()
 
+        # self.assertListEqual(
+        #     [
+        #         (date(year=2023, month=3, day=15), time(hour=14, minute=45)),
+        #         (date(year=2023, month=3, day=16), None),
+        #         True,
+        #         False,
+        #     ],
+        #     field.clean([
+        #         [self.formfield_value_date(2023, 3, 15), '14:45:00'],
+        #         [self.formfield_value_date(2023, 3, 16)],
+        #         'on',
+        #         '',
+        #     ]),
+        # )
         DWOT = DateWithOptionalTimeField.DateWithOptionalTime
         self.assertEqual(
             field.Range(
@@ -133,6 +160,7 @@ class ActivityRangeFieldTestCase(CremeTestCase):
 @skipIfCustomActivity
 class ActivityInnerEditionTestCase(_ActivitiesTestCase):
     def test_inner_edit_start_n_end(self):
+        # user = self.login()
         user = self.login_as_root_and_get()
         activity = self._create_meeting(user=user, busy=True)
 
@@ -207,6 +235,7 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         'busy',
     ])
     def test_inner_edit_start_floating(self, field_name):
+        # self.login()
         user = self.login_as_root_and_get()
         activity = self._create_meeting(user=user)
 
@@ -238,6 +267,7 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertFalse(activity.busy)
 
     def test_inner_edit_start_all_day(self):
+        # self.login()
         user = self.login_as_root_and_get()
         activity = self._create_meeting(user=user)
 
@@ -265,6 +295,7 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertEqual(create_dt(hour=23, minute=59), activity.end)
 
     def test_inner_edit_start_busy(self):
+        # self.login()
         user = self.login_as_root_and_get()
         activity = self._create_meeting(user=user)
 
@@ -294,6 +325,7 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertEqual(create_dt(hour=12), activity.end)
 
     def test_inner_edit_start_floating_time(self):
+        # self.login()
         user = self.login_as_root_and_get()
         activity = self._create_meeting(user=user)
 
@@ -331,6 +363,7 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertEqual(create_dt(day=15, hour=23, minute=59), activity.end)
 
     def test_inner_edit_start_only_end_time(self):
+        # self.login()
         user = self.login_as_root_and_get()
         activity = self._create_meeting(user=user)
 
@@ -362,6 +395,7 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertFalse(activity.busy)
 
     def test_inner_edit_start_computed_end(self):
+        # self.login()
         user = self.login_as_root_and_get()
         activity = self._create_meeting(user=user)
 
@@ -393,16 +427,17 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertFalse(activity.busy)
 
     def test_inner_edit_start_computed_end_all_day01(self):
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         atype = ActivityType.objects.create(
-            # id='test-activity_contest',
+            id='test-activity_contest',
             name='Martial contest',
             default_day_duration=2,
             default_hour_duration='00:00:00',
         )
         sub_type = ActivitySubType.objects.create(
-            # id='test-activity_contest',
+            id='test-activity_contest',
             name='Karate contest',
             type=atype,
         )
@@ -441,16 +476,17 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
 
     def test_inner_edit_start_computed_end_all_day02(self):
         "Duration is not a round number of days."
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         atype = ActivityType.objects.create(
-            # id='test-activity_contest',
+            id='test-activity_contest',
             name='Martial contest',
             default_day_duration=2,
             default_hour_duration='05:00:00',
         )
         sub_type = ActivitySubType.objects.create(
-            # id='test-activity_contest',
+            id='test-activity_contest',
             name='Karate contest',
             type=atype,
         )
@@ -487,16 +523,17 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertTrue(activity.is_all_day)
 
     def test_inner_edit_start_computed_end_floating_time(self):
+        # user = self.login()
         user = self.login_as_root_and_get()
 
         atype = ActivityType.objects.create(
-            # id='test-activity_contest',
+            id='test-activity_contest',
             name='Martial contest',
             default_day_duration=2,
             default_hour_duration='00:00:00',
         )
         sub_type = ActivitySubType.objects.create(
-            # id='test-activity_contest',
+            id='test-activity_contest',
             name='Karate contest',
             type=atype,
         )
@@ -531,15 +568,14 @@ class ActivityInnerEditionTestCase(_ActivitiesTestCase):
         self.assertEqual(constants.FLOATING_TIME, activity.floating_type)
 
     def test_inner_edit_start_collision(self):
+        # user = self.login()
         user = self.login_as_root_and_get()
 
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_MEETING_NETWORK)
         create_activity = partial(
             Activity.objects.create,
             user=user,
-            # type_id=constants.ACTIVITYTYPE_MEETING,
-            # sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
-            type_id=sub_type.type_id, sub_type=sub_type,
+            type_id=constants.ACTIVITYTYPE_MEETING,
+            sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_NETWORK,
         )
         create_dt = self.create_datetime
         activity1 = create_activity(

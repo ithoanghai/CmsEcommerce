@@ -18,8 +18,8 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.gui.button_menu import Button
-from creme.persons import get_contact_model
+from ..creme_core.gui.button_menu import Button
+from ..persons import get_contact_model
 
 
 class GenerateVcfButton(Button):

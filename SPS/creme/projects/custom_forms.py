@@ -1,8 +1,8 @@
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext_lazy
 
-from creme import projects
-from creme.creme_core.gui.custom_form import (
+from .. import projects
+from ..creme_core.gui.custom_form import (
     CustomFormDefault,
     CustomFormDescriptor,
 )

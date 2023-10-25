@@ -3,18 +3,18 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from ..accounts.tests import AccountCreateTest
+from ..models.auth.tests import AccountCreateTest
 from ..tests import CaseCreation
-from ..models import Comment, User
+from ..models.auth import Comment, CremeUser
 from ...tasks import (resend_activation_link_to_user,
                           send_email_to_new_user, send_email_user_delete,
                           send_email_user_mentions, send_email_user_status)
 from ..tests import ObjectsCreation
-from ...contacts.tests import ContactObjectsCreation
+from ...persons.tests import ContactObjectsCreation
 from ...events.tests import EventObjectTest
 from ...invoices.tests import InvoiceCreateTest
 from ...leads.tests import TestLeadModel
-from ...opportunity.tests import OpportunityModel
+from ...opportunities.tests import OpportunityModel
 from ...tasks.tests import TaskCreateTest
 
 
@@ -84,7 +84,7 @@ class TestUserMentionsForAccountComments(AccountCreateTest, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_account_comment(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",
@@ -113,7 +113,7 @@ class TestUserMentionsForContactsComments(ContactObjectsCreation, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_contacts_comments(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",
@@ -142,7 +142,7 @@ class TestUserMentionsForLeadsComments(TestLeadModel, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_leads_comments(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",
@@ -171,7 +171,7 @@ class TestUserMentionsForOpportunityComments(OpportunityModel, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_opportunity_comments(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",
@@ -200,7 +200,7 @@ class TestUserMentionsForCasesComments(CaseCreation, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_cases_comments(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",
@@ -229,7 +229,7 @@ class TestUserMentionsForTasksComments(TaskCreateTest, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_tasks_comments(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",
@@ -258,7 +258,7 @@ class TestUserMentionsForInvoiceComments(InvoiceCreateTest, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_invoice_comments(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",
@@ -287,7 +287,7 @@ class TestUserMentionsForEventsComments(EventObjectTest, TestCase):
         BROKER_BACKEND="memory",
     )
     def test_user_mentions_for_events_comments(self):
-        self.user_comment = User.objects.create(
+        self.user_comment = CremeUser.objects.create(
             first_name="johnComment",
             username="johnDoeComment",
             email="johnDoeComment@example.com",

@@ -1,9 +1,8 @@
 from rest_framework import serializers
 
 from ..creme_core.common.serializer import (BillingAddressSerializer,
-                               OrganizationSerializer, UserSerializer)
+                               OrganizationSerializer, UserSerializer, TeamsSerializer)
 from .models import Invoice, InvoiceHistory
-from ..teams.serializer import TeamsSerializer
 
 
 class InvoiceSerailizer(serializers.ModelSerializer):

@@ -16,8 +16,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from .. import documents
-from ..creme_core.gui import menu
+from creme import documents
+from creme.creme_core.gui import menu
 
 Document = documents.get_document_model()
 Folder = documents.get_folder_model()

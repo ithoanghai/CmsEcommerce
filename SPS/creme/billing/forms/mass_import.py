@@ -88,7 +88,7 @@ class _TotalsExtractor:
             return self._amount_validator(value)
         except ValidationError as e:
             raise ValidationError(
-                gettext('The total without VAT is invalid: {}').format(e.message)
+                _('The total without VAT is invalid: {}').format(e.message)
             )
 
     def _clean_total_with_vat(self, value):
@@ -96,7 +96,7 @@ class _TotalsExtractor:
             return self._amount_validator(value)
         except ValidationError as e:
             raise ValidationError(
-                gettext('The total with VAT is invalid: {}').format(e.message)
+                _('The total with VAT is invalid: {}').format(e.message)
             )
 
     def _clean_vat(self, value):
@@ -104,7 +104,7 @@ class _TotalsExtractor:
             cleaned_value = self._vat_validator(value)
         except ValidationError as e:
             raise ValidationError(
-                gettext('The VAT value is invalid: {}').format(e.message)
+                _('The VAT value is invalid: {}').format(e.message)
             )
 
         return self._get_or_create_vat(cleaned_value)
@@ -115,7 +115,7 @@ class _TotalsExtractor:
         except Vat.DoesNotExist:
             if not self.create_vat:
                 raise ValidationError(
-                    gettext(
+                    _(
                         'The VAT with value «{}» does not exist and cannot be created'
                     ).format(number_format(value)),
                 )
@@ -136,7 +136,7 @@ class _TotalsExtractor:
             line_model = self.line_model
             extracted = line_model(
                 user=user,
-                on_the_fly_item=gettext('N/A (import)'),
+                on_the_fly_item=_('N/A (import)'),
                 quantity=Decimal('1'),
                 discount=Decimal('0'),
                 discount_unit=line_model.Discount.PERCENT,
@@ -361,7 +361,7 @@ class TotalsExtractorField(forms.Field):
 def get_import_form_builder(header_dict, choices):
     class BillingMassImportForm(ImportForm4CremeEntity):
         source = EntityExtractorField(
-            models_info=[(Organisation, 'name')],
+            models_info=[(settings.PERSONS_ORGANISATION_MODEL, 'name')],
             choices=choices,
             label=pgettext_lazy('billing', 'Source organisation'),
         )
@@ -420,7 +420,7 @@ def get_import_form_builder(header_dict, choices):
 
             if extractor is not None and self.cleaned_data.get('key_fields'):
                 raise ValidationError(
-                    gettext('You cannot compute totals in update mode.')
+                    _('You cannot compute totals in update mode.')
                 )
 
             return extractor

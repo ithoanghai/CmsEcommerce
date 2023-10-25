@@ -10,7 +10,7 @@
 
 {% block brick_header_actions %}
 {% has_perm_to change object as has_perm %}
-    {% brick_header_action id='link' url='emails:add_attachments_to_template'|url:object.id label=_('Add documents') enabled=has_perm %}
+    {% brick_header_action id='link' url='emails__add_attachments_to_template'|url:object.id label=_('Add documents') enabled=has_perm %}
 {% endblock %}
 
 {% block brick_table_columns %}
@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block brick_table_rows %}
-{% has_perm_to change object as has_perm %}{% url 'emails:remove_attachment_from_template' object.id as rm_attachment_url %}
+{% has_perm_to change object as has_perm %}{% url 'emails__remove_attachment_from_template' object.id as rm_attachment_url %}
     {% for attachment in page.object_list %}
     <tr>
         <td {% brick_table_data_status primary %}>{% widget_entity_hyperlink attachment user %}</td>

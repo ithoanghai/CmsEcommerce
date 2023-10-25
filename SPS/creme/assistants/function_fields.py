@@ -19,7 +19,7 @@
 from collections import defaultdict
 
 from django.db.models.query_utils import Q
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from ..creme_core.forms import listview as lv_form
 from ..creme_core.core.function_field import (

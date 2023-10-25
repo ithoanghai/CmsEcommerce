@@ -19,8 +19,8 @@
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
-from creme import persons, polls
-from creme.creme_core.gui.bricks import (
+from .. import persons, polls
+from ..creme_core.gui.bricks import (
     Brick,
     BrickDependencies,
     QuerysetBrick,

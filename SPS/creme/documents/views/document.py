@@ -20,38 +20,18 @@ from functools import partial
 
 from django.core.exceptions import ValidationError
 from django.db.transaction import atomic
-from django.utils.translation import gettext as _
-from django.db import transaction
-from django.db.models import F
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
-from django.views import static
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    TemplateView,
-)
+from django.utils.translation import gettext_lazy as _
 
-from ... import documents
-from ...creme_core.auth import build_creation_perm as cperm
-from ...creme_core.forms.validators import validate_linkable_model
-from ...creme_core.models import Relation
-from ...creme_core.utils import ellipsis
-from ...creme_core.views import generic
+from creme import documents
+from creme.creme_core.auth import build_creation_perm as cperm
+from creme.creme_core.forms.validators import validate_linkable_model
+from creme.creme_core.models import Relation
+from creme.creme_core.utils import ellipsis
+from creme.creme_core.views import generic
 
 from .. import constants, custom_forms
 from ..constants import DEFAULT_HFILTER_DOCUMENT
-from ..models import FolderCategory, Document, Folder, UserStorage
-from ..compat import LoginRequiredMixin
-from ..conf import settings
-from ..forms import (
-    DocumentCreateForm,
-    DocumentCreateFormWithName,
-)
-from ..hooks import hookset
-
+from ..models import FolderCategory
 
 Folder = documents.get_folder_model()
 Document = documents.get_document_model()
@@ -181,129 +161,3 @@ class DocumentEdition(generic.EntityEdition):
 class DocumentsList(generic.EntitiesList):
     model = Document
     default_headerfilter_id = DEFAULT_HFILTER_DOCUMENT
-
-
-class DocumentCreate(LoginRequiredMixin, CreateView):
-    model = Document
-    form_class = DocumentCreateForm
-    template_name = "app_list/documents/document_create.html"
-    folder = None
-
-    def get(self, request, *args, **kwargs):
-        if "f" in request.GET:
-            qs = Folder.objects.for_user(request.user)
-            self.folder = get_object_or_404(qs, pk=request.GET["f"])
-        else:
-            self.folder = None
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        kwargs.setdefault("folder", self.folder)
-        return super().get_context_data(**kwargs)
-
-    def get_initial(self):
-        if self.folder:
-            self.initial["folder"] = self.folder
-        return super().get_initial()
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({"folders": Folder.objects.for_user(self.request.user),
-                       "storage": self.request.user.storage})
-        return kwargs
-
-    def create_document(self, **kwargs):
-        document = self.model.objects.create(**kwargs)
-        document.touch(self.request.user)
-        if document.folder is not None:
-            # if folder is not amongst anything shared it will share with no
-            # users which share will no-op; perhaps not the best way?
-            document.share(document.folder.shared_parent().shared_with())
-        return document
-
-    def increase_usage(self, bytes):
-        # increase usage for this user based on document size
-        storage_qs = UserStorage.objects.filter(pk=self.request.user.storage.pk)
-        storage_qs.update(bytes_used=F("bytes_used") + bytes)
-
-    def get_create_kwargs(self, form):
-        return {
-            "name": form.cleaned_data["file"].name,
-            "original_filename": form.cleaned_data["file"].name,
-            "folder": form.cleaned_data["folder"],
-            "author": self.request.user,
-            "file": form.cleaned_data["file"],
-        }
-
-    def form_valid(self, form):
-        with transaction.atomic():
-            kwargs = self.get_create_kwargs(form)
-            self.object = self.create_document(**kwargs)
-            hookset.document_created_message(self.request, self.object)
-            bytes = form.cleaned_data["file"].size
-            self.increase_usage(bytes)
-            return HttpResponseRedirect(self.get_success_url())
-
-
-class DocumentWithCustomNameCreate(DocumentCreate):
-
-    form_class = DocumentCreateFormWithName
-
-    def get_create_kwargs(self, form):
-        return {
-            "name": form.cleaned_data["name"],
-            "original_filename": form.cleaned_data["file"].name,
-            "folder": form.cleaned_data["folder"],
-            "author": self.request.user,
-            "file": form.cleaned_data["file"],
-        }
-
-
-class DocumentDetailApp(LoginRequiredMixin, DetailView):
-    model = Document
-    template_name = "app_list/documents/document_detail.html"
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.for_user(self.request.user)
-        return qs
-
-
-class DocumentDownload(LoginRequiredMixin, DetailView):
-    model = Document
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.for_user(self.request.user)
-        return qs
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if settings.DOCUMENTS_USE_X_ACCEL_REDIRECT:
-            response = HttpResponse()
-            response["X-Accel-Redirect"] = self.object.file.url
-            # delete content-type to allow Gondor to determine the filetype and
-            # we definitely don't want Django's crappy default :-)
-            del response["content-type"]
-        else:
-            # Note:
-            #
-            # The 'django.views.static.py' docstring states:
-            #
-            #     Views and functions for serving static files. These are only to be used
-            #     during development, and SHOULD NOT be used in a production setting.
-            #
-            response = static.serve(request, self.object.file.name,
-                                    document_root=settings.MEDIA_ROOT)
-        return response
-
-
-class DocumentDelete(LoginRequiredMixin, DeleteView):
-    model = Document
-    success_url = reverse_lazy("documents:document_index")
-    template_name = "app_list/documents/document_confirm_delete.html"
-
-    def delete(self, request, *args, **kwargs):
-        success_url = super().delete(request, *args, **kwargs)
-        hookset.document_deleted_message(self.request, self.object)
-        return success_url

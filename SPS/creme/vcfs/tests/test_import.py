@@ -12,17 +12,17 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from PIL.Image import open as open_img
 
-from creme.creme_core.models import (
+from ...creme_core.models import (
     CremePropertyType,
     CustomField,
     CustomFieldValue,
     FieldsConfig,
     RelationType,
 )
-from creme.creme_core.tests.base import CremeTestCase
-from creme.documents.tests.base import _DocumentsTestCase
-from creme.persons.constants import REL_SUB_EMPLOYED_BY, REL_SUB_MANAGES
-from creme.persons.models import Sector
+from ...creme_core.tests.base import CremeTestCase
+from ...documents.tests.base import _DocumentsTestCase
+from ...persons.constants import REL_SUB_EMPLOYED_BY, REL_SUB_MANAGES
+from ...persons.models import Sector
 
 # from ..forms import vcf as vcf_forms
 from ..vcf_lib import readOne as read_vcf

@@ -17,7 +17,8 @@
 ################################################################################
 
 from django.http import Http404
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from ...creme_core.models import CremeEntity, Relation
 from ...creme_core.utils import get_from_POST_or_404
@@ -106,7 +107,7 @@ class ActivityUnlinking(generic.CremeDeletion):
         entities_per_id = CremeEntity.objects.in_bulk([activity_id, subject_id])
 
         if len(entities_per_id) != 2:
-            raise Http404(_('One entity does not exist any more.'))
+            raise Http404(gettext('One entity does not exist any more.'))
 
         entities = {
             'entity': entities_per_id[subject_id],

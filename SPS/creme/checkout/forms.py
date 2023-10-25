@@ -7,7 +7,7 @@ from ..creme_core.core.compat import get_user_model
 from ..creme_core.core.loading import get_class, get_model
 from ..creme_core.forms.mixins import PhoneNumberMixin
 
-User = get_user_model()
+CremeUser = get_user_model()
 AbstractAddressForm = get_class('address.forms', 'AbstractAddressForm')
 Country = get_model('address', 'Country')
 
@@ -69,7 +69,7 @@ class GatewayForm(AuthenticationForm):
                 del self.errors['password']
             if 'username' in self.cleaned_data:
                 email = normalise_email(self.cleaned_data['username'])
-                if User._default_manager.filter(email__iexact=email).exists():
+                if CremeUser._default_manager.filter(email__iexact=email).exists():
                     msg = _("A user with that email address already exists")
                     self._errors["username"] = self.error_class([msg])
             return self.cleaned_data

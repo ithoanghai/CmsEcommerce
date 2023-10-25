@@ -5,9 +5,9 @@ from django.urls import reverse
 from django_webtest import WebTest
 from purl import URL
 
-from ...core.compat import get_user_model
+from ..core.compat import get_user_model
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 def add_permissions(user, permissions):

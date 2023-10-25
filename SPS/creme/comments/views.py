@@ -11,7 +11,7 @@ from .models import Comment
 from .signals import comment_updated, commented
 
 try:
-    from ..creme_core.accounts.mixins import LoginRequiredMixin
+    from ..creme_core.auth.mixins import LoginRequiredMixin
 except ImportError:
     from django.contrib.auth.mixins import LoginRequiredMixin
 

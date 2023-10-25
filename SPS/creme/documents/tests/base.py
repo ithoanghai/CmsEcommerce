@@ -4,9 +4,9 @@ from unittest import skipIf
 from django.conf import settings
 from django.urls import reverse
 
-from ... import documents
-from ...creme_core.tests.base import CremeTestCase
-from ...documents import constants
+from creme import documents
+from creme.creme_core.tests.base import CremeTestCase
+from creme.documents import constants
 
 skip_document_tests = documents.document_model_is_custom()
 skip_folder_tests   = documents.folder_model_is_custom()
@@ -27,7 +27,7 @@ class _DocumentsTestCase(CremeTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.ADD_DOC_URL = reverse('documents:create_document')
+        cls.ADD_DOC_URL = reverse('documents__create_document')
 
     # TODO: user mandatory?
     def _create_doc(self, title,

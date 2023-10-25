@@ -18,8 +18,8 @@
 
 import logging
 
-from ...creme_core.management.commands.creme_populate import BasePopulator
-from ...creme_core.models import SettingValue
+from ..creme_core.management.commands.creme_populate import BasePopulator
+from ..creme_core.models import SettingValue
 
 from . import setting_keys
 

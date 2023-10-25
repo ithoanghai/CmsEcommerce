@@ -18,9 +18,8 @@
 
 from django.conf import settings
 
-from ..creme_core import get_concrete_model
+from creme.creme_core import get_concrete_model
 
-default_app_config = "creme.documents.apps.DocumentsConfig"
 
 def document_model_is_custom():
     return (
@@ -44,5 +43,3 @@ def get_document_model():
 def get_folder_model():
     """Returns the Folder model that is active in this project."""
     return get_concrete_model('DOCUMENTS_FOLDER_MODEL')
-
-

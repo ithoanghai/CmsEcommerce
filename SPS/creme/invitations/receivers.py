@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from ..creme_core.models.auth import EmailConfirmation, SignupCodeResult
-from ..creme_core.accounts.signals import email_confirmed, signup_code_used, user_signed_up
+from ..creme_core.auth.signals import email_confirmed, signup_code_used, user_signed_up
 
 from .conf import settings
 from .models import InvitationStat, JoinInvitation

@@ -20,8 +20,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from creme.commercial.models import MarketSegment
-from creme.creme_core.models import CremeEntity
+from ...commercial.models import MarketSegment
+from ...creme_core.models import CremeEntity
 
 
 class AbstractPollCampaign(CremeEntity):

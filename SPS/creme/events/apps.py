@@ -1,12 +1,3 @@
-from django.apps import AppConfig as BaseAppConfig
-from django.conf import settings
-from django.utils.translation import gettext_lazy as _
-
-from imagekit import register
-from .utils import load_path_attr
-
-from ..creme_core.apps import CremeAppConfig
-
 ################################################################################
 #    Creme is a free/open-source Customer Relationship Management software
 #    Copyright (C) 2015-2022  Hybird
@@ -25,30 +16,16 @@ from ..creme_core.apps import CremeAppConfig
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
+from django.utils.translation import gettext_lazy as _
+
+from ..creme_core.apps import CremeAppConfig
+
+
 class EventsConfig(CremeAppConfig):
     default = True
     name = 'creme.events'
     verbose_name = _('Events')
     dependencies = ['creme.persons', 'creme.opportunities']
-    label = "events"
-
-    def ready(self):
-        image_path = getattr(
-            settings,
-            "EVENTS_IMAGE_THUMBNAIL_SPEC",
-            "creme.events.specs.ImageThumbnail"
-        )
-        secondary_image_path = getattr(
-            settings,
-            "EVENTS_SECONDARY_IMAGE_THUMBNAIL_SPEC",
-            "creme.events.specs.SecondaryImageThumbnail"
-        )
-
-        image_spec_class = load_path_attr(image_path)
-        secondary_image_spec_class = load_path_attr(secondary_image_path)
-
-        register.generator("events:image:thumb", image_spec_class)
-        register.generator("events:secondary_image:thumb", secondary_image_spec_class)
 
     def all_apps_ready(self):
         from . import get_event_model

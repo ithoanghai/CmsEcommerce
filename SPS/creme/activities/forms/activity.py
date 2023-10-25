@@ -29,13 +29,14 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.timezone import localtime, make_aware
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
-from .. import forms as core_forms
+from ...creme_core import forms as core_forms
 from ...creme_core.gui.custom_form import CustomFormExtraSubCell
 from ...creme_core.models import Relation, RelationType
 from ...creme_core.utils.chunktools import iter_as_chunk
-from ...creme_core import forms as core_forms
+# from ...creme_core.utils.dates import make_aware_dt
 from ...persons import get_contact_model
 
 from .. import constants, get_activity_model
@@ -61,16 +62,11 @@ class ActivitySubTypeSubCell(CustomFormExtraSubCell):
     def formfield(self, instance, user, **kwargs):
         type_id = instance.type_id
 
-        # if type_id and (instance.pk is None or type_id == constants.ACTIVITYTYPE_INDISPO):
-        if type_id and (
-            instance.pk is None
-            or str(instance.type.uuid) == constants.UUID_TYPE_UNAVAILABILITY
-        ):
+        if type_id and (instance.pk is None or type_id == constants.ACTIVITYTYPE_INDISPO):
             # TODO: improve help_text of end (we know the type default duration)
             limit_choices_to = Q(type_id=type_id)
         else:
-            # limit_choices_to = ~Q(type_id=constants.ACTIVITYTYPE_INDISPO)
-            limit_choices_to = ~Q(type__uuid=constants.UUID_TYPE_UNAVAILABILITY)
+            limit_choices_to = ~Q(type_id=constants.ACTIVITYTYPE_INDISPO)
 
         return ActivitySubTypeField(
             model=type(instance),
@@ -86,6 +82,7 @@ class ActivitySubTypeSubCell(CustomFormExtraSubCell):
 class UnavailabilityTypeSubCell(CustomFormExtraSubCell):
     sub_type_id = 'activities_unavailability_subtype'
     verbose_name = _('Unavailability type')
+    # is_required = False
     is_required = True
 
     def formfield(self, instance, user, **kwargs):
@@ -96,8 +93,7 @@ class UnavailabilityTypeSubCell(CustomFormExtraSubCell):
             user=user,
             label=self.verbose_name,
             required=True,
-            # limit_choices_to=Q(type_id=constants.ACTIVITYTYPE_INDISPO),
-            limit_choices_to=Q(type__uuid=constants.UUID_TYPE_UNAVAILABILITY),
+            limit_choices_to=Q(type_id=constants.ACTIVITYTYPE_INDISPO),
         )
 
 
@@ -455,6 +451,8 @@ class BaseCustomForm(core_forms.CremeEntityForm):
         get_key = self.subcell_key
         start = end = None
 
+        # start_date, start_time = get_data(get_key(StartSubCell)) or (None, None)
+        # end_date,   end_time   = get_data(get_key(EndSubCell))   or (None, None)
         start_date_opt_time = get_data(get_key(StartSubCell))
         if start_date_opt_time:
             start_date = start_date_opt_time.date
@@ -493,11 +491,14 @@ class BaseCustomForm(core_forms.CremeEntityForm):
                     code='floating_cannot_busy',
                 )
 
+            # start = make_aware_dt(datetime.combine(start_date, start_time or time()))
             start = make_aware(datetime.combine(start_date, start_time or time()))
 
             if end_date:
+                # end = make_aware_dt(datetime.combine(end_date, end_time or time()))
                 end = make_aware(datetime.combine(end_date, end_time or time()))
             elif end_time is not None:
+                # end = make_aware_dt(datetime.combine(start_date, end_time))
                 end = make_aware(datetime.combine(start_date, end_time))
             else:
                 tdelta = activity_type.as_timedelta()
@@ -515,7 +516,9 @@ class BaseCustomForm(core_forms.CremeEntityForm):
                 end = start + tdelta
 
             if is_all_day or floating_type == constants.FLOATING_TIME:
+                # start = make_aware_dt(datetime.combine(start, time(hour=0, minute=0)))
                 start = make_aware(datetime.combine(start, time(hour=0, minute=0)))
+                # end   = make_aware_dt(datetime.combine(end,   time(hour=23, minute=59)))
                 end   = make_aware(datetime.combine(end,   time(hour=23, minute=59)))
 
             if start > end:
@@ -546,11 +549,14 @@ class BaseCreationCustomForm(BaseCustomForm):
         'no_participant': _('No participant'),
     }
 
+    # def __init__(self, activity_type_id=None, *args, **kwargs):
     def __init__(self, sub_type: ActivitySubType | None = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # All Contacts who participate: me, other users, other contacts
         self.participants = set()
 
+        # if activity_type_id:
+        #     self.instance.type_id = activity_type_id
         if sub_type:
             instance = self.instance
             instance.type_id = sub_type.type_id
@@ -564,6 +570,7 @@ class BaseCreationCustomForm(BaseCustomForm):
         participants.update(cdata.get(get_key(UsersSubCell), ()))
 
         my_participation = cdata.get(get_key(MyParticipationSubCell))
+        # if my_participation and my_participation[0]:
         if my_participation and my_participation.is_set:
             participants.add(self.user.linked_contact)
 
@@ -610,6 +617,11 @@ class BaseCreationCustomForm(BaseCustomForm):
             ).values()
         ]
 
+        # i_participate, my_calendar = cdata.get(
+        #     get_key(MyParticipationSubCell), (False, None)
+        # )
+        # if i_participate:
+        #     calendars.append(my_calendar)
         my_participation = cdata.get(get_key(MyParticipationSubCell))
         if my_participation and my_participation.is_set:
             calendars.append(my_participation.data)

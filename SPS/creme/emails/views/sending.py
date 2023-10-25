@@ -106,7 +106,7 @@ class SendingDetail(generic.RelatedToEntityDetail):
     template_name = 'emails/view_sending.html'
     pk_url_kwarg = 'sending_id'
     permissions = 'emails'
-    bricks_reload_url_name = 'emails:reload_sending_bricks'
+    bricks_reload_url_name = 'emails__reload_sending_bricks'
 
 
 # TODO: factorise with get_lightweight_mail_body()

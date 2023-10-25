@@ -4,7 +4,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
 
-from ..creme_core.models.auth import User
+from ..creme_core.models import CremeUser
 from .models import Invoice, InvoiceHistory
 
 app = Celery("redis://")
@@ -16,7 +16,7 @@ def send_email(invoice_id, recipients, domain="demo.django-crm.io", protocol="ht
     created_by = invoice.created_by
     for user in recipients:
         recipients_list = []
-        user = User.objects.filter(id=user, is_active=True).first()
+        user = CremeUser.objects.filter(id=user, is_active=True).first()
         if user:
             recipients_list.append(user.email)
             subject = "Shared an invoice with you."
@@ -112,7 +112,7 @@ def create_invoice_history(original_invoice_id, updated_by_user_id, changed_fiel
     """original_invoice_id, updated_by_user_id, changed_fields"""
     original_invoice = Invoice.objects.filter(id=original_invoice_id).first()
     created_by = original_invoice.created_by
-    updated_by_user = User.objects.get(id=updated_by_user_id)
+    updated_by_user = CremeUser.objects.get(id=updated_by_user_id)
     changed_data = [(" ".join(field.split("_")).title()) for field in changed_fields]
     if len(changed_data) > 1:
         changed_data = (

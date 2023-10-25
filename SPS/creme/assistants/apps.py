@@ -64,7 +64,7 @@ class AssistantsConfig(CremeAppConfig):
         )
 
     def register_function_fields(self, function_field_registry):
-        from ..creme_core.models.entity import CremeEntity
+        from ..creme_core.models import CremeEntity
 
         from . import function_fields as ffields
 

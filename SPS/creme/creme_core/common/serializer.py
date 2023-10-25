@@ -7,11 +7,10 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
-from .models import (APISettings, Attachments,)
+from .models import (CremeUser, APISettings, Attachments,)
 from ...comments.models import Comment
 from ...documents.models import (Document)
-from ..models.auth import User
-from ...userprofile.models import (Address, Org, Profile)
+from ...persons.models import (Address, Organisation, Profile, Teams, Contact)
 
 
 class LoginSealizer(serializers.Serializer):
@@ -42,7 +41,7 @@ class LoginSealizer(serializers.Serializer):
 
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Org
+        model = Organisation
         fields = ("id", "name")
 
 
@@ -88,7 +87,7 @@ class RegisterOrganizationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=100)
 
     class Meta:
-        model = User
+        model = CremeUser
         fields = ("email", "first_name", "password")
         extra_kwargs = {
             "email": {"required": True},
@@ -106,7 +105,7 @@ class RegisterOrganizationSerializer(serializers.ModelSerializer):
 
     def validate_email(self, email):
 
-        if User.objects.filter(email__iexact=email).exists():
+        if CremeUser.objects.filter(email__iexact=email).exists():
             raise serializers.ValidationError("This email is already registered.")
         return email
 
@@ -122,7 +121,7 @@ class OrgProfileCreateSerializer(serializers.ModelSerializer):
     country = serializers.CharField(max_length=255)
 
     class Meta:
-        model = Org
+        model = Organisation
         fields = "__all__"
         extra_kwargs = {
             "name": {"required": True},
@@ -136,7 +135,7 @@ class OrgProfileCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "organization name should not contain any special characters"
             )
-        if Org.objects.filter(name=name).exists():
+        if Organisation.objects.filter(name=name).exists():
             raise serializers.ValidationError(
                 "Organization already exists with this name"
             )
@@ -190,7 +189,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField()
 
     class Meta:
-        model = User
+        model = CremeUser
         fields = (
             "first_name",
             "last_name",
@@ -250,7 +249,7 @@ class UserSerializer(serializers.ModelSerializer):
         return None
 
     class Meta:
-        model = User
+        model = CremeUser
         fields = (
             "id",
             "first_name",
@@ -290,7 +289,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         email = data.get("email")
-        user = User.objects.filter(email__iexact=email).last()
+        user = CremeUser.objects.filter(email__iexact=email).last()
         if not user:
             raise serializers.ValidationError(
                 "You don't have an account. Please create one."
@@ -308,8 +307,8 @@ class CheckTokenSerializer(serializers.Serializer):
     def get_user(self, uidb64):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
-            user = User._default_manager.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = CremeUser._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CremeUser.DoesNotExist):
             user = None
         return user
 
@@ -395,6 +394,160 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = ["title", "document_file", "status", "org"]
+
+
+class TeamsSerializer(serializers.ModelSerializer):
+    users = ProfileSerializer(read_only=True, many=True)
+    created_by = ProfileSerializer()
+
+    class Meta:
+        model = Teams
+        fields = (
+            "id",
+            "name",
+            "description",
+            "users",
+            "created_on",
+            "created_by",
+            "created_on_arrow",
+        )
+
+
+class TeamCreateSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        request_obj = kwargs.pop("request_obj", None)
+        super().__init__(*args, **kwargs)
+        self.org = request_obj.org
+
+        self.fields["name"].required = True
+        self.fields["description"].required = False
+
+    def validate_name(self, name):
+        if self.instance:
+            if (
+                    Teams.objects.filter(name__iexact=name, org=self.org)
+                            .exclude(id=self.instance.id)
+                            .exists()
+            ):
+                raise serializers.ValidationError("Team already exists with this name")
+        else:
+            if Teams.objects.filter(name__iexact=name).exists():
+                raise serializers.ValidationError("Team already exists with this name")
+        return name
+
+    class Meta:
+        model = Teams
+        fields = (
+            "name",
+            "description",
+            "created_on",
+            "created_by",
+            "created_on_arrow",
+            "org",
+        )
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    created_by = ProfileSerializer()
+    teams = TeamsSerializer(read_only=True, many=True)
+    assigned_to = ProfileSerializer(read_only=True, many=True)
+    address = BillingAddressSerializer(read_only=True)
+    get_team_users = ProfileSerializer(read_only=True, many=True)
+    get_team_and_assigned_users = ProfileSerializer(read_only=True, many=True)
+    get_assigned_users_not_in_teams = ProfileSerializer(read_only=True, many=True)
+    contact_attachment = AttachmentsSerializer(read_only=True, many=True)
+    date_of_birth = serializers.DateField()
+    org = OrganizationSerializer()
+    country = serializers.SerializerMethodField()
+
+    def get_country(self, obj):
+        return obj.get_country_display()
+
+    class Meta:
+        model = Contact
+        fields = (
+            "id",
+            "salutation",
+            "first_name",
+            "last_name",
+            "date_of_birth",
+            "organization",
+            "title",
+            "primary_email",
+            "secondary_email",
+            "mobile_number",
+            "secondary_number",
+            "department",
+            "country",
+            "language",
+            "do_not_call",
+            "address",
+            "description",
+            "linked_in_url",
+            "facebook_url",
+            "twitter_username",
+            "contact_attachment",
+            "assigned_to",
+            "created_by",
+            "created_on",
+            "is_active",
+            "teams",
+            "created_on_arrow",
+            "get_team_users",
+            "get_team_and_assigned_users",
+            "get_assigned_users_not_in_teams",
+            "org",
+        )
+
+
+class CreateContactSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        request_obj = kwargs.pop("request_obj", None)
+        super().__init__(*args, **kwargs)
+        self.org = request_obj.org
+
+    def validate_first_name(self, first_name):
+        if self.instance:
+            if (
+                    Contact.objects.filter(first_name__iexact=first_name, org=self.org)
+                            .exclude(id=self.instance.id)
+                            .exists()
+            ):
+                raise serializers.ValidationError(
+                    "Contact already exists with this name"
+                )
+
+        else:
+            if Contact.objects.filter(
+                    first_name__iexact=first_name, org=self.org
+            ).exists():
+                raise serializers.ValidationError(
+                    "Contact already exists with this name"
+                )
+        return first_name
+
+    class Meta:
+        model = Contact
+        fields = (
+            "salutation",
+            "first_name",
+            "last_name",
+            "organization",
+            "title",
+            "primary_email",
+            "secondary_email",
+            "mobile_number",
+            "secondary_number",
+            "department",
+            "country",
+            "language",
+            "do_not_call",
+            "address",
+            "description",
+            "linked_in_url",
+            "facebook_url",
+            "twitter_username",
+        )
 
 
 def find_urls(string):

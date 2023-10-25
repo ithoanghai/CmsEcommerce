@@ -7,7 +7,7 @@
 
 # class EventObjects(object):
 #     def setUp(self):
-#         self.user = User.objects.create_superuser(
+#         self.user = CremeUser.objects.create_superuser(
 #             'user@micropyramid.com', 'username', 'password')
 
 #         user_login = self.client.login(username='user@micropyramid.com', password='password')

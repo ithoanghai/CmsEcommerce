@@ -1,7 +1,7 @@
 from django.urls import include, re_path
 
-from creme import polls
-from creme.creme_core.conf.urls import Swappable, swap_manager
+from .. import polls
+from ..creme_core.conf.urls import Swappable, swap_manager
 
 from .views import campaign, poll_form, poll_reply
 

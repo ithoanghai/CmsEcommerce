@@ -2,9 +2,9 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 
 from .models import InvitationStat, JoinInvitation
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models import Account, CremeUser
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 class InvitationStatAdmin(admin.ModelAdmin):
@@ -25,7 +25,7 @@ class InvitationStatAdmin(admin.ModelAdmin):
 class JoinInvitationAdmin(admin.ModelAdmin):
     list_display = ["from_user", "to_user", "sent", "status", "to_user_email"]
     list_filter = ["sent", "status"]
-    search_fields = [f"from_user__{User.USERNAME_FIELD}"]
+    search_fields = [f"from_user__{CremeUser.USERNAME_FIELD}"]
 
 
 @admin.register(InvitationStat)

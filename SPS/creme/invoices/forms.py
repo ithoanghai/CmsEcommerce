@@ -1,12 +1,11 @@
 from django import forms
 from django.db.models import Q
 
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models import Account, CremeUser
 from ..creme_core.common.models import Attachments
-from ..userprofile.models import (Address)
+from ..persons.models import (Address, Teams)
 from ..comments.models import Comment
 from .models import Invoice
-from ..teams.models import Teams
 
 
 class InvoiceForm(forms.ModelForm):
@@ -23,7 +22,7 @@ class InvoiceForm(forms.ModelForm):
             field.required = False
 
         if request_user.role == "ADMIN" or request_user.is_superuser:
-            self.fields["assigned_to"].queryset = User.objects.filter(
+            self.fields["assigned_to"].queryset = CremeUser.objects.filter(
                 is_active=True, company=request_obj.company
             )
             self.fields["teams"].choices = [
@@ -36,11 +35,11 @@ class InvoiceForm(forms.ModelForm):
                 status="open", company=request_obj.company
             )
         # elif request_user.google.all():
-        #     self.fields['assigned_to'].queryset = User.objects.none()
+        #     self.fields['assigned_to'].queryset = CremeUser.objects.none()
         #     self.fields['accounts'].queryset = Account.objects.filter(status='open').filter(
         #         Q(created_by=request_user) | Q(assigned_to=request_user))
         elif request_user.role == "USER":
-            self.fields["assigned_to"].queryset = User.objects.filter(
+            self.fields["assigned_to"].queryset = CremeUser.objects.filter(
                 role="ADMIN", company=request_obj.company
             )
             self.fields["accounts"].queryset = Account.objects.filter(

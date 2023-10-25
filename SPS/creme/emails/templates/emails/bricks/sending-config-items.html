@@ -11,7 +11,7 @@
 {% block brick_header_actions %}
     {% translate 'New server configuration' context 'emails' as new_label %}
     {% has_perm_to admin 'emails' as admin_perm %}
-    {% brick_header_action id='add' url='emails:create_sending_config_item'|url label=new_label enabled=admin_perm %}
+    {% brick_header_action id='add' url='emails__create_sending_config_item'|url label=new_label enabled=admin_perm %}
 {% endblock %}
 
 {% block brick_table_columns %}
@@ -28,7 +28,7 @@
 
 {% block brick_table_rows %}
 {% has_perm_to admin 'emails' as admin_perm %}
-{% url 'emails:delete_campaign_config_item' as delete_url %}
+{% url 'emails__delete_campaign_config_item' as delete_url %}
 {% translate 'Edit this configuration' context 'emails' as edit_label %}{% translate 'Delete this configuration' context 'emails' as del_label %}
   {% for item in page.object_list %}
     <tr>
@@ -39,7 +39,7 @@
         <td>{% print_field object=item field='use_tls' %}</td>
         <td>{{item.default_sender|default:'—'}}</td>
         <td {% brick_table_data_status action %}>
-            {% brick_table_action id='edit' url='emails:set_sending_config_item_password'|url:item.id label=_('Change the password') icon='security' enabled=admin_perm %}
+            {% brick_table_action id='edit' url='emails__set_sending_config_item_password'|url:item.id label=_('Change the password') icon='security' enabled=admin_perm %}
         </td>
         <td {% brick_table_data_status action %}>
             {% brick_table_action id='edit' url=item.get_edit_absolute_url label=edit_label enabled=admin_perm %}

@@ -22,10 +22,10 @@ from django.conf import settings
 from django.forms import ImageField
 from django.utils.translation import gettext as _
 
-from ...creme_core.backends import import_backend_registry
-from ...creme_core.forms.base import CremeEntityQuickForm
-from ...creme_core.models.utils import assign_2_charfield
-from ...creme_core.views.file_handling import handle_uploaded_file
+from creme.creme_core.backends import import_backend_registry
+from creme.creme_core.forms.base import CremeEntityQuickForm
+from creme.creme_core.models.utils import assign_2_charfield
+from creme.creme_core.views.file_handling import handle_uploaded_file
 
 from .. import constants, get_document_model, get_folder_model
 from ..utils import get_csv_folder_or_create

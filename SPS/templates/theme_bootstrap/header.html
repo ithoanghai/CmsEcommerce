@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'profile:edit-profile' %}">
+                    <a href="{% url 'edit-profile' %}">
                         <svg class="olymp-stats-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="My profile">
                             <use xlink:href="#olymp-stats-icon"></use>
@@ -69,7 +69,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'profile:edit-profile' %}">
+                    <a href="{% url 'edit-profile' %}">
                         <svg class="olymp-stats-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="My profile">
                             <use xlink:href="#olymp-stats-icon"></use>
@@ -221,7 +221,7 @@
             </div>
         </form>
         <a href="{% url 'friends:find-friends' %}" class="link-find-friend">{% trans "Find Friends" %}</a>
-        <a href="{% url 'communications:all-messages' %}" class="link-find-friend">{% trans "Messenger" %}</a>
+        <a href="{% url 'communications__all-messages' %}" class="link-find-friend">{% trans "Messenger" %}</a>
 
         <div class="control-block">
 

@@ -42,9 +42,9 @@ class _ComApproachesEmailsSendType(JobType):
     list_target_orga = [(REL_SUB_CUSTOMER_SUPPLIER, 30)]
 
     def _execute(self, job):
-        from creme import persons
-        from creme.opportunities import get_opportunity_model
-        from creme.opportunities.constants import REL_SUB_TARGETS
+        from .. import persons
+        from ..opportunities import get_opportunity_model
+        from ..opportunities.constants import REL_SUB_TARGETS
 
         from .models import CommercialApproach
 

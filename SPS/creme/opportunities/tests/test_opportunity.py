@@ -10,11 +10,10 @@ from django.utils.translation import gettext as _
 
 from ... import products
 from ...activities.constants import REL_SUB_ACTIVITY_SUBJECT
-from ...accounts.entity_credentials import EntityCredentials
 from ...creme_core.constants import DEFAULT_CURRENCY_PK
 from ...creme_core.core.function_field import function_field_registry
 from ...creme_core.gui.view_tag import ViewTag
-from ...creme_core.models.entity import (
+from ...creme_core.models import (
     CremeEntity,
     Currency,
     FakeEmailCampaign,
@@ -23,6 +22,7 @@ from ...creme_core.models.entity import (
     RelationType,
     SetCredentials,
     SettingValue,
+    EntityCredentials,
 )
 from ...creme_core.tests.base import skipIfNotInstalled
 from ...opportunities import constants, setting_keys

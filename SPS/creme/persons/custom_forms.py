@@ -6,8 +6,8 @@ from ..creme_core.gui.custom_form import (
     CustomFormDefault,
     CustomFormDescriptor,
 )
-from ..persons.forms.address import AddressesGroup
-from ..persons.forms.contact import BaseContactCustomForm
+from .forms.address import AddressesGroup
+from .forms.contact import BaseContactCustomForm
 
 Contact = persons.get_contact_model()
 Organisation = persons.get_organisation_model()

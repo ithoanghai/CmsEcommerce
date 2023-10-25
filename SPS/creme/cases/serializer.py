@@ -1,10 +1,8 @@
 from rest_framework import serializers
 
-from ..creme_core.accounts.serializer import AccountSerializer
+from ..creme_core.auth.serializer import AccountSerializer
 from .models import Case
-from ..creme_core.common.serializer import OrganizationSerializer, ProfileSerializer
-from ..contacts.serializer import ContactSerializer
-from ..teams.serializer import TeamsSerializer
+from ..creme_core.common.serializer import OrganizationSerializer, ProfileSerializer, ContactSerializer, TeamsSerializer
 
 
 class CaseSerializer(serializers.ModelSerializer):

@@ -18,7 +18,7 @@
 
 from itertools import chain
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from .. import persons
 from ..creme_config.bricks import GenericModelBrick
@@ -49,6 +49,7 @@ class ActivityBarHatBrick(SimpleBrick):
 
 
 class ParticipantsBrick(QuerysetBrick):
+    # id_ = QuerysetBrick.generate_id('activities', 'participants')
     id = QuerysetBrick.generate_id('activities', 'participants')
     verbose_name = _('Participants')
 
@@ -93,6 +94,7 @@ class ParticipantsBrick(QuerysetBrick):
 
 
 class SubjectsBrick(QuerysetBrick):
+    # id_ = QuerysetBrick.generate_id('activities', 'subjects')
     id = QuerysetBrick.generate_id('activities', 'subjects')
     verbose_name = _('Subjects')
 
@@ -176,6 +178,7 @@ class _RelatedActivitiesBrick(QuerysetBrick):
 
 
 class FutureActivitiesBrick(_RelatedActivitiesBrick):
+    # id_ = QuerysetBrick.generate_id('activities', 'future_activities')
     id = QuerysetBrick.generate_id('activities', 'future_activities')
     verbose_name = _('Future activities')
     description = _(
@@ -198,6 +201,7 @@ class FutureActivitiesBrick(_RelatedActivitiesBrick):
 
 
 class PastActivitiesBrick(_RelatedActivitiesBrick):
+    # id_ = QuerysetBrick.generate_id('activities', 'past_activities')
     id = QuerysetBrick.generate_id('activities', 'past_activities')
     verbose_name = _('Past activities')
     description = _(
@@ -219,6 +223,7 @@ class PastActivitiesBrick(_RelatedActivitiesBrick):
 
 
 class UserCalendarsBrick(QuerysetBrick):
+    # id_ = QuerysetBrick.generate_id('activities', 'user_calendars')
     id = QuerysetBrick.generate_id('activities', 'user_calendars')
     verbose_name = 'My calendars'
     dependencies = (Calendar, )
@@ -238,6 +243,7 @@ class UserCalendarsBrick(QuerysetBrick):
 
 
 class RelatedCalendarBrick(QuerysetBrick):
+    # id_ = QuerysetBrick.generate_id('activities', 'related_calendar')
     id = QuerysetBrick.generate_id('activities', 'related_calendar')
     verbose_name = _('On my calendars')
     dependencies = (Calendar, )

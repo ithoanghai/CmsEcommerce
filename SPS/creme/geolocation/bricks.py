@@ -21,10 +21,11 @@ from collections import defaultdict
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
-from creme import persons
-from creme.creme_core.gui.bricks import Brick, BrickDependencies
-from creme.creme_core.models import EntityFilter
+from .. import persons
+from ..creme_core.gui.bricks import Brick, BrickDependencies
+from ..creme_core.models import EntityFilter
 
 from .models import GeoAddress
 from .utils import (

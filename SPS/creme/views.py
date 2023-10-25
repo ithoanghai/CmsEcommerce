@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 
 
-from .creme_core.accounts.decorators import login_required
+from .creme_core.auth.decorators import login_required
 
 
 @login_required

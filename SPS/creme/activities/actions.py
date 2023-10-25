@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from .. import activities
 from ..creme_core.gui.actions import BulkEntityAction
@@ -31,4 +31,4 @@ class BulkExportICalAction(BulkEntityAction):
     model = Activity
     label = _('Download in iCalendar format')
     icon = 'calendar_ical'
-    url_name = 'activities:dl_ical'
+    url_name = 'activities__dl_ical'

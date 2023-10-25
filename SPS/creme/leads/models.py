@@ -2,19 +2,16 @@ import arrow
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
-from django.utils import timezone
 from ..creme_core.models.auth import Tags
-from ..userprofile.models import Org, Profile
 from ..creme_core.common.utils import (COUNTRIES, INDCHOICES, LEAD_SOURCE, LEAD_STATUS,
                           return_complete_address)
-from ..contacts.models import Contact
-from ..teams.models import Teams
 
 
 class Company(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
-    org = models.ForeignKey(Org, on_delete=models.SET_NULL, null=True, blank=True)
+    org = models.ForeignKey(settings.PERSONS_ORGANISATION_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class Lead(models.Model):
@@ -41,23 +38,19 @@ class Lead(models.Model):
     country = models.CharField(max_length=3, choices=COUNTRIES, blank=True, null=True)
     website = models.CharField(_("Website"), max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    assigned_to = models.ManyToManyField(Profile, related_name="lead_assigned_users")
+    assigned_to = models.ManyToManyField(settings.PERSONS_PROFILE_MODEL, related_name="lead_assigned_users")
     account_name = models.CharField(max_length=255, null=True, blank=True)
-    opportunity_amount = models.DecimalField(
-        _("Opportunity Amount"), decimal_places=2, max_digits=12, blank=True, null=True
-    )
-    created_by = models.ForeignKey(
-        Profile, related_name="lead_created_by", on_delete=models.SET_NULL, null=True
-    )
+    opportunity_amount = models.DecimalField(_("Opportunity Amount"), decimal_places=2, max_digits=12, blank=True, null=True)
+    created_by = models.ForeignKey(settings.PERSONS_PROFILE_MODEL, related_name="lead_created_by", on_delete=models.SET_NULL, null=True )
     created_on = models.DateTimeField(_("Created on"), auto_now=True)
     is_active = models.BooleanField(default=False)
     enquiry_type = models.CharField(max_length=255, blank=True, null=True)
     tags = models.ManyToManyField(Tags, blank=True)
-    contacts = models.ManyToManyField(Contact, related_name="lead_contacts")
+    contacts = models.ManyToManyField(settings.PERSONS_CONTACT_MODEL, related_name="lead_contacts")
     created_from_site = models.BooleanField(default=False)
-    teams = models.ManyToManyField(Teams, related_name="lead_teams")
+    teams = models.ManyToManyField(settings.PERSONS_TEAM_MODEL, related_name="lead_teams")
     org = models.ForeignKey(
-        Org, on_delete=models.SET_NULL, null=True, blank=True, related_name="lead_org"
+        settings.PERSONS_ORGANISATION_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="lead_org"
     )
     company = models.ForeignKey(
         Company,
@@ -96,21 +89,21 @@ class Lead(models.Model):
     @property
     def get_team_users(self):
         team_user_ids = list(self.teams.values_list("users__id", flat=True))
-        return Profile.objects.filter(id__in=team_user_ids)
+        return settings.PERSONS_PROFILE_MODEL.objects.filter(id__in=team_user_ids)
 
     @property
     def get_team_and_assigned_users(self):
         team_user_ids = list(self.teams.values_list("users__id", flat=True))
         assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
         user_ids = team_user_ids + assigned_user_ids
-        return Profile.objects.filter(id__in=user_ids)
+        return settings.PERSONS_PROFILE_MODEL.objects.filter(id__in=user_ids)
 
     @property
     def get_assigned_users_not_in_teams(self):
         team_user_ids = list(self.teams.values_list("users__id", flat=True))
         assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
         user_ids = set(assigned_user_ids) - set(team_user_ids)
-        return Profile.objects.filter(id__in=list(user_ids))
+        return settings.PERSONS_PROFILE_MODEL.objects.filter(id__in=list(user_ids))
 
     # def save(self, *args, **kwargs):
     #     super(Lead, self).save(*args, **kwargs)

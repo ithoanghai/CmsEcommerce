@@ -22,11 +22,11 @@ from functools import partial
 from django.db import models
 from django.db.transaction import atomic
 from django.utils.timezone import now
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from ...creme_core.models import base as core_models
-from ...creme_core.models import entity as core_entitys
+from ...creme_core import models as core_models
 from ...creme_core.models import fields as core_fields
 
 logger = logging.getLogger(__name__)
@@ -68,7 +68,7 @@ class UserMessage(core_models.CremeModel):
         null=True, related_name='+', editable=False,
     )
     entity = models.ForeignKey(
-        core_entitys.CremeEntity,
+        core_models.CremeEntity,
         null=True,  related_name='assistants_messages',
         editable=False, on_delete=models.CASCADE,
     ).set_tags(viewable=False)
@@ -129,8 +129,8 @@ class UserMessage(core_models.CremeModel):
         if not user_messages:
             return
 
-        subject_format =_('User message from {software}: {title}')
-        body_format    =_('{user} sent you the following message:\n{body}')
+        subject_format = gettext('User message from {software}: {title}')
+        body_format    = gettext('{user} sent you the following message:\n{body}')
         EMAIL_SENDER   = settings.EMAIL_SENDER
 
         messages = [
@@ -150,8 +150,8 @@ class UserMessage(core_models.CremeModel):
             core_models.JobResult.objects.create(
                 job=job,
                 messages=[
-                   _('An error occurred while sending emails'),
-                   _('Original error: {}').format(e),
+                    gettext('An error occurred while sending emails'),
+                    gettext('Original error: {}').format(e),
                 ],
             )
 

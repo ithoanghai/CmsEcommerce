@@ -19,12 +19,12 @@ UserSearchForm, ProductAlertSearchForm, ProductAlertUpdateForm = get_classes('cr
 PasswordResetForm = get_class('customer.forms', 'PasswordResetForm')
 UserTable = get_class('creme_core.dashboard.users.tables', 'UserTable')
 ProductAlert = get_model('customer', 'ProductAlert')
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 class IndexView(BulkEditMixin, FormMixin, SingleTableView):
     template_name = 'oscar/dashboard/users/index.html'
-    model = User
+    model = CremeUser
     actions = ('make_active', 'make_inactive', )
     form_class = UserSearchForm
     table_class = UserTable
@@ -120,14 +120,14 @@ class IndexView(BulkEditMixin, FormMixin, SingleTableView):
 
 class UserDetailView(DetailView):
     template_name = 'oscar/dashboard/users/detail.html'
-    model = User
+    model = CremeUser
     context_object_name = 'customer'
 
 
 class PasswordResetView(SingleObjectMixin, FormView):
     form_class = PasswordResetForm
     http_method_names = ['post']
-    model = User
+    model = CremeUser
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()

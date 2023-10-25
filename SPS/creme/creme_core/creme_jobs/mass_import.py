@@ -23,7 +23,7 @@ from django.http import QueryDict
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
-from creme.documents import get_document_model
+from ...documents import get_document_model
 
 from ..forms.mass_import import form_factory, get_header
 from ..models import MassImportJobResult

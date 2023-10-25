@@ -18,7 +18,7 @@
 
 from django import shortcuts
 from django.db.transaction import atomic
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from ...creme_core.auth.decorators import login_required

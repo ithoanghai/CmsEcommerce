@@ -22,6 +22,7 @@ from django.urls import reverse
 from django.utils.functional import lazy
 from django.utils.translation import gettext as _
 
+from ...creme_core.common.utils import COUNTRIES
 from ...creme_core.core.exceptions import SpecificProtectedError
 from ...creme_core.global_info import cached_per_request
 from ...creme_core.models import CREME_REPLACE_NULL, CremeEntity
@@ -41,6 +42,9 @@ class OrganisationManager(CremeEntityManager):
 
 class AbstractOrganisation(CremeEntity, base.PersonWithAddressesMixin):
     name = models.CharField(_('Name'), max_length=200)
+    address = models.TextField(blank=True, null=True)
+    user_limit = models.IntegerField(default=5)
+    country = models.CharField(max_length=3, choices=COUNTRIES, blank=True, null=True)
 
     is_managed = models.BooleanField(
         lazy(
@@ -108,7 +112,6 @@ class AbstractOrganisation(CremeEntity, base.PersonWithAddressesMixin):
         ordering = ('name',)
         verbose_name = _('Organisation')
         verbose_name_plural = _('Organisations')
-        # index_together = ('name', 'cremeentity_ptr')
         indexes = [
             models.Index(
                 fields=['name', 'cremeentity_ptr'],

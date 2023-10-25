@@ -1,9 +1,9 @@
 from django.http import Http404
 from django.shortcuts import render
 
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models import Account, CremeUser
 
-from ..creme_core.accounts.decorators import login_required
+from ..creme_core.auth.decorators import login_required
 
 
 @login_required

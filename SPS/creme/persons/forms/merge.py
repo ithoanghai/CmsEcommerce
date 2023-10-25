@@ -21,12 +21,12 @@ from __future__ import annotations
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
-from creme import persons
-from creme.creme_core.forms.merge import (
+from ... import persons
+from ...creme_core.forms.merge import (
     MergeEntitiesBaseForm,
     mergefield_factory,
 )
-from creme.creme_core.models import FieldsConfig
+from ...creme_core.models import FieldsConfig
 
 Contact = persons.get_contact_model()
 Address = persons.get_address_model()

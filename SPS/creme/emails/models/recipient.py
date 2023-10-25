@@ -21,7 +21,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from creme.creme_core.models.base import CremeModel
+from ...creme_core.models.base import CremeModel
 
 
 class EmailRecipient(CremeModel):

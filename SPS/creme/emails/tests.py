@@ -1,6 +1,6 @@
 from django.test import Client, TestCase
-
-from ..userprofile.models import Org, User
+from ..creme_core.models import CremeUser
+from ..persons.models import Organisation
 from .forms import EmailForm
 from .models import Email
 
@@ -8,10 +8,10 @@ from .models import Email
 class UserCreation(TestCase):
     def setUp(self):
         self.client = Client()
-        self.org, _ = Org.objects.get_or_create(
+        self.org, _ = Organisation.objects.get_or_create(
             name="test org", address="IN", country="IN"
         )
-        self.user = User.objects.create(
+        self.user = CremeUser.objects.create(
             first_name="janeEmail@example.com",
             username="jane",
             email="janeEmail@example.com",

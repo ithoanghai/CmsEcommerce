@@ -32,10 +32,10 @@ from django.forms.fields import (
 from django.forms.widgets import RadioSelect, Textarea
 from django.utils.translation import gettext as _
 
-from creme.creme_core.forms.fields import ChoiceOrCharField
-from creme.creme_core.forms.widgets import UnorderedMultipleChoiceWidget
-from creme.creme_core.utils.dates import date_2_dict
-from creme.creme_core.utils.serializers import json_encode
+from ..creme_core.forms.fields import ChoiceOrCharField
+from ..creme_core.forms.widgets import UnorderedMultipleChoiceWidget
+from ..creme_core.utils.dates import date_2_dict
+from ..creme_core.utils.serializers import json_encode
 
 
 class PollLineType:

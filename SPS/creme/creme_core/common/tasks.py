@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from ...creme_core.models.auth import User
+from ...creme_core.models import CremeUser
 from ...comments.models import Comment
 from .token_generator import account_activation_token
 
@@ -20,7 +20,7 @@ app = Celery("redis://")
 def send_email_to_new_user(user_id):
 
     """Send Mail To Users When their account is created"""
-    user_obj = User.objects.filter(id=user_id).first()
+    user_obj = CremeUser.objects.filter(id=user_id).first()
 
     if user_obj:
         context = {}

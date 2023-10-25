@@ -24,7 +24,7 @@ from django.urls import reverse
 from django.utils.functional import partition
 from django.utils.translation import gettext as _
 
-from creme.creme_core.models import CremeEntity, CremeModel
+from ...creme_core.models import CremeEntity, CremeModel
 
 from .. import get_pollform_model, get_pollreply_model
 from .base import _PollLine

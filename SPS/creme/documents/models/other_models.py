@@ -15,23 +15,18 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-import math
-from django.conf import settings
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from ...creme_core.models import base as core_models
+from ...creme_core import models as core_models
+
 from ..constants import MIMETYPE_PREFIX_IMG
-#from ..hooks import hookset
 
-MAXINT = 100000
-
-#def uuid_filename(instance, filename):
-#    return hookset.file_upload_to(instance, filename)
 
 class FolderCategory(core_models.MinionModel):
-    name = models.CharField(_('Category name'), max_length=100, unique=True)
+    name = models.CharField(_('Category name'), max_length=100, unique=True, null=True)
 
     creation_label = pgettext_lazy('documents-folder_category', 'Create a category')
 
@@ -75,36 +70,3 @@ class MimeType(core_models.CremeModel):
     @property
     def is_image(self):
         return self.name.startswith(MIMETYPE_PREFIX_IMG)
-
-
-class MemberSharedUser(models.Model):
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # @@@ privileges
-
-    class Meta:
-        #app_label = "membershareuser"
-        abstract = True
-
-    @classmethod
-    def for_user(cls, user):
-        qs = cls._default_manager.filter(user=user)
-        return qs.values_list(cls.obj_attr, flat=True)
-
-
-class UserStorage(models.Model):
-
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="storage", on_delete=models.CASCADE)
-    bytes_used = models.BigIntegerField(default=0)
-    bytes_total = models.BigIntegerField(default=0)
-
-    #class Meta:
-    #    app_label = "userstorage"
-
-    @property
-    def percentage(self):
-        return int(math.ceil((float(self.bytes_used) / self.bytes_total) * 100))
-
-    #@property
-    #def color(self):
-    #    return hookset.storage_color(self)

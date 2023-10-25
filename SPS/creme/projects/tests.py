@@ -10,24 +10,24 @@ from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from parameterized import parameterized
 
-import creme.projects.bricks as proj_bricks
-from creme.activities.constants import (
+from . import bricks as proj_bricks
+from ..activities.constants import (
     ACTIVITYSUBTYPE_MEETING_MEETING,
     ACTIVITYTYPE_MEETING,
     ACTIVITYTYPE_TASK,
     NARROW,
     REL_SUB_PART_2_ACTIVITY,
 )
-from creme.activities.models import Activity, ActivitySubType, Calendar
-from creme.activities.tests.base import skipIfCustomActivity
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from creme.creme_core.gui import actions
-from creme.creme_core.models import Currency, SetCredentials
-from creme.creme_core.tests.base import CremeTestCase
-from creme.creme_core.tests.views.base import BrickTestCaseMixin
-from creme.creme_core.utils.currency_format import currency
-from creme.persons.models import Contact
-from creme.persons.tests.base import skipIfCustomContact
+from ..activities.models import Activity, ActivitySubType, Calendar
+from ..activities.tests.base import skipIfCustomActivity
+from ..creme_core.auth.entity_credentials import EntityCredentials
+from ..creme_core.gui import actions
+from ..creme_core.models import Currency, SetCredentials
+from ..creme_core.tests.base import CremeTestCase
+from ..creme_core.tests.views.base import BrickTestCaseMixin
+from ..creme_core.utils.currency_format import currency
+from ..persons.models import Contact
+from ..persons.tests.base import skipIfCustomContact
 
 from . import (
     get_project_model,

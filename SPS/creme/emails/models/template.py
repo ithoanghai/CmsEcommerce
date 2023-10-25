@@ -69,18 +69,18 @@ class AbstractEmailTemplate(CremeEntity):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('emails:view_template', args=(self.id,))
+        return reverse('emails__view_template', args=(self.id,))
 
     @staticmethod
     def get_create_absolute_url():
-        return reverse('emails:create_template')
+        return reverse('emails__create_template')
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_template', args=(self.id,))
+        return reverse('emails__edit_template', args=(self.id,))
 
     @staticmethod
     def get_lv_absolute_url():
-        return reverse('emails:list_templates')
+        return reverse('emails__list_templates')
 
 
 class EmailTemplate(AbstractEmailTemplate):

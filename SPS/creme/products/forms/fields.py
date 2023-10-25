@@ -23,7 +23,7 @@
 # from django.forms.utils import ValidationError
 # from django.utils.translation import gettext as _
 #
-# from creme.creme_config.registry import config_registry
+# from ..creme_config.registry import config_registry
 # from ..creme_core.forms.fields import ChoiceModelIterator, JSONField
 # from ..creme_core.forms.widgets import ActionButtonList, ChainedInput
 # from ..creme_core.utils.url import TemplateURLBuilder

@@ -5,7 +5,7 @@ import tempfile
 from zipfile import ZipFile
 
 from django.conf import settings
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models import Account, CremeUser
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.test import TestCase

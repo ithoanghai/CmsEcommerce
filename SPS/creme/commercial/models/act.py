@@ -28,10 +28,9 @@ from django.utils.translation import pgettext_lazy
 from ...creme_core.models.entity import (
     CremeEntity,
 )
-from ...creme_core.models.base import (CremeModel,)
+from ...creme_core.models.base import (CremeModel, MinionModel)
 from ...creme_core.models.entity_filter import (EntityFilter,)
 from ...creme_core.models.relation import (Relation,)
-from ...creme_core.models.base import (MinionModel,)
 from ...creme_core.models.fields import CTypeForeignKey
 from ...opportunities import get_opportunity_model
 

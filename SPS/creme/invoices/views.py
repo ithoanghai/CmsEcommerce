@@ -53,7 +53,7 @@
 #         {"team": team.id, "users": [user.id for user in team.users.all()]}
 #         for team in teams
 #     ]
-#     users = User.objects.all().values_list("id", flat=True)
+#     users = CremeUser.objects.all().values_list("id", flat=True)
 #     data["teams"] = teams_data
 #     data["users"] = list(users)
 #     return JsonResponse(data)
@@ -64,13 +64,13 @@
 # def invoices_list(request):
 
 #     if request.user.role == "ADMIN" or request.user.is_superuser:
-#         users = User.objects.all()
+#         users = CremeUser.objects.all()
 #     # elif request.user.google.all():
-#     #     # users = User.objects.none()
-#     #     # users = User.objects.filter(id=request.user.id)
-#     #     users = User.objects.filter(Q(role='ADMIN') | Q(id=request.user.id))
+#     #     # users = CremeUser.objects.none()
+#     #     # users = CremeUser.objects.filter(id=request.user.id)
+#     #     users = CremeUser.objects.filter(Q(role='ADMIN') | Q(id=request.user.id))
 #     elif request.user.role == "USER":
-#         users = User.objects.filter(Q(role="ADMIN") | Q(id=request.user.id))
+#         users = CremeUser.objects.filter(Q(role="ADMIN") | Q(id=request.user.id))
 #     status = (
 #         ("Draft", "Draft"),
 #         ("Sent", "Sent"),
@@ -153,7 +153,7 @@
 #     if request.method == "GET":
 #         context = {}
 #         context["form"] = InvoiceForm(request_user=request.user, request_obj=request)
-#         context["users"] = User.objects.filter(company=request.company)
+#         context["users"] = CremeUser.objects.filter(company=request.company)
 #         # "prefix" use case in form, both from address and to address use the
 #         # same model and same model form, so the name attribute in the form will
 #         #  be same for the both forms and the address will be same for both
@@ -264,7 +264,7 @@
 #         context["invoice_history"] = invoice.invoice_history.all()
 #         if request.user.is_superuser or request.user.role == "ADMIN":
 #             context["users_mention"] = list(
-#                 User.objects.filter(is_active=True, company=request.company).values(
+#                 CremeUser.objects.filter(is_active=True, company=request.company).values(
 #                     "username"
 #                 )
 #             )
@@ -297,7 +297,7 @@
 #         context = {}
 #         context["invoice_obj"] = invoice_obj
 #         context["teams"] = Teams.objects.filter(company=request.company)
-#         context["users"] = User.objects.filter(company=request.company)
+#         context["users"] = CremeUser.objects.filter(company=request.company)
 #         context["form"] = InvoiceForm(
 #             instance=invoice_obj, request_user=request.user, request_obj=request
 #         )

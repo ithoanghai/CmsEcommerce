@@ -7,7 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 from ..core.loading import get_model
 
 # A setting that can be used in foreign key declarations
-AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'creme_core.User')
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'creme_core.CremeUser')
 try:
     AUTH_USER_APP_LABEL, AUTH_USER_MODEL_NAME = AUTH_USER_MODEL.rsplit('.', 1)
 except ValueError:

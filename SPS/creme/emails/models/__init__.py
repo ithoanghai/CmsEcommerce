@@ -1,5 +1,5 @@
 from .campaign import AbstractEmailCampaign, EmailCampaign  # NOQA
-from .mail import AbstractEntityEmail, EntityEmail, AbstractMail  # NOQA
+from .mail import AbstractEntityEmail, EntityEmail, AbstractMail, Email  # NOQA
 from .mailing_list import AbstractMailingList, MailingList  # NOQA
 from .recipient import EmailRecipient  # NOQA
 from .sending import (  # NOQA

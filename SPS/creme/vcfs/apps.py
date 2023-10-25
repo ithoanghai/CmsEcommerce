@@ -34,8 +34,8 @@ class VCFsConfig(CremeAppConfig):
     #
     #     from django.urls import reverse
     #
-    #     from creme.creme_core.gui.listview import CreationButton
-    #     from creme.persons.views.contact import ContactsList
+    #     from ..creme_core.gui.listview import CreationButton
+    #     from ..persons.views.contact import ContactsList
     #
     #     class ImportVCFButton(CreationButton):
     #         def get_label(self, model):

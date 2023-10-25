@@ -5,8 +5,9 @@ from unittest import skipIf
 from django.urls import reverse
 
 from ... import persons
-# from ...activities.constants import ACTIVITYTYPE_MEETING, ACTIVITYSUBTYPE_MEETING_NETWORK
 from ...activities.constants import (
+    ACTIVITYTYPE_MEETING,
+    ACTIVITYSUBTYPE_MEETING_NETWORK,
     UUID_SUBTYPE_MEETING_NETWORK,
     UUID_TYPE_MEETING,
 )
@@ -29,7 +30,7 @@ def skipIfCustomActivity(test_func):
 
 
 class _ActivitiesTestCase(CremeTestCase):
-    ACTIVITY_CREATION_URL = reverse('activities:create_activity')
+    ACTIVITY_CREATION_URL = reverse('activities__create_activity')
 
     EXTRA_START_KEY = 'cform_extra-activities_start'
     EXTRA_END_KEY   = 'cform_extra-activities_end'
@@ -46,6 +47,15 @@ class _ActivitiesTestCase(CremeTestCase):
     EXTRA_ALERTPERIOD_KEY = 'cform_extra-activities_alert_period'
     EXTRA_MESSAGES_KEY    = 'cform_extra-activities_user_messages'
 
+    # def login(self, is_superuser=True, is_staff=False,
+    #           allowed_apps=('activities', 'persons'), *args, **kwargs):
+    #     return super().login(
+    #         is_superuser=is_superuser,
+    #         is_staff=is_staff,
+    #         allowed_apps=allowed_apps,
+    #         *args, **kwargs
+    #     )
+
     def login_as_activities_user(self, *, allowed_apps=(), **kwargs):
         return self.login_as_standard(
             allowed_apps=['persons', 'activities', *allowed_apps],
@@ -59,7 +69,9 @@ class _ActivitiesTestCase(CremeTestCase):
     def assertUserHasDefaultCalendar(self, user):
         return self.get_object_or_fail(Calendar, is_default=True, user=user)
 
+    # def _build_nolink_setcreds(self):
     def _build_nolink_setcreds(self, user):
+        # create_sc = partial(SetCredentials.objects.create, role=self.role)
         create_sc = partial(SetCredentials.objects.create, role=user.role)
         create_sc(value=EntityCredentials.LINK, set_type=SetCredentials.ESET_OWN)
         create_sc(
@@ -75,18 +87,15 @@ class _ActivitiesTestCase(CremeTestCase):
     def _create_activity_by_view(self,
                                  user,
                                  title='My task',
-                                 # subtype_id=ACTIVITYSUBTYPE_MEETING_NETWORK,
-                                 subtype=UUID_SUBTYPE_MEETING_NETWORK,
+                                 subtype_id=ACTIVITYSUBTYPE_MEETING_NETWORK,
                                  **kwargs):
-        if isinstance(subtype, str):
-            subtype = ActivitySubType.objects.get(uuid=subtype)
+        # user = self.login()
 
         data = {
             'user': user.pk,
             'title': title,
 
-            # self.EXTRA_SUBTYPE_KEY: subtype_id,
-            self.EXTRA_SUBTYPE_KEY: subtype.id,
+            self.EXTRA_SUBTYPE_KEY: subtype_id,
 
             f'{self.EXTRA_MYPART_KEY}_0': True,
             f'{self.EXTRA_MYPART_KEY}_1': Calendar.objects.get_default_calendar(user).pk,
@@ -102,21 +111,16 @@ class _ActivitiesTestCase(CremeTestCase):
     def _create_meeting(self,
                         user,
                         title='Meeting01',
-                        # subtype_id=ACTIVITYSUBTYPE_MEETING_NETWORK,
-                        subtype=UUID_SUBTYPE_MEETING_NETWORK,
+                        subtype_id=ACTIVITYSUBTYPE_MEETING_NETWORK,
                         hour=14,
-                        **kwargs):
+                        **kwargs
+                        ):
         create_dt = self.create_datetime
         return Activity.objects.create(
+            # user=self.user,
             user=user,
             title=title,
-            # type_id=ACTIVITYTYPE_MEETING, sub_type_id=subtype_id,
-            type=ActivityType.objects.get(uuid=UUID_TYPE_MEETING),
-            sub_type=(
-                ActivitySubType.objects.get(uuid=subtype)
-                if isinstance(subtype, str) else
-                subtype
-            ),
+            type_id=ACTIVITYTYPE_MEETING, sub_type_id=subtype_id,
             start=create_dt(year=2013, month=4, day=1, hour=hour,     minute=0),
             end=create_dt(year=2013,   month=4, day=1, hour=hour + 1, minute=0),
             **kwargs

@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.timezone import localtime, make_aware, now
 from django.utils.translation import gettext as _
 
-from creme.activities.constants import (
+from ...activities.constants import (
     ACTIVITYSUBTYPE_PHONECALL_FAILED,
     ACTIVITYSUBTYPE_PHONECALL_OUTGOING,
     ACTIVITYTYPE_PHONECALL,
@@ -21,11 +21,11 @@ from creme.activities.constants import (
     STATUS_IN_PROGRESS,
     STATUS_PLANNED,
 )
-from creme.activities.models import Calendar
-from creme.activities.tests.base import skipIfCustomActivity
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from creme.creme_core.models import Relation, SetCredentials
-from creme.persons.tests.base import (
+from ...activities.models import Calendar
+from ...activities.tests.base import skipIfCustomActivity
+from ...creme_core.auth.entity_credentials import EntityCredentials
+from ...creme_core.models import Relation, SetCredentials
+from ...persons.tests.base import (
     skipIfCustomContact,
     skipIfCustomOrganisation,
 )

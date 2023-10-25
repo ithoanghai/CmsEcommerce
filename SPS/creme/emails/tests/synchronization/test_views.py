@@ -131,7 +131,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
     def test_server_config_creation02(self):
         "No admin credentials."
         self.login_as_emails_user()
-        self.assertGET403(reverse('emails:create_sync_config_item'))
+        self.assertGET403(reverse('emails__create_sync_config_item'))
 
     def test_server_config_edition01(self):
         "IMAP, no SSL, default port, keep attachments."
@@ -292,7 +292,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
         # create_e2s(user=self.other_user, subject='I want a swordfish III')
         create_e2s(user=self.get_root_user(), subject='I want a swordfish III')
 
-        response = self.assertGET200(reverse('emails:sync_portal'))
+        response = self.assertGET200(reverse('emails__sync_portal'))
 
         brick_node = self.get_brick_node(
             self.get_html_tree(response.content),
@@ -307,7 +307,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
 
     def test_sync_portal02(self):
         self.login_as_standard(allowed_apps=['documents'])
-        self.assertGET403(reverse('emails:sync_portal'))
+        self.assertGET403(reverse('emails__sync_portal'))
 
     def test_sync_portal03(self):
         "Staff."
@@ -315,7 +315,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
 
         EmailToSync.objects.create(user=self.get_root_user(), subject='I want a swordfish')
 
-        response = self.assertGET200(reverse('emails:sync_portal'))
+        response = self.assertGET200(reverse('emails__sync_portal'))
         brick_node = self.get_brick_node(
             self.get_html_tree(response.content),
             brick=bricks.EmailsToSyncBrick,
@@ -599,7 +599,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
             email_to_sync=e2s_2, email='spike@bebop.mrs',
         )
 
-        url = reverse('emails:mark_email_to_sync_recipient', args=(e2s_1.id,))
+        url = reverse('emails__mark_email_to_sync_recipient', args=(e2s_1.id,))
         data = {'id': recipient12.id}
         self.assertGET405(url, data=data)
 
@@ -625,7 +625,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
             type=EmailToSyncPerson.Type.SENDER,
         )
         self.assertPOST404(
-            reverse('emails:mark_email_to_sync_recipient', args=(e2s.id,)),
+            reverse('emails__mark_email_to_sync_recipient', args=(e2s.id,)),
             data={'id': sender.id},
         )
 
@@ -640,7 +640,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
             type=EmailToSyncPerson.Type.RECIPIENT,
         )
         self.assertPOST403(
-            reverse('emails:mark_email_to_sync_recipient', args=(e2s.id,)),
+            reverse('emails__mark_email_to_sync_recipient', args=(e2s.id,)),
             data={'id': recipient.id},
         )
 
@@ -656,7 +656,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
             type=EmailToSyncPerson.Type.RECIPIENT,
         )
         self.assertPOST403(
-            reverse('emails:mark_email_to_sync_recipient', args=(e2s.id,)),
+            reverse('emails__mark_email_to_sync_recipient', args=(e2s.id,)),
             data={'id': recipient.id},
         )
 
@@ -678,7 +678,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
             email='jet@bebop.mrs',
         )
 
-        url = reverse('emails:delete_email_to_sync_recipient', args=(e2s.id, ))
+        url = reverse('emails__delete_email_to_sync_recipient', args=(e2s.id, ))
 
         # Cannot delete a sender
         data1 = {'id': sender.id}
@@ -706,7 +706,7 @@ class SynchronizationViewsTestCase(BrickTestCaseMixin, _EmailsTestCase):
             email='spike@bebop.mrs',
         )
         self.assertPOST403(
-            reverse('emails:delete_email_to_sync_recipient', args=(e2s.id,)),
+            reverse('emails__delete_email_to_sync_recipient', args=(e2s.id,)),
             data={'id': recipient.id},
         )
 

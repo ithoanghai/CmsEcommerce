@@ -8,7 +8,7 @@ from ..customer.signals import user_registered
 from ..creme_core.core.compat import get_user_model
 from ..creme_core.core.loading import get_class, get_model
 
-User = get_user_model()
+CremeUser = get_user_model()
 CommunicationEventType = get_model('communication', 'CommunicationEventType')
 CustomerDispatcher = get_class('customer.utils', 'CustomerDispatcher')
 
@@ -58,7 +58,7 @@ class RegisterUserMixin(object):
             user = authenticate(
                 username=user.email,
                 password=form.cleaned_data['password1'])
-        except User.MultipleObjectsReturned:
+        except CremeUser.MultipleObjectsReturned:
             # Handle race condition where the registration request is made
             # multiple times in quick succession.  This leads to both requests
             # passing the uniqueness check and creating users (as the first one
@@ -71,7 +71,7 @@ class RegisterUserMixin(object):
             # twice, this is about the only place in Oscar where we don't
             # ignore capitalisation when looking up an email address.
             # We might otherwise accidentally mark unrelated users as inactive
-            users = User.objects.filter(email=user.email)
+            users = CremeUser.objects.filter(email=user.email)
             user = users[0]
             for u in users[1:]:
                 u.is_active = False

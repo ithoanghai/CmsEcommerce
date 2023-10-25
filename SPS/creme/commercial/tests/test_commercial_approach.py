@@ -175,7 +175,7 @@ class CommercialApproachTestCase(CremeTestCase, BrickTestCaseMixin):
         self._add_approach_extra_cell()
 
         user = self.user
-        url = reverse('activities:create_activity')
+        url = reverse('activities__create_activity')
 
         response1 = self.assertGET200(url)
 
@@ -236,7 +236,7 @@ class CommercialApproachTestCase(CremeTestCase, BrickTestCaseMixin):
             ActivitySubType, uuid=UUID_SUBTYPE_MEETING_QUALIFICATION,
         )
         response = self.client.post(
-            reverse('activities:create_activity'),
+            reverse('activities__create_activity'),
             follow=True,
             data={
                 'user':        user.id,

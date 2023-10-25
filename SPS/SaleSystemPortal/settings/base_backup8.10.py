@@ -214,9 +214,7 @@ MODULES_APPS = [
     # "creme.speakers",
     # "creme.sponsorship",
     # "creme.stripe",
-    "creme.teams",  # "app_CRM.teams",
     # "app_list.testimonials",
-    'creme.userprofile',
     # 'creme.utils',
     # "creme.waitinglist",
     # "app_list.webanalytics",
@@ -233,12 +231,10 @@ MODULES_APPS = [
     # app module for django CRM
     "creme.creme_core.common",
     "creme.cases",
-    "creme.contacts",
     # Manages EntityEmails, MailingLists & EmailCampaign entities.
     # If the app "crudity" is installed, emails can be synchronised with Creme.
     #"app_CRM.emails",  # mix from 'app_list.emails',
     "creme.leads",
-    "creme.opportunity",
     "creme.planner",
     "creme.tasks",
     "creme.invoices",
@@ -419,15 +415,15 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     # "common.custom_auth.TokenAuthMiddleware",
-    'common.middleware.get_company.GetProfileAndOrg',
-    'common.middleware.swagger_post.SwaggerMiddleware',
+    'creme.creme_core.common.middleware.get_company.GetProfileAndOrg',
+    'creme.creme_core.common.middleware.swagger_post.SwaggerMiddleware',
 
     # other middleware of social network
-    'app_list.accounts.middleware.LocaleMiddleware',
-    'app_list.accounts.middleware.TimezoneMiddleware',
-    'app_list.accounts.middleware.ExpiredPasswordMiddleware',
+    'creme.creme_core.auth.middleware.LocaleMiddleware',
+    'creme.creme_core.auth.middleware.TimezoneMiddleware',
+    'creme.creme_core.auth.middleware.ExpiredPasswordMiddleware',
     'creme.referrals.middleware.SessionJumpingMiddleware',
-    # 'creme.teams.middleware.TeamMiddleware',
+    'creme.persons.middleware.TeamMiddleware',
     # 'app_list.site_access.middleware.BasicAuthMiddleware',
     'reversion.middleware.RevisionMiddleware',
 
@@ -626,9 +622,9 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.twitter.TwitterOAuth',
 
     # Auth backends
-    "app_list.accounts.auth_backends.UsernameAuthenticationBackend",
+    "creme.creme_core.auth.auth_backends.UsernameAuthenticationBackend",
     # Permissions Backends
-    "creme.teams.backends.TeamPermissionsBackend",
+    "creme.persons.backends.TeamPermissionsBackend",
     # other backends
     "creme.likes.auth_backends.CanLikeBackend",
 

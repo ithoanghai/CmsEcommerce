@@ -49,7 +49,7 @@ from ...creme_core.models import (
     BrickDetailviewLocation,
     BrickHomeLocation,
     CremeEntity,
-    User,
+    CremeUser,
     CustomFormConfigItem,
     DeletionCommand,
     EntityFilter,

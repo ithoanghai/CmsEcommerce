@@ -114,7 +114,7 @@ class HeaderFilterManager(models.Manager):
 
         if is_private:
             if not user:
-                raise ValueError('HeaderFilter.create(): a private filter must belong to a User.')
+                raise ValueError('HeaderFilter.create(): a private filter must belong to a CremeUser.')
 
             if not is_custom:
                 # It should not be useful to create a private HeaderFilter (so it
@@ -219,7 +219,7 @@ class HeaderFilter(models.Model):  # TODO: CremeModel? MinionModel?
         elif user.id in self.user.teammates:
             return True, 'OK'
 
-        return False, gettext('You are not allowed to edit/delete this view')
+        return False, _('You are not allowed to edit/delete this view')
 
     def can_view(self,
                  user,

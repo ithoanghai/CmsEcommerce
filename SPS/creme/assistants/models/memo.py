@@ -18,11 +18,10 @@
 
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
-from ...creme_core.models import base as core_models
+from ...creme_core import models as core_models
 from ...creme_core.models import fields as core_fields
-from ...creme_core.models import entity as core_entitys
 from ...creme_core.utils import ellipsis
 
 
@@ -39,7 +38,7 @@ class Memo(core_models.CremeModel):
 
     entity_content_type = core_fields.EntityCTypeForeignKey(related_name='+', editable=False)
     entity = models.ForeignKey(
-        core_entitys.CremeEntity,
+        core_models.CremeEntity,
         related_name='assistants_memos',
         editable=False, on_delete=models.CASCADE,
     ).set_tags(viewable=False)
@@ -62,7 +61,7 @@ class Memo(core_models.CremeModel):
         return ellipsis(self.content.strip().replace('\n', ''), 25)
 
     def get_edit_absolute_url(self):
-        return reverse('assistants:edit_memo', args=(self.id,))
+        return reverse('assistants__edit_memo', args=(self.id,))
 
     def get_related_entity(self):  # For generic views
         return self.real_entity

@@ -29,7 +29,6 @@ from wagtail.contrib.sitemaps.views import sitemap as WagtailSitemap
 from wagtail.images.views.serve import ServeView
 
 from creme.creme_core.apps import creme_app_configs
-from creme.sitemaps import ActivitiesSitemap
 from creme.sitemaps import NewsSitemap
 from creme.creme_core.views.exceptions import permission_denied
 from app_CMS.search import views as search_views
@@ -55,7 +54,6 @@ schema_view = get_schema_view(
 sitemaps = {
     'pages': WagtailSitemap,
     'mysitemap': NewsSitemap,
-    'activitiessitemap': ActivitiesSitemap
 }
 
 def __prepare_static_url():
@@ -90,7 +88,7 @@ url_main = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
     path('sitemapsocial.xml', sitemap, {'sitemaps': {'socialpages': NewsSitemap}}),
     path('account/social/', include("social.apps.django_app.urls", namespace="social")),
-    path('accounts/', include('creme.creme_core.accounts.urls')),
+    path('accounts/', include('creme.creme_core.auth.urls')),
 
     path('search/', search_views.search, name="search"),
 
@@ -114,13 +112,12 @@ url_crm_cms_social_ecommerce = [
     path('', include('creme.notifications.urls')),
     path('', include('creme.newsfeed.urls')),
     path('', include('creme.friends.urls')),
-    path('', include('creme.userprofile.urls')),
-    path('', include('creme.communications.urls')),
+    path('', include('creme.communication.urls')),
     path('', include("creme.chatgpt.urls")),
     path('', include("creme.speakers.urls")),
     path('', include("creme.sponsorship.urls")),
     path('', include("creme.boxes.urls")),
-    path('', include("creme.teams.urls")),     # path('teams/', include("teams.urls", namespace="teams")),
+    path('', include("creme.persons.urls")),     # mix with "teams.urls" and "userprofile.urls"
     path('', include("creme.reviews.urls")),
     path('', include("creme.schedule.urls")),
 
@@ -128,7 +125,7 @@ url_crm_cms_social_ecommerce = [
     path("activities/", include("creme.activities.urls")),  # for creme, social
     path("assistants/", include("creme.assistants.urls")),  # for creme
     path("events/", include("creme.events.urls")),  # for creme
-    path("opportunities/", include("creme.opportunity.urls")),  # for creme
+    path("opportunities/", include("creme.opportunities.urls")),  # for creme
 
     path('invitations/', include("creme.invitations.urls", namespace="invitations")),
     path('announcements/', include("creme.announcements.urls", namespace="announcements")),
@@ -151,12 +148,11 @@ url_crm_cms_social_ecommerce = [
     # path("message/", include("creme.message.urls", namespace="message")),
 
     #crm api url
-    path("contacts/", include("creme.contacts.urls", namespace="api_contacts")),
     path("leads/", include("creme.leads.urls", namespace="api_leads")),
     path("tasks/", include("creme.tasks.urls", namespace="api_tasks")),
     path("cases/", include("creme.cases.urls", namespace="api_cases")),
-    path("teams/", include("creme.teams.urls", namespace="api_teams")),
-    path("accounts/", include("creme.creme_core.accounts.urls", namespace="api_accounts")),
+    #path("persons/", include("creme.persons.urls", namespace="api_persons")),
+    path("accounts/", include("creme.creme_core.auth.urls", namespace="api_accounts")),
 
     #crm creme base
     url(

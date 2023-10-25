@@ -19,7 +19,7 @@
 from django.conf import settings
 from django.db import models
 
-from creme.creme_core.models import CremeEntity
+from ..creme_core.models import CremeEntity
 
 
 class MobileFavorite(models.Model):

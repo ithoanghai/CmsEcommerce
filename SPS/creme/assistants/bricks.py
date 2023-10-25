@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from ..creme_core.gui.bricks import BricksManager, QuerysetBrick
 
@@ -53,6 +53,7 @@ class _AssistantsBrick(QuerysetBrick):
 
 
 class TodosBrick(_AssistantsBrick):
+    # id_ = QuerysetBrick.generate_id('assistants', 'todos')
     id = QuerysetBrick.generate_id('assistants', 'todos')
     verbose_name = _('Todos')
     description = _(
@@ -103,6 +104,7 @@ class TodosBrick(_AssistantsBrick):
 
 
 class MemosBrick(_AssistantsBrick):
+    # id_ = QuerysetBrick.generate_id('assistants', 'memos')
     id = QuerysetBrick.generate_id('assistants', 'memos')
     verbose_name = _('Memos')
     description = _(
@@ -120,6 +122,7 @@ class MemosBrick(_AssistantsBrick):
         ).select_related('user')
 
     def _get_queryset_for_home(self, context):
+        # return Memo.objects.filter_by_user(
         return self.dependencies[0].objects.filter_by_user(
             context['user']
         ).filter(
@@ -128,6 +131,7 @@ class MemosBrick(_AssistantsBrick):
 
 
 class AlertsBrick(_AssistantsBrick):
+    # id_ = QuerysetBrick.generate_id('assistants', 'alerts')
     id = QuerysetBrick.generate_id('assistants', 'alerts')
     verbose_name = _('Alerts')
     description = _(
@@ -194,6 +198,7 @@ class _ActionsBrick(_AssistantsBrick):
 
 
 class ActionsOnTimeBrick(_ActionsBrick):
+    # id_ = QuerysetBrick.generate_id('assistants', 'actions_it')
     id = QuerysetBrick.generate_id('assistants', 'actions_it')
     verbose_name = _('Actions on time')
     description = _(
@@ -217,6 +222,7 @@ class ActionsOnTimeBrick(_ActionsBrick):
 
 
 class ActionsNotOnTimeBrick(_ActionsBrick):
+    # id_ = QuerysetBrick.generate_id('assistants', 'actions_nit')
     id = QuerysetBrick.generate_id('assistants', 'actions_nit')
     verbose_name = _('Reactions not on time')
     description = _(
@@ -240,6 +246,7 @@ class ActionsNotOnTimeBrick(_ActionsBrick):
 
 
 class UserMessagesBrick(_AssistantsBrick):
+    # id_ = QuerysetBrick.generate_id('assistants', 'messages')
     id = QuerysetBrick.generate_id('assistants', 'messages')
     verbose_name = _('User messages')
     description = _(

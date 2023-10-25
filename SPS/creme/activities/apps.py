@@ -16,19 +16,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from django.apps import AppConfig as BaseAppConfig
 from django.utils.translation import gettext_lazy as _
-
+from django.core.exceptions import ImproperlyConfigured
 from ..creme_core.apps import CremeAppConfig
-
+from ..utils import load_path_attr
 from . import constants
-
-
-class AppConfig(BaseAppConfig):
-
-    name = "creme.activities"
-    label = "lms_activities"
-    verbose_name = _("LMS Activities")
 
 
 class ActivitiesConfig(CremeAppConfig):
@@ -49,7 +41,7 @@ class ActivitiesConfig(CremeAppConfig):
         creme_registry.register_entity_models(self.Activity)
 
     def register_actions(self, actions_registry):
-        from . import actions
+        from ..activities import actions
 
         actions_registry.register_bulk_actions(actions.BulkExportICalAction)
 
@@ -163,13 +155,8 @@ class ActivitiesConfig(CremeAppConfig):
     def register_icons(self, icon_registry):
         Activity = self.Activity
         get_icon = constants.ICONS.get
-        # icon_registry.register(Activity, 'images/calendar_%(size)s.png') \
-        #              .register_4_instance(Activity, lambda instance: get_icon(instance.type_id))
-        icon_registry.register(
-            Activity, 'images/calendar_%(size)s.png'
-        ).register_4_instance(
-            Activity, lambda instance: get_icon(str(instance.type.uuid)),
-        )
+        icon_registry.register(Activity, 'images/calendar_%(size)s.png') \
+                     .register_4_instance(Activity, lambda instance: get_icon(instance.type_id))
 
     def register_mass_import(self, import_form_registry):
         from .forms import mass_import
@@ -194,7 +181,7 @@ class ActivitiesConfig(CremeAppConfig):
     def register_creation_menu(self, creation_menu_registry):
         from django.urls import reverse_lazy as reverse
 
-        from ..creme_core.accounts import build_creation_perm
+        from ..creme_core.auth import build_creation_perm
 
         creation_perm = build_creation_perm(self.Activity)
         creation_menu_registry.get_or_create_group(
@@ -202,31 +189,31 @@ class ActivitiesConfig(CremeAppConfig):
         ).add_link(
             'activities-create_phonecall',
             label=_('Phone call'),
-            url=reverse('activities:create_activity', args=('phonecall',)),
+            url=reverse('activities__create_activity', args=('phonecall',)),
             perm=creation_perm,
             priority=5,
         ).add_link(
             'activities-create_meeting',
             label=_('Meeting'),
-            url=reverse('activities:create_activity', args=('meeting',)),
+            url=reverse('activities__create_activity', args=('meeting',)),
             perm=creation_perm,
             priority=10,
         ).add_link(
             'activities-create_activity',
             label=_('Activity'),
-            url=reverse('activities:create_activity'),
+            url=reverse('activities__create_activity'),
             perm=creation_perm,
             priority=15,
         ).add_link(
             'activities-create_task',
             label=_('Task'),
-            url=reverse('activities:create_activity', args=('task',)),
+            url=reverse('activities__create_activity', args=('task',)),
             perm=creation_perm,
             priority=20,
         ).add_link(
             'activities-create_unavailability',
             label=_('Unavailability'),
-            url=reverse('activities:create_unavailability'),
+            url=reverse('activities__create_unavailability'),
             perm=creation_perm,
             priority=25,
         )

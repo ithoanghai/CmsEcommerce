@@ -130,7 +130,7 @@ class AbstractProductAlert(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="alerts",
-        verbose_name=_('User'))
+        verbose_name=_('CremeUser'))
     email = models.EmailField(_("Email"), db_index=True, blank=True)
 
     # This key are used to confirm and cancel alerts for anon users

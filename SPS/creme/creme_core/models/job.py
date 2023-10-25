@@ -70,7 +70,7 @@ class Job(models.Model):
         - they are dynamically created by a view.
         - they must have their 'user' filled; it corresponds to the User which
           have created the Job, & who owns it. The Job should act with the
-          credentials of this User.
+          credentials of this CremeUser.
         - A view which creates a Job should check settings.MAX_JOBS_PER_USER
           before creating a Job, and redirect to the jobs list view if the Job
           can not be created (tip: you can use Job.not_finished_jobs()).

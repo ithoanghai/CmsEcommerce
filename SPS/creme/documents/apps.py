@@ -15,10 +15,10 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-import importlib
+
 from django.utils.translation import gettext_lazy as _
 
-from ..creme_core.apps import CremeAppConfig
+from creme.creme_core.apps import CremeAppConfig
 
 
 class DocumentsConfig(CremeAppConfig):
@@ -27,14 +27,11 @@ class DocumentsConfig(CremeAppConfig):
     verbose_name = _('Documents')
     dependencies = ['creme.creme_core']
 
-    def ready(self):
-        importlib.import_module("creme.documents.receivers")
-
     def all_apps_ready(self):
         from . import get_document_model, get_folder_model
 
         self.Document = get_document_model()
-        self.Folder = get_folder_model()
+        self.Folder   = get_folder_model()
         super().all_apps_ready()
 
     def register_entity_models(self, creme_registry):
@@ -76,7 +73,7 @@ class DocumentsConfig(CremeAppConfig):
         from . import models
 
         register_model = config_registry.register_model
-        register_model(models.FolderCategory, 'category')
+        register_model(models.FolderCategory,   'category')
         register_model(models.DocumentCategory, 'doc_category')
 
     def register_custom_forms(self, cform_registry):
@@ -94,6 +91,20 @@ class DocumentsConfig(CremeAppConfig):
         fields_config_registry.register_models(self.Document, self.Folder)
 
     def register_field_printers(self, field_printers_registry):
+        # from creme.creme_core.gui import field_printers
+        #
+        # from . import gui
+        #
+        # Document = self.Document
+        # field_printers.print_foreignkey_html.register(
+        #     model=Document,
+        #     printer=gui.print_fk_image_html,
+        # )
+        # field_printers.print_many2many_html.register(
+        #     Document,
+        #     printer=gui.print_doc_summary_html,
+        #     enumerator=field_printers.M2MPrinterForHTML.enumerator_entity,
+        # )
         from django.db import models
 
         from . import gui
@@ -121,7 +132,7 @@ class DocumentsConfig(CremeAppConfig):
         icon_registry.register(
             self.Document, 'images/document_%(size)s.png',
         ).register(
-            self.Folder, 'images/document_%(size)s.png',
+            self.Folder,   'images/document_%(size)s.png',
         )
 
     def register_menu_entries(self, menu_registry):
@@ -129,7 +140,7 @@ class DocumentsConfig(CremeAppConfig):
 
         menu_registry.register(
             menu.DocumentsEntry, menu.DocumentCreationEntry,
-            menu.FoldersEntry, menu.FolderCreationEntry,
+            menu.FoldersEntry,   menu.FolderCreationEntry,
         )
 
     def register_creation_menu(self, creation_menu_registry):
@@ -138,7 +149,7 @@ class DocumentsConfig(CremeAppConfig):
         ).add_link(
             'documents-create_document', self.Document, priority=10,
         ).add_link(
-            'documents-create_folder', self.Folder, priority=20,
+            'documents-create_folder',   self.Folder,   priority=20,
         )
 
     def register_merge_forms(self, merge_form_registry):

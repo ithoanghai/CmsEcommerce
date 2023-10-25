@@ -20,9 +20,11 @@ from datetime import datetime, time
 
 from django.forms import TypedChoiceField
 from django.utils.timezone import localtime, make_aware
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from ...creme_core.forms import CremeModelForm
+# from creme.creme_core.utils.dates import make_aware_dt
 from ...creme_core.forms.widgets import CalendarWidget
 
 from ..models import ToDo
@@ -58,7 +60,7 @@ class ToDoForm(CremeModelForm):
         self.instance.real_entity = entity
 
         fields = self.fields
-        fields['user'].empty_label =_(
+        fields['user'].empty_label = gettext(
             'Same owner than the entity (currently «{user}»)'
         ).format(user=entity.user)
 
@@ -82,6 +84,7 @@ class ToDoForm(CremeModelForm):
                         _('The hour is required if you set a date.'),
                     )
                 else:
+                    # cdata['deadline'] = make_aware_dt(
                     cdata['deadline'] = make_aware(
                         datetime.combine(deadline, time(deadline_hour))
                     )

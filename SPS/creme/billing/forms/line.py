@@ -169,11 +169,11 @@ class LineEditionForm(core_forms.CremeModelForm):
             (Discount.PERCENT, '%'),
             (
                 Discount.LINE_AMOUNT,
-                gettext('{currency} per line').format(currency=currency_str),
+                _('{currency} per line').format(currency=currency_str),
             ),
             (
                 Discount.ITEM_AMOUNT,
-                gettext('{currency} per unit').format(currency=currency_str),
+                _('{currency} per unit').format(currency=currency_str),
             ),
         ]
 

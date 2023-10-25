@@ -72,7 +72,7 @@ class AppTestCase(BrickTestCaseMixin, _BillingTestCase):
     @skipIfNotInstalled('creme.activities')
     def test_populate_activities(self):
         # Contribution to activities
-        from creme.activities.constants import REL_SUB_ACTIVITY_SUBJECT
+        from ...activities.constants import REL_SUB_ACTIVITY_SUBJECT
 
         rtype = self.get_object_or_fail(RelationType, pk=REL_SUB_ACTIVITY_SUBJECT)
         get_ct = ContentType.objects.get_for_model

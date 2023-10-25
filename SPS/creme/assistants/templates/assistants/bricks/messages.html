@@ -10,9 +10,9 @@
 
 {% block brick_header_actions %}
     {% if object %}{% has_perm_to change object as has_perm %}
-        {% brick_header_action id='add' url='assistants:create_related_message'|url:object.id label=_('Send a new message') enabled=has_perm %}
+        {% brick_header_action id='add' url='assistants__create_related_message'|url:object.id label=_('Send a new message') enabled=has_perm %}
     {% else %}
-        {% brick_header_action id='add' url='assistants:create_message'|url label=_('New message') %}
+        {% brick_header_action id='add' url='assistants__create_message'|url label=_('New message') %}
     {% endif %}
 {% endblock %}
 
@@ -29,7 +29,7 @@
     {% brick_table_column title=_('Action') status='action' %}
 {% endblock %}
 
-{% block brick_table_rows %}{% url 'assistants:delete_message' as delete_url %}
+{% block brick_table_rows %}{% url 'assistants__delete_message' as delete_url %}
     {% for message in page.object_list %}
     <tr>
         {% if not object %}

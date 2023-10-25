@@ -3,28 +3,28 @@ from functools import partial
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+# from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core import mail
 from django.db.models.query_utils import Q
-from django.forms import ChoiceField
+from django.forms import ChoiceField, IntegerField, TypedChoiceField
 from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.utils.translation import override as override_language
-from django.utils.translation import pgettext
 
-from ...creme_core.core.entity_cell import (
+from creme.creme_core.core.entity_cell import (
     EntityCellFunctionField,
     EntityCellRegularField,
 )
-from ...creme_core.core.function_field import function_field_registry
+from creme.creme_core.core.function_field import function_field_registry
 # Should be a test queue
-from ...creme_core.core.job import get_queue
-from ...creme_core.forms.fields import RelativeDatePeriodField
-from ...creme_core.forms.listview import TextLVSWidget
-from ...creme_core.gui.view_tag import ViewTag
-from ...creme_core.models import (
+from creme.creme_core.core.job import get_queue
+from creme.creme_core.forms.fields import RelativeDatePeriodField
+from creme.creme_core.forms.listview import TextLVSWidget
+from creme.creme_core.gui.view_tag import ViewTag
+from creme.creme_core.models import (
     BrickDetailviewLocation,
     BrickHomeLocation,
     BrickState,
@@ -34,9 +34,9 @@ from ...creme_core.models import (
     FakeOrganisation,
     FieldsConfig,
 )
-# from ...creme_core.tests.forms.base import FieldTestCase
-from ...creme_core.tests.views.base import BrickTestCaseMixin
-from ...creme_core.utils.date_period import (
+from creme.creme_core.tests.forms.base import FieldTestCase
+from creme.creme_core.tests.views.base import BrickTestCaseMixin
+from creme.creme_core.utils.date_period import (
     DatePeriodRegistry,
     DaysPeriod,
     HoursPeriod,
@@ -221,8 +221,7 @@ class ModelRelativeDatePeriodWidgetTestCase(AssistantsTestCase):
         )
 
 
-# class ModelRelativeDatePeriodFieldTestCase(FieldTestCase):
-class ModelRelativeDatePeriodFieldTestCase(AssistantsTestCase):
+class ModelRelativeDatePeriodFieldTestCase(FieldTestCase):
     def test_model_relativedate_period(self):
         RPeriod = RelativeDatePeriodField.RelativeDatePeriod
         MRPeriod = ModelRelativeDatePeriodField.ModelRelativeDatePeriod
@@ -275,8 +274,19 @@ class ModelRelativeDatePeriodFieldTestCase(AssistantsTestCase):
         "Field <FakeOrganisation.creation_date> + days + after."
         field_name = 'creation_date'
         offset = ModelRelativeDatePeriodField(model=FakeOrganisation).clean(
+            # [field_name, '1', DaysPeriod.name, '3'],
             [field_name, ['1', [DaysPeriod.name, '3']]],
         )
+        # self.assertIsTuple(offset, length=2)
+        # self.assertEqual(field_name, offset[0])
+        #
+        # signed_period = offset[1]
+        # self.assertIsTuple(signed_period, length=2)
+        # self.assertEqual(1, signed_period[0])
+        #
+        # period = signed_period[1]
+        # self.assertIsInstance(period, DaysPeriod)
+        # self.assertDictEqual({'type': 'days', 'value': 3}, period.as_dict())
         self.assertEqual(
             ModelRelativeDatePeriodField.ModelRelativeDatePeriod(
                 field_name=field_name,
@@ -291,8 +301,15 @@ class ModelRelativeDatePeriodFieldTestCase(AssistantsTestCase):
         "Field <FakeOrganisation.created> + minutes + before."
         field_name = 'created'
         offset = ModelRelativeDatePeriodField(model=FakeOrganisation).clean(
+            # [field_name, '-1', MinutesPeriod.name, '5']
             [field_name, ['-1', [MinutesPeriod.name, '5']]]
         )
+        # self.assertEqual(field_name, offset[0])
+        #
+        # sign, period = offset[1]
+        # self.assertEqual(-1, sign)
+        # self.assertIsInstance(period, MinutesPeriod)
+        # self.assertDictEqual({'type': 'minutes', 'value': 5}, period.as_dict())
         self.assertEqual(
             ModelRelativeDatePeriodField.ModelRelativeDatePeriod(
                 field_name=field_name,
@@ -304,26 +321,32 @@ class ModelRelativeDatePeriodFieldTestCase(AssistantsTestCase):
         )
 
     def test_required(self):
-        field = ModelRelativeDatePeriodField(model=FakeOrganisation)
+        cls = ModelRelativeDatePeriodField
+        field = cls(model=FakeOrganisation)
+        clean = field.clean
         pname = DaysPeriod.name
-        code = 'required'
-        msg = _('This field is required.')
-        self.assertFormfieldError(
-            field=field, messages=msg, codes=code, value=['', ['', ['', '']]],
-        )
-        self.assertFormfieldError(field=field, messages=msg, codes=code, value=None)
-        self.assertFormfieldError(
-            field=field, messages=msg, codes=code, value=['', ['', [pname, '2']]],
-        )
-        self.assertFormfieldError(
-            field=field, messages=msg, codes=code, value=['', ['1', [pname, '']]],
-        )
-        self.assertFormfieldError(
-            field=field, messages=msg, codes='required', value=['created', ['1', [pname, '']]],
-        )
+        # self.assertFieldValidationError(cls, 'required', clean, ['', '', '', ''])
+        # self.assertFieldValidationError(cls, 'required', clean, None)
+        # self.assertFieldValidationError(cls, 'required', clean, ['', '', pname, '2'])
+        # self.assertFieldValidationError(cls, 'required', clean, ['', '1', pname, ''])
+        # self.assertFieldValidationError(cls, 'required', clean, ['created', '1', pname, ''])
+        self.assertFieldValidationError(cls, 'required', clean, ['', ['', ['', '']]])
+        self.assertFieldValidationError(cls, 'required', clean, None)
+        self.assertFieldValidationError(cls, 'required', clean, ['', ['', [pname, '2']]])
+        self.assertFieldValidationError(cls, 'required', clean, ['', ['1', [pname, '']]])
+        self.assertFieldValidationError(cls, 'required', clean, ['created', ['1', [pname, '']]])
 
     def test_not_required(self):
         clean = ModelRelativeDatePeriodField(required=False).clean
+        # empty = ()
+        # self.assertTupleEqual(empty, clean([''] * 4))
+        # self.assertTupleEqual(empty, clean([''] * 3))
+        # self.assertTupleEqual(empty, clean([''] * 2))
+        # self.assertTupleEqual(empty, clean(['']))
+        # self.assertTupleEqual(empty, clean([]))
+        # self.assertTupleEqual(empty, clean(None))
+        # self.assertTupleEqual(empty, clean(['created', '1', DaysPeriod.name, '']))
+        # self.assertTupleEqual(empty, clean(['', '1', '', '2']))
         self.assertIsNone(clean([''] * 4))
         self.assertIsNone(clean([''] * 3))
         self.assertIsNone(clean([''] * 2))
@@ -334,38 +357,33 @@ class ModelRelativeDatePeriodFieldTestCase(AssistantsTestCase):
         self.assertIsNone(clean(['', ['1', ['', '2']]]))
 
     def test_invalid(self):
-        field = ModelRelativeDatePeriodField(model=FakeOrganisation)
+        clean = ModelRelativeDatePeriodField(model=FakeOrganisation).clean
 
         f_name = 'invalid_field'
-        choice_code = 'invalid_choice'
-        choice_msg = ChoiceField.default_error_messages[choice_code]
-        self.assertFormfieldError(
-            field=field,
-            value=[f_name, ['-1', [YearsPeriod.name, '5']]],
-            codes=choice_code,
-            messages=choice_msg % {'value': f_name},
+        self.assertFieldValidationError(
+            ChoiceField, 'invalid_choice', clean,
+            # [f_name, '-1', YearsPeriod.name, '5'],
+            [f_name, ['-1', [YearsPeriod.name, '5']]],
+            message_args={'value': f_name},
         )
 
-        notint = 'notint'
-        self.assertFormfieldError(
-            field=field,
-            value=['created', [notint, [YearsPeriod.name, '1']]],
-            codes=choice_code,
-            messages=choice_msg % {'value': notint},
+        self.assertFieldValidationError(
+            TypedChoiceField, 'invalid_choice', clean,
+            # ['created', 'notint', YearsPeriod.name, '1'],
+            ['created', ['notint', [YearsPeriod.name, '1']]],
+            message_args={'value': 'notint'},
         )
-        self.assertFormfieldError(
-            field=field,
-            value=['created', ['1', [YearsPeriod.name, notint]]],
-            codes='invalid',
-            messages=_('Enter a whole number.'),
+        self.assertFieldValidationError(
+            IntegerField, 'invalid', clean,
+            # ['created', '1', YearsPeriod.name, 'notint'],
+            ['created', ['1', [YearsPeriod.name, 'notint']]],
         )
 
         p_name = 'unknownperiod'
-        self.assertFormfieldError(
-            field=field,
-            value=['created', ['-1', [p_name, '2']]],
-            codes=choice_code,
-            messages=choice_msg % {'value': p_name},
+        self.assertFieldValidationError(
+            # ChoiceField, 'invalid_choice', clean, ['created', '-1', p_name, '2'],
+            ChoiceField, 'invalid_choice', clean, ['created', ['-1', [p_name, '2']]],
+            message_args={'value': p_name},
         )
 
     def test_model_1(self):
@@ -502,11 +520,7 @@ class ModelRelativeDatePeriodFieldTestCase(AssistantsTestCase):
     def test_relative_choices_1(self):
         "Default choices."
         field = ModelRelativeDatePeriodField(model=FakeContact)
-        # expected_choices = [(-1, _('Before')), (1, _('After'))]
-        expected_choices = [
-            (-1, pgettext('creme_core-date_period', 'Before')),
-            (1,  pgettext('creme_core-date_period', 'After')),
-        ]
+        expected_choices = [(-1, _('Before')), (1, _('After'))]
         self.assertListEqual(expected_choices, [*field.fields[1].relative_choices])
         self.assertListEqual(expected_choices, [*field.relative_choices])
         self.assertListEqual(expected_choices, [*field.widget.relative_choices])
@@ -520,8 +534,7 @@ class ModelRelativeDatePeriodFieldTestCase(AssistantsTestCase):
         self.assertListEqual(choices, [*field.widget.relative_choices])
 
 
-# class AbsoluteOrRelativeDatetimeFieldTestCase(FieldTestCase):
-class AbsoluteOrRelativeDatetimeFieldTestCase(AssistantsTestCase):
+class AbsoluteOrRelativeDatetimeFieldTestCase(FieldTestCase):
     def test_ok(self):
         field = AbsoluteOrRelativeDatetimeField(model=FakeOrganisation)
         self.assertEqual(FakeOrganisation, field.model)
@@ -532,6 +545,7 @@ class AbsoluteOrRelativeDatetimeFieldTestCase(AssistantsTestCase):
         field_name = 'creation_date'
         sub_values = {
             ABSOLUTE: self.formfield_value_datetime(**dt_kwargs),
+            # RELATIVE: [field_name, '1', DaysPeriod.name, '3'],
             RELATIVE: [field_name, ['1', [DaysPeriod.name, '3']]],
         }
         self.assertTupleEqual(
@@ -543,6 +557,18 @@ class AbsoluteOrRelativeDatetimeFieldTestCase(AssistantsTestCase):
         cleaned2 = field.clean((RELATIVE, sub_values))
         self.assertIsTuple(cleaned2, length=2)
         self.assertEqual(RELATIVE, cleaned2[0])
+
+        # offset = cleaned2[1]
+        # self.assertIsTuple(offset, length=2)
+        # self.assertEqual(field_name, offset[0])
+        #
+        # signed_period = offset[1]
+        # self.assertIsTuple(signed_period, length=2)
+        # self.assertEqual(1, signed_period[0])
+        #
+        # period = signed_period[1]
+        # self.assertIsInstance(period, DaysPeriod)
+        # self.assertDictEqual({'type': 'days', 'value': 3}, period.as_dict())
         self.assertEqual(
             ModelRelativeDatePeriodField.ModelRelativeDatePeriod(
                 field_name=field_name,
@@ -566,7 +592,7 @@ class AbsoluteOrRelativeDatetimeFieldTestCase(AssistantsTestCase):
 class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
     @staticmethod
     def _build_add_url(entity):
-        return reverse('assistants:create_alert', args=(entity.id,))
+        return reverse('assistants__create_alert', args=(entity.id,))
 
     def _create_alert(self,
                       title='TITLE',
@@ -594,6 +620,7 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
     def test_create_with_absolute_date(self):
         self.assertFalse(Alert.objects.exists())
+        # other_user = self.other_user
         other_user = self.create_user()
 
         entity = self.entity
@@ -660,6 +687,7 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         response = self.client.post(
             self._build_add_url(entity),
             data={
+                # 'user':         self.user.pk,
                 'title':        title,
                 'description':  '',
 
@@ -823,6 +851,7 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         self.assertTupleEqual(
             (
                 RELATIVE,
+                # {RELATIVE: (field_name, -1, DaysPeriod(1))},
                 {
                     RELATIVE: ModelRelativeDatePeriodField.ModelRelativeDatePeriod(
                         field_name=field_name,
@@ -968,7 +997,7 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         alert = self._create_alert()
         self.assertFalse(alert.is_validated)
 
-        url = reverse('assistants:validate_alert', args=(alert.id,))
+        url = reverse('assistants__validate_alert', args=(alert.id,))
         self.assertGET405(url)
 
         response = self.assertPOST200(url, follow=True)
@@ -1218,6 +1247,7 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
     @override_settings(DEFAULT_TIME_ALERT_REMIND=60)
     def test_reminder3(self):
         "Dynamic user."
+        # other_user = self.other_user
         other_user = self.create_user()
 
         entity = self.entity
@@ -1225,7 +1255,10 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         entity.save()
 
         reminder_ids = [*DateReminder.objects.values_list('id', flat=True)]
-        Alert.objects.create(real_entity=entity, trigger_date=now())
+        Alert.objects.create(
+            # user=user
+            real_entity=entity, trigger_date=now(),
+        )
 
         self.execute_reminder_job(self.get_reminder_job())
         self.assertEqual(1, DateReminder.objects.exclude(id__in=reminder_ids).count())
@@ -1280,6 +1313,23 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         user = self.user
         now_value = now()
 
+        # create_user = get_user_model().objects.create
+        # teammate1 = create_user(
+        #     username='luffy',
+        #     email='luffy@sunny.org', role=self.role,
+        #     first_name='Luffy', last_name='Monkey D.',
+        # )
+        # teammate2 = create_user(
+        #     username='zorro',
+        #     email='zorro@sunny.org', role=self.role,
+        #     first_name='Zorro', last_name='Roronoa',
+        # )
+        #
+        # team1 = create_user(username='Team #1', is_team=True)
+        # team1.teammates = [teammate1, user]
+        #
+        # team2 = create_user(username='Team #2', is_team=True)
+        # team2.teammates = [self.other_user, teammate2]
         other_user = self.create_user(0)
         teammate1 = self.create_user(1)
         teammate2 = self.create_user(2)
@@ -1301,6 +1351,7 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         user = self.user
         entity1 = self.entity
 
+        # state = BrickState.objects.get_for_brick_id(user=user, brick_id=AlertsBrick.id_)
         state = BrickState.objects.get_for_brick_id(user=user, brick_id=AlertsBrick.id)
         state.set_extra_data(key=BRICK_STATE_HIDE_VALIDATED_ALERTS, value=False)
         state.save()
@@ -1348,10 +1399,11 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
         # Home + do not hide ---
         BrickHomeLocation.objects.get_or_create(
+            # brick_id=AlertsBrick.id_, defaults={'order': 50},
             brick_id=AlertsBrick.id, defaults={'order': 50},
         )
 
-        response2 = self.assertGET200(reverse('shop_home'))
+        response2 = self.assertGET200(reverse('creme_core__home'))
         home_brick_node = self.get_brick_node(
             self.get_html_tree(response2.content), brick=AlertsBrick,
         )
@@ -1377,7 +1429,7 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         self.assertFalse(alert_found(detail_brick_node_hidden, alert3))
 
         # Home + hide validated ---
-        response4 = self.assertGET200(reverse('shop_home'))
+        response4 = self.assertGET200(reverse('creme_core__home'))
         home_brick_node_hidden = self.get_brick_node(
             self.get_html_tree(response4.content), brick=AlertsBrick,
         )
@@ -1391,11 +1443,12 @@ class AlertTestCase(BrickTestCaseMixin, AssistantsTestCase):
         user = self.user
 
         def get_state():
+            # return BrickState.objects.get_for_brick_id(user=user, brick_id=AlertsBrick.id_)
             return BrickState.objects.get_for_brick_id(user=user, brick_id=AlertsBrick.id)
 
         self.assertIsNone(get_state().pk)
 
-        url = reverse('assistants:hide_validated_alerts')
+        url = reverse('assistants__hide_validated_alerts')
         self.assertGET405(url)
 
         # ---

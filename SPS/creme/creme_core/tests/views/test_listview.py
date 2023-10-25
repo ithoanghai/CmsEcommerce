@@ -16,8 +16,8 @@ from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext
 
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from creme.creme_core.core.entity_cell import (
+from ....creme_core.auth.entity_credentials import EntityCredentials
+from ....creme_core.core.entity_cell import (
     EntityCellCustomField,
     EntityCellFunctionField,
     EntityCellRegularField,
@@ -28,10 +28,10 @@ from creme.creme_core.core.entity_filter import (
     condition_handler,
     operators,
 )
-from creme.creme_core.core.function_field import function_field_registry
-from creme.creme_core.gui.listview import ListViewState
-from creme.creme_core.gui.view_tag import ViewTag
-from creme.creme_core.models import (
+from ....creme_core.core.function_field import function_field_registry
+from ....creme_core.gui.listview import ListViewState
+from ....creme_core.gui.view_tag import ViewTag
+from ....creme_core.models import (
     CremeProperty,
     CremePropertyType,
     CustomField,
@@ -59,10 +59,10 @@ from creme.creme_core.models import (
     RelationType,
     SetCredentials,
 )
-from creme.creme_core.models.entity_filter import EntityFilterList
-from creme.creme_core.models.header_filter import HeaderFilterList
-from creme.creme_core.utils.profiling import CaptureQueriesContext
-from creme.creme_core.utils.queries import QSerializer
+from ....creme_core.models.entity_filter import EntityFilterList
+from ....creme_core.models.header_filter import HeaderFilterList
+from ....creme_core.utils.profiling import CaptureQueriesContext
+from ....creme_core.utils.queries import QSerializer
 
 from .. import fake_constants
 from .base import ViewsTestCase

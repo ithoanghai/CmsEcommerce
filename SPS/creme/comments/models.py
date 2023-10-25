@@ -8,14 +8,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from ..cases.models import Case
-from ..contacts.models import Contact
+from ..persons.models import Profile, Contact
 from ..creme_core.models.auth import Account
 from ..events.models import Event
 from ..invoices.models import Invoice
 from ..leads.models import Lead
-from ..opportunity.models import Opportunity
+from ..opportunities.models import Opportunity
 from ..tasks.models import Task
-from ..userprofile.models import Profile
 
 
 class Comment(models.Model):
@@ -45,9 +44,7 @@ class Comment(models.Model):
     )
     comment = models.CharField(max_length=255)
     commented_on = models.DateTimeField(auto_now=True)
-    commented_by = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, blank=True, null=True
-    )
+    commented_by = models.ForeignKey(settings.PERSONS_PROFILE_MODEL, on_delete=models.CASCADE, blank=True, null=True )
     account = models.ForeignKey(
         Account,
         blank=True,
@@ -77,7 +74,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
     profile = models.ForeignKey(
-        Profile,
+        settings.PERSONS_PROFILE_MODEL,
         blank=True,
         null=True,
         related_name="user_comments",

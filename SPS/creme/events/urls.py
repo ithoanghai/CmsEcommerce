@@ -1,24 +1,21 @@
-from django.urls import path, re_path, include
-
-from . import event_model_is_custom
-from .views import event, views
+from django.urls import include, re_path, path
 
 from ..creme_core.conf.urls import Swappable, swap_manager
 from ..opportunities import opportunity_model_is_custom
 
-app_name = "events"
+from . import event_model_is_custom
+from .views import event
 
-#url for creme CRM
 urlpatterns = [
     re_path(
         r'^event/(?P<event_id>\d+)/contacts[/]?$',
         event.RelatedContactsList.as_view(),
-        name='list_related_contacts',
+        name='events__list_related_contacts',
     ),
     re_path(
         r'^event/(?P<event_id>\d+)/link_contacts[/]?$',
         event.AddContactsToEvent.as_view(),
-        name='link_contacts',
+        name='events__link_contacts',
     ),
 
     re_path(
@@ -27,12 +24,12 @@ urlpatterns = [
             re_path(
                 r'^set_invitation_status[/]?$',
                 event.InvitationStatusSetting.as_view(),
-                name='set_invitation_status',
+                name='events__set_invitation_status',
             ),
             re_path(
                 r'^set_presence_status[/]?$',
                 event.PresenceStatusSetting.as_view(),
-                name='set_presence_status',
+                name='events__set_presence_status',
             ),
         ]),
     ),
@@ -50,21 +47,21 @@ urlpatterns = [
             re_path(
                 r'^event/add[/]?$',
                 event.EventCreation.as_view(),
-                name='create_event',
+                name='events__create_event',
             ),
         ),
         Swappable(
             re_path(
                 r'^event/edit/(?P<event_id>\d+)[/]?$',
                 event.EventEdition.as_view(),
-                name='edit_event'),
+                name='events__edit_event'),
             check_args=Swappable.INT_ID,
         ),
         Swappable(
             re_path(
                 r'^event/(?P<event_id>\d+)[/]?$',
                 event.EventDetail.as_view(),
-                name='view_event',
+                name='events__view_event',
             ),
             check_args=Swappable.INT_ID,
         ),
@@ -77,16 +74,17 @@ urlpatterns = [
             re_path(
                 r'^event/(?P<event_id>\d+)/add_opportunity_with/(?P<contact_id>\d+)[/]?$',
                 event.RelatedOpportunityCreation.as_view(),
-                name='create_related_opportunity',
+                name='events__create_related_opportunity',
             ),
             check_args=(1, 2),
         ),
+        app_name='events',
     ).kept_patterns(),
 ]
 
 urlpatterns = urlpatterns + [
-    path("", views.EventListView.as_view()),
-    path("<int:pk>/", views.EventDetailView.as_view()),
-    path("comment/<int:pk>/", views.EventCommentView.as_view()),
-    path("attachment/<int:pk>/", views.EventAttachmentView.as_view()),
+    path("", event.EventListView.as_view()),
+    path("<int:pk>/", event.EventDetailView.as_view()),
+    path("comment/<int:pk>/", event.EventCommentView.as_view()),
+    path("attachment/<int:pk>/", event.EventAttachmentView.as_view()),
 ]

@@ -71,10 +71,10 @@ from .base import (
 
 
 class SendingConfigTestCase(BrickTestCaseMixin, _EmailsTestCase):
-    DEL_CONF_URL = reverse('emails:delete_sending_config_item')
+    DEL_CONF_URL = reverse('emails__delete_sending_config_item')
 
     def _build_password_edition_url(self, item):
-        return reverse('emails:set_sending_config_item_password', args=(item.id,))
+        return reverse('emails__set_sending_config_item_password', args=(item.id,))
 
     def test_model(self):
         name = 'Config #1'

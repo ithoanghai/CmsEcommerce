@@ -21,10 +21,10 @@ from django.contrib.auth import get_user_model
 from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.forms.base import CremeModelForm
-from creme.creme_core.forms.widgets import PrettySelect
+from ...creme_core.forms.base import CremeModelForm
+from ...creme_core.forms.widgets import PrettySelect
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 # class MenuSetting(Select):
@@ -41,7 +41,7 @@ class MenuSetting(PrettySelect):
 
 class UserThemeForm(CremeModelForm):
     class Meta:
-        model = User
+        model = CremeUser
         fields = ('theme',)
         widgets = {
             'theme': MenuSetting(url='creme_config__set_user_theme'),
@@ -51,7 +51,7 @@ class UserThemeForm(CremeModelForm):
 
 class UserTimeZoneForm(CremeModelForm):
     class Meta:
-        model = User
+        model = CremeUser
         fields = ('time_zone',)
         widgets = {
             'time_zone': MenuSetting(url='creme_config__set_user_timezone'),
@@ -61,7 +61,7 @@ class UserTimeZoneForm(CremeModelForm):
 
 class UserLanguageForm(CremeModelForm):
     class Meta:
-        model = User
+        model = CremeUser
         fields = ('language',)
         widgets = {
             'language': MenuSetting(url='creme_config__set_user_language'),
@@ -71,6 +71,6 @@ class UserLanguageForm(CremeModelForm):
 
 class UserDisplayedNameForm(CremeModelForm):
     class Meta:
-        model = User
+        model = CremeUser
         fields = ('displayed_name',)
         labels = {'displayed_name': _('How to display your name')}

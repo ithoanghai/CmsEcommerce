@@ -5,6 +5,7 @@ import time
 import arrow
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 from .templatetags.common_tags import (is_document_file_audio,
                                              is_document_file_code,
@@ -14,16 +15,15 @@ from .templatetags.common_tags import (is_document_file_audio,
                                              is_document_file_text,
                                              is_document_file_video,
                                              is_document_file_zip)
-from ..models.auth import User, Tags, Account
+from ..models import CremeUser, Tags, Account
 
 from ...cases.models import Case
-from ...contacts.models import Contact
+from ...persons.models import Organisation
 from ...events.models import Event
 from ...invoices.models import Invoice
 from ...leads.models import Lead
-from ...opportunity.models import Opportunity
+from ...opportunities.models import Opportunity
 from ...tasks.models import Task
-from ...userprofile.models import Profile, Org
 
 
 def img_url(self, filename):
@@ -33,7 +33,7 @@ def img_url(self, filename):
 
 class Attachments(models.Model):
     created_by = models.ForeignKey(
-        Profile,
+        settings.PERSONS_PROFILE_MODEL,
         related_name="attachment_created_by",
         on_delete=models.SET_NULL,
         null=True,
@@ -57,7 +57,7 @@ class Attachments(models.Model):
         on_delete=models.CASCADE,
     )
     contact = models.ForeignKey(
-        Contact,
+        settings.PERSONS_CONTACT_MODEL,
         on_delete=models.CASCADE,
         related_name="contact_attachment",
         blank=True,
@@ -142,19 +142,17 @@ class APISettings(models.Model):
     title = models.TextField()
     apikey = models.CharField(max_length=16, blank=True)
     website = models.URLField(max_length=255, null=True)
-    lead_assigned_to = models.ManyToManyField(
-        Profile, related_name="lead_assignee_users"
-    )
+    lead_assigned_to = models.ManyToManyField(settings.PERSONS_PROFILE_MODEL, related_name="lead_assignee_users" )
     tags = models.ManyToManyField(Tags, blank=True)
     created_by = models.ForeignKey(
-        Profile,
+        settings.PERSONS_PROFILE_MODEL,
         related_name="settings_created_by",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
     org = models.ForeignKey(
-        Org,
+        Organisation,
         blank=True,
         on_delete=models.SET_NULL,
         null=True,
@@ -176,7 +174,7 @@ class APISettings(models.Model):
 
 class Google(models.Model):
     user = models.ForeignKey(
-        User, related_name="google_user", on_delete=models.CASCADE, null=True
+        CremeUser, related_name="google_user", on_delete=models.CASCADE, null=True
     )
     google_id = models.CharField(max_length=200, default="")
     google_url = models.TextField(default="")
@@ -196,7 +194,7 @@ class Email(models.Model):
     from_account = models.ForeignKey(
         Account, related_name="sent_email", on_delete=models.SET_NULL, null=True
     )
-    recipients = models.ManyToManyField(Contact, related_name="recieved_email")
+    recipients = models.ManyToManyField(settings.PERSONS_CONTACT_MODEL, related_name="recieved_email")
     message_subject = models.TextField(null=True)
     message_body = models.TextField(null=True)
     timezone = models.CharField(max_length=100, default="UTC")
@@ -217,6 +215,6 @@ class EmailLog(models.Model):
         Email, related_name="email_log", on_delete=models.SET_NULL, null=True
     )
     contact = models.ForeignKey(
-        Contact, related_name="contact_email_log", on_delete=models.SET_NULL, null=True
+        settings.PERSONS_CONTACT_MODEL, related_name="contact_email_log", on_delete=models.SET_NULL, null=True
     )
     is_sent = models.BooleanField(default=False)

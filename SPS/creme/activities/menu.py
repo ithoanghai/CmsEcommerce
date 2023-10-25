@@ -17,9 +17,9 @@
 ################################################################################
 
 from django.urls import reverse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
-from ..creme_core.accounts import build_creation_perm
+from ..creme_core.auth import build_creation_perm
 from ..creme_core.gui import menu
 
 from . import get_activity_model
@@ -35,29 +35,33 @@ class _ActivitiesURLEntry(menu.FixedURLEntry):
 class CalendarEntry(_ActivitiesURLEntry):
     id = 'activities-calendar'
     label = _('Calendar')
-    url_name = 'activities:calendar'
+    url_name = 'activities__calendar'
 
 
 class ActivitiesEntry(menu.ListviewEntry):
     id = 'activities-activities'
     model = Activity
+    label = _('Activities')
+    #url_name = 'activities__list_activities'
 
 
 class PhoneCallsEntry(_ActivitiesURLEntry):
     id = 'activities-phone_calls'
     label = _('Phone calls')
-    url_name = 'activities:list_phone_calls'
+    url_name = 'activities__list_phone_calls'
 
 
 class MeetingsEntry(_ActivitiesURLEntry):
     id = 'activities-meetings'
     label = _('Meetings')
-    url_name = 'activities:list_meetings'
+    url_name = 'activities__list_meetings'
 
 
 class ActivityCreationEntry(menu.CreationEntry):
     id = 'activities-create_activity'
     model = Activity
+    label = _('Create a activity')
+    #url_name = 'activities__create_activity'
 
 
 class PhoneCallCreationEntry(_ActivitiesURLEntry):
@@ -67,7 +71,7 @@ class PhoneCallCreationEntry(_ActivitiesURLEntry):
 
     @property
     def url(self):
-        return reverse('activities:create_activity', args=('phonecall',))
+        return reverse('activities__create_activity', args=('phonecall',))
 
 
 class MeetingCreationEntry(_ActivitiesURLEntry):
@@ -77,4 +81,4 @@ class MeetingCreationEntry(_ActivitiesURLEntry):
 
     @property
     def url(self):
-        return reverse('activities:create_activity', args=('meeting',))
+        return reverse('activities__create_activity', args=('meeting',))

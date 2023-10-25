@@ -49,7 +49,7 @@ class Enumerator:
             help:  Small additional description for the label. Optional.
             group: Group of the choice (think <optgroup> in HTML). Optional.
 
-        @param user: Instance of User.
+        @param user: Instance of CremeUser.
         @param term: Search words.
         @param only: List only choices with these values
         @return: List of choice-dictionaries.
@@ -60,7 +60,7 @@ class Enumerator:
         """Return the list of the model instances related to the given values
         and available for the user.
 
-        @param user: Instance of User.
+        @param user: Instance of CremeUser.
         @param values: List of ids
         @return: List of model instances
         """

@@ -10,8 +10,8 @@
 
 {% block brick_header_actions %}
 {% has_perm_to change object as has_perm %}
-    {% brick_header_action id='add' url='emails:add_recipients_from_csv'|url:object.id label=_('Add from a CSV file') enabled=has_perm %}
-    {% brick_header_action id='add' url='emails:add_recipients'|url:object.id          label=_('Add manually')        enabled=has_perm %}
+    {% brick_header_action id='add' url='emails__add_recipients_from_csv'|url:object.id label=_('Add from a CSV file') enabled=has_perm %}
+    {% brick_header_action id='add' url='emails__add_recipients'|url:object.id          label=_('Add manually')        enabled=has_perm %}
 {% endblock %}
 
 {% block brick_table_columns %}

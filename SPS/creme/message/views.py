@@ -13,7 +13,7 @@ from .forms import MessageReplyForm, NewMessageForm, NewMessageFormMultiple
 from .models import Thread
 
 try:
-    from ..creme_core.accounts.decorators import login_required
+    from ..creme_core.auth.decorators import login_required
 except:  # noqa
     from django.contrib.auth.decorators import login_required
 

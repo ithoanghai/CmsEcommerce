@@ -22,15 +22,15 @@ from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.template import Library
 
-from creme.activities.constants import (
+from ...activities.constants import (
     ACTIVITYTYPE_PHONECALL,
     NARROW,
     REL_SUB_ACTIVITY_SUBJECT,
     STATUS_IN_PROGRESS,
 )
 from ...creme_core.models import SettingValue
-from creme.mobile import setting_keys
-from creme.persons import get_organisation_model
+from ...mobile import setting_keys
+from ...persons import get_organisation_model
 
 register = Library()
 Organisation = get_organisation_model()

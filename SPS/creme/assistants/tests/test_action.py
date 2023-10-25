@@ -2,19 +2,20 @@ from datetime import date, timedelta
 from functools import partial
 
 from django.conf import settings
+# from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext
 
-from ...creme_core.models import (
+from creme.creme_core.models import (
     BrickDetailviewLocation,
     BrickHomeLocation,
     FakeContact,
     FakeOrganisation,
 )
-from ...creme_core.tests.views.base import BrickTestCaseMixin
+from creme.creme_core.tests.views.base import BrickTestCaseMixin
 
 from ..bricks import ActionsNotOnTimeBrick, ActionsOnTimeBrick
 from ..models import Action
@@ -30,7 +31,7 @@ class ActionTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
     @staticmethod
     def _build_add_url(entity):
-        return reverse('assistants:create_action', args=(entity.id,))
+        return reverse('assistants__create_action', args=(entity.id,))
 
     def _create_action(self, deadline, title='TITLE', descr='DESCRIPTION',
                        reaction='REACTION', entity=None, user=None,
@@ -225,10 +226,12 @@ class ActionTestCase(BrickTestCaseMixin, AssistantsTestCase):
 
         # ---
         create_home = BrickHomeLocation.objects.get_or_create
+        # create_home(brick_id=ActionsOnTimeBrick.id_,    defaults={'order': 50})
         create_home(brick_id=ActionsOnTimeBrick.id,    defaults={'order': 50})
+        # create_home(brick_id=ActionsNotOnTimeBrick.id_, defaults={'order': 51})
         create_home(brick_id=ActionsNotOnTimeBrick.id, defaults={'order': 51})
 
-        response2 = self.assertGET200(reverse('shop_home'))
+        response2 = self.assertGET200(reverse('creme_core__home'))
 
         home_brick_node_ok = self.get_brick_node(
             self.get_html_tree(response2.content), brick=ActionsOnTimeBrick,
@@ -253,7 +256,7 @@ class ActionTestCase(BrickTestCaseMixin, AssistantsTestCase):
         self.assertFalse(action.is_ok)
         self.assertIsNone(action.validation_date)
 
-        url = reverse('assistants:validate_action', args=(action.id,))
+        url = reverse('assistants__validate_action', args=(action.id,))
         self.assertGET405(url)
 
         response = self.assertPOST200(url, follow=True)
@@ -295,6 +298,17 @@ class ActionTestCase(BrickTestCaseMixin, AssistantsTestCase):
         user = self.user
         now_value = now()
 
+        # create_user = get_user_model().objects.create
+        # teammate1 = create_user(
+        #     username='luffy',
+        #     email='luffy@sunny.org', role=self.role,
+        #     first_name='Luffy', last_name='Monkey D.',
+        # )
+        # teammate2 = create_user(
+        #     username='zorro',
+        #     email='zorro@sunny.org', role=self.role,
+        #     first_name='Zorro', last_name='Roronoa',
+        # )
         other_user = self.create_user(0)
         teammate1 = self.create_user(1)
         teammate2 = self.create_user(2)

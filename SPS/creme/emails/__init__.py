@@ -20,7 +20,7 @@ from django.conf import settings
 
 from ..creme_core import get_concrete_model
 
-default_app_config = 'creme.emails.apps.EmailsConfig'
+#default_app_config = 'creme.emails.apps.EmailsConfig'
 
 
 def emailcampaign_model_is_custom():

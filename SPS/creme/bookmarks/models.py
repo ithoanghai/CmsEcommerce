@@ -4,10 +4,7 @@ import urllib.parse
 
 from django.db import models
 from django.utils.translation import gettext as _
-
-#from django.contrib.auth.models import User
-from ..creme_core.models.auth import User
-
+from django.conf import settings
 from taggit.managers import TaggableManager
 
 """
@@ -33,7 +30,7 @@ class Bookmark(models.Model):
     has_favicon = models.BooleanField(_("has favicon"))
     favicon_checked = models.DateTimeField(_("favicon checked"), default=datetime.datetime.now)
 
-    adder = models.ForeignKey(User, related_name="added_bookmarks", verbose_name=_("adder"), on_delete=models.CASCADE)
+    adder = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="added_bookmarks", verbose_name=_("adder"), on_delete=models.CASCADE)
     added = models.DateTimeField(_("added"), default=datetime.datetime.now)
 
     def get_favicon_url(self, force=False):
@@ -77,7 +74,7 @@ class BookmarkInstance(models.Model):
 
     bookmark = models.ForeignKey(Bookmark, related_name="saved_instances",
                                  verbose_name=_("bookmark"), on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="saved_bookmarks", verbose_name=_("user"), on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="saved_bookmarks", verbose_name=_("user"), on_delete=models.CASCADE)
     saved = models.DateTimeField(_("saved"), default=datetime.datetime.now)
 
     description = models.CharField(_("description"), max_length=100)

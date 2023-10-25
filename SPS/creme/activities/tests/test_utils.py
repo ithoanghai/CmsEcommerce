@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from functools import partial
 
+# import pytz
 from django.core.exceptions import ValidationError
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import override as override_tz
@@ -12,6 +13,7 @@ from ...creme_core.models import Relation
 from ...persons.tests.base import skipIfCustomContact
 
 from .. import constants
+# from ..utils import PytzToVtimezone
 from ..utils import (
     ICalEncoder,
     ZoneinfoToVtimezone,
@@ -72,25 +74,22 @@ class UtilsTestCase(_ActivitiesTestCase):
 
     @skipIfCustomContact
     def test_collision01(self):
+        # user = self.login()
         user = self.login_as_root_and_get()
 
-        sub_type1 = self._get_sub_type(constants.UUID_SUBTYPE_MEETING_MEETING)
-        sub_type2 = self._get_sub_type(constants.UUID_SUBTYPE_PHONECALL_INCOMING)
         create_activity = partial(
             Activity.objects.create,
             user=user,
-            # type_id=constants.ACTIVITYTYPE_MEETING,
-            # sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_MEETING,
-            type_id=sub_type1.type_id, sub_type=sub_type1,
+            type_id=constants.ACTIVITYTYPE_MEETING,
+            sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_MEETING,
         )
         create_dt = self.create_datetime
 
         with self.assertNoException():
             act01 = create_activity(
                 title='call01',
-                # type_id=constants.ACTIVITYTYPE_PHONECALL,
-                # sub_type_id=constants.ACTIVITYSUBTYPE_PHONECALL_INCOMING,
-                type_id=sub_type2.type_id, sub_type=sub_type2,
+                type_id=constants.ACTIVITYTYPE_PHONECALL,
+                sub_type_id=constants.ACTIVITYSUBTYPE_PHONECALL_INCOMING,
                 start=create_dt(year=2010, month=10, day=1, hour=12, minute=0),
                 end=create_dt(year=2010, month=10, day=1, hour=13, minute=0),
             )
@@ -204,14 +203,12 @@ class ICalEncoderTestCase(_ActivitiesTestCase):
         user = self.get_root_user()
         create_dt = self.create_datetime
 
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_MEETING_MEETING)
         activity = Activity.objects.create(
             user=user,
             title='Act#1',
             # busy=True,  # TODO ?
-            # type_id=constants.ACTIVITYTYPE_MEETING,
-            # sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_MEETING,
-            type_id=sub_type.type_id, sub_type=sub_type,
+            type_id=constants.ACTIVITYTYPE_MEETING,
+            sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_MEETING,
             start=create_dt(year=2023, month=1, day=17, hour=9),
             end=create_dt(year=2023, month=1, day=17, hour=10),
         )
@@ -238,14 +235,11 @@ class ICalEncoderTestCase(_ActivitiesTestCase):
         user = self.get_root_user()
         create_dt = self.create_datetime
 
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_PHONECALL_OUTGOING)
         activity = Activity.objects.create(
             user=user,
             title='My Activity',
-            # type_id=constants.ACTIVITYTYPE_PHONECALL,
-            # sub_type_id=constants.ACTIVITYSUBTYPE_PHONECALL_OUTGOING,
-            type_id=sub_type.type_id,
-            sub_type=sub_type,
+            type_id=constants.ACTIVITYTYPE_PHONECALL,
+            sub_type_id=constants.ACTIVITYSUBTYPE_PHONECALL_OUTGOING,
             start=create_dt(year=2023, month=3, day=26, hour=14, minute=30),
             end=create_dt(year=2023, month=3, day=26, hour=16),
             place='Tour Eiffel',
@@ -268,6 +262,83 @@ class ICalEncoderTestCase(_ActivitiesTestCase):
             f'END:VEVENT',
             encoder.encode_activity(activity, tz=get_current_timezone()),
         )
+
+#     def test_PytzToVtimezone01(self):
+#         tz = pytz.timezone('Europe/Paris')
+#         self.assertEqual(
+#             """BEGIN:VTIMEZONE
+# TZID:Europe/Paris
+# BEGIN:STANDARD
+# TZOFFSETFROM:+0200
+# TZOFFSETTO:+0100
+# DTSTART:20091025T000300
+# RDATE:20101031T000300
+# TZNAME:CET
+# END:STANDARD
+# BEGIN:DAYLIGHT
+# TZOFFSETFROM:+0100
+# TZOFFSETTO:+0200
+# DTSTART:20100328T000200
+# TZNAME:CEST
+# END:DAYLIGHT
+# END:VTIMEZONE""",
+#             PytzToVtimezone.generate_vtimezone(
+#                 pytz_timezone=tz,
+#                 date_from=date(year=2010, month=1, day=1),
+#                 date_to=date(year=2010, month=12, day=31),
+#             ),
+#         )
+#         self.assertEqual(
+#             """BEGIN:VTIMEZONE
+# TZID:Europe/Paris
+# BEGIN:STANDARD
+# TZOFFSETFROM:+0200
+# TZOFFSETTO:+0100
+# DTSTART:20091025T000300
+# RDATE:20101031T000300
+# RDATE:20111030T000300
+# TZNAME:CET
+# END:STANDARD
+# BEGIN:DAYLIGHT
+# TZOFFSETFROM:+0100
+# TZOFFSETTO:+0200
+# DTSTART:20100328T000200
+# RDATE:20110327T000200
+# TZNAME:CEST
+# END:DAYLIGHT
+# END:VTIMEZONE""",
+#             PytzToVtimezone.generate_vtimezone(
+#                 pytz_timezone=tz,
+#                 date_from=date(year=2010, month=1, day=1),
+#                 date_to=date(year=2011, month=12, day=31),
+#             ),
+#         )
+#
+#     def test_PytzToVtimezone02(self):
+#         tz = pytz.timezone('Europe/London')
+#         self.assertEqual(
+#             """BEGIN:VTIMEZONE
+# TZID:Europe/London
+# BEGIN:STANDARD
+# TZOFFSETFROM:+0100
+# TZOFFSETTO:-0000
+# DTSTART:20091025T000200
+# RDATE:20101031T000200
+# TZNAME:GMT
+# END:STANDARD
+# BEGIN:DAYLIGHT
+# TZOFFSETFROM:-0000
+# TZOFFSETTO:+0100
+# DTSTART:20100328T000100
+# TZNAME:BST
+# END:DAYLIGHT
+# END:VTIMEZONE""",
+#             PytzToVtimezone.generate_vtimezone(
+#                 pytz_timezone=tz,
+#                 date_from=date(year=2010, month=1, day=1),
+#                 date_to=date(year=2010, month=12, day=31),
+#             ),
+#         )
 
     def test_ZoneinfoToVtimezone01(self):
         tz = zoneinfo.ZoneInfo('Europe/Paris')
@@ -350,14 +421,11 @@ END:VTIMEZONE""",
     def test_encode(self):
         user = self.get_root_user()
 
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_MEETING_MEETING)
         create_act = partial(
             Activity.objects.create,
             user=user, busy=True,
-            # type_id=constants.ACTIVITYTYPE_MEETING,
-            # sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_MEETING,
-            type_id=sub_type.type_id,
-            sub_type=sub_type,
+            type_id=constants.ACTIVITYTYPE_MEETING,
+            sub_type_id=constants.ACTIVITYSUBTYPE_MEETING_MEETING,
         )
         create_dt = self.create_datetime
         act1 = create_act(

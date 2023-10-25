@@ -59,7 +59,7 @@ class AbstractQuote(Base):
         self.status = QuoteStatus.objects.get_or_create(
             pk=tpl_status_id,
             defaults={
-                'name': gettext('N/A'),
+                'name': _('N/A'),
                 'order': tpl_status_id,
             },
         )[0]

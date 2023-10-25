@@ -9,7 +9,7 @@ from .categories import category_value
 from .models import Rating
 
 try:
-    from ..creme_core.accounts.mixins import LoginRequiredMixin
+    from ..creme_core.auth.mixins import LoginRequiredMixin
 except ImportError:  # pragma: no cover
     from django.contrib.auth.mixins import LoginRequiredMixin  # pragma: no cover
 

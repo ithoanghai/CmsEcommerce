@@ -2,6 +2,7 @@ import json
 
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.pagination import LimitOffsetPagination
@@ -12,12 +13,11 @@ from rest_framework.views import APIView
 from ..creme_core.models.auth import Account, Tags
 from ..creme_core.common.models import APISettings, Attachments
 from ..comments.models import Comment
-from ..userprofile.models import (Profile)
+from ..persons.models import (Profile, Contact, Teams)
 # from ..creme_core.common.custom_auth import JSONWebTokenAuthentication
 from ..creme_core.common.serializer import (AttachmentsSerializer, CommentSerializer,
-                               LeadCommentSerializer, ProfileSerializer)
+                               LeadCommentSerializer, ProfileSerializer, TeamsSerializer)
 from ..creme_core.common.utils import COUNTRIES, INDCHOICES, LEAD_SOURCE, LEAD_STATUS
-from ..contacts.models import Contact
 from . import swagger_params
 from .forms import LeadListForm
 from .models import Company, Lead
@@ -25,8 +25,6 @@ from .serializer import (CompanySerializer, LeadCreateSerializer,
                               LeadSerializer, TagsSerializer)
 from .tasks import (create_lead_from_file, send_email_to_assigned_user,
                          send_lead_assigned_emails)
-from ..teams.models import Teams
-from ..teams.serializer import TeamsSerializer
 
 
 class LeadListView(APIView, LimitOffsetPagination):
@@ -178,7 +176,7 @@ class LeadListView(APIView, LimitOffsetPagination):
 
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 lead_obj.teams.add(*teams)
 
             if params.get("assigned_to"):
@@ -462,7 +460,7 @@ class LeadDetailView(APIView):
             lead_obj.teams.clear()
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 lead_obj.teams.add(*teams)
 
             lead_obj.assigned_to.clear()
@@ -690,7 +688,7 @@ class CreateLeadFromSite(APIView):
             )
 
         if api_setting and params.get("email") and params.get("title"):
-            # user = User.objects.filter(is_admin=True, is_active=True).first()
+            # user = CremeUser.objects.filter(is_admin=True, is_active=True).first()
             user = api_setting.created_by
             lead = Lead.objects.create(
                 title=params.get("title"),

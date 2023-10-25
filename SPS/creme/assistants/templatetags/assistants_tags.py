@@ -17,7 +17,8 @@
 ################################################################################
 
 from django.template import Library
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 # TODO: make public ?
 from ...creme_core.core.entity_cell import CELLS_MAP
@@ -68,8 +69,8 @@ def assistants_verbose_date_offset(offset_dict, entity):
     # period: a (translated) string, like "1 hour" or "2 weeks".
     # relative: "after" or "before" (translated too ; see msgid in the same .po file)
     # field: verbose name of a field, like "date of creation".
-    return _('{period} {relative} «{field}»').format(
+    return gettext('{period} {relative} «{field}»').format(
         period=date_period_registry.deserialize(offset_dict['period']),
-        relative=_('after') if offset_dict['sign'] == 1 else _('before'),
+        relative=gettext('after') if offset_dict['sign'] == 1 else gettext('before'),
         field=CELLS_MAP.build_cell_from_dict(type(entity), offset_dict['cell']).title,
     )

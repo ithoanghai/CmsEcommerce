@@ -26,17 +26,18 @@ from django.utils.translation import gettext_lazy as _
 
 from ...creme_core.models import fields as core_fields
 from ...creme_core.models import CremeEntity, CremeModel, FieldsConfig
-
+from ...creme_core.common.utils import COUNTRIES
 
 class AbstractAddress(CremeModel):
     name = models.CharField(_('Name'), max_length=100, blank=True)
-    address = models.TextField(_('Address'), blank=True)
+    address = models.TextField(_('Address'), max_length=255, blank=True, default="")
     po_box = models.CharField(
         _('PO box'), max_length=50, blank=True,
     ).set_tags(optional=True)
     zipcode = models.CharField(
-        _('Zip code'), max_length=100, blank=True,
+        _('Post/Zip-code'), max_length=100, blank=True,
     ).set_tags(optional=True)
+    street = models.CharField(_("Street"), max_length=100, blank=True, default="").set_tags(optional=True)
     city = models.CharField(
         _('City'), max_length=100, blank=True,
     ).set_tags(optional=True)
@@ -47,9 +48,8 @@ class AbstractAddress(CremeModel):
         _('State'), max_length=100, blank=True,
     ).set_tags(optional=True)
     country = models.CharField(
-        _('Country'), max_length=40, blank=True,
+        _('Country'), max_length=40, choices=COUNTRIES, blank=True, default=""
     ).set_tags(optional=True)
-
     content_type = core_fields.EntityCTypeForeignKey(
         related_name='+', editable=False,
     ).set_tags(viewable=False)
@@ -89,7 +89,38 @@ class AbstractAddress(CremeModel):
             if s:
                 break
 
-        return s
+        return self.city if self.city else s
+
+    def get_complete_address(self):
+        address = ""
+        if self.address_line:
+            address += self.address_line
+        if self.street:
+            if address:
+                address += ", " + self.street
+            else:
+                address += self.street
+        if self.city:
+            if address:
+                address += ", " + self.city
+            else:
+                address += self.city
+        if self.state:
+            if address:
+                address += ", " + self.state
+            else:
+                address += self.state
+        if self.postcode:
+            if address:
+                address += ", " + self.postcode
+            else:
+                address += self.postcode
+        if self.country:
+            if address:
+                address += ", " + self.get_country_display()
+            else:
+                address += self.get_country_display()
+        return address
 
     def get_edit_absolute_url(self):
         return reverse('persons__edit_address', args=(self.id,))

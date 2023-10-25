@@ -386,7 +386,6 @@ else:
             ordering = ('last_name', 'first_name')
             verbose_name = 'Test Contact'
             verbose_name_plural = 'Test Contacts'
-            # index_together = ('last_name', 'first_name', 'cremeentity_ptr')
             indexes = [
                 models.Index(
                     fields=['last_name', 'first_name', 'cremeentity_ptr'],
@@ -483,7 +482,6 @@ else:
             ordering = ('name',)
             verbose_name = 'Test Organisation'
             verbose_name_plural = 'Test Organisations'
-            # index_together = ('name', 'cremeentity_ptr')
             indexes = [
                 models.Index(
                     fields=['name', 'cremeentity_ptr'],

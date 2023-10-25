@@ -20,7 +20,7 @@ from django.db.models import CharField
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from creme.creme_core.models import MinionModel
+from ...creme_core.models import MinionModel
 
 
 class PollType(MinionModel):

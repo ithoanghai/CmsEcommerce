@@ -330,7 +330,7 @@ class Populator(BasePopulator):
             # ---------------------------
             if apps.is_installed('creme.persons'):
                 try:
-                    from creme.persons import (
+                    from ..persons import (
                         get_contact_model,
                         get_organisation_model,
                     )

@@ -312,7 +312,7 @@ class _EntityEmailsSyncType(JobType):
 
     @property
     def results_bricks(self):
-        from creme.creme_core.bricks import JobResultsBrick
+        from ...creme_core.bricks import JobResultsBrick
         return [JobResultsBrick()]
 
 

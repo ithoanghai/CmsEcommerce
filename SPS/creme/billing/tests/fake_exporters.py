@@ -1,5 +1,5 @@
-from creme.billing import get_invoice_model
-from creme.billing.exporters import (
+from ...billing import get_invoice_model
+from ...billing.exporters import (
     BillingExportEngine,
     BillingExporter,
     ExporterFlavour,

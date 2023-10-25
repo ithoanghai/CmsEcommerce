@@ -18,36 +18,17 @@
 
 import logging
 
-from django.http import Http404, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
 from django.db.models.query_utils import Q
 from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext as _
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    TemplateView,
-)
-from django.views.generic.detail import (
-    SingleObjectMixin,
-    SingleObjectTemplateResponseMixin,
-)
-from django.views.generic.edit import FormMixin, ProcessFormView
+from django.utils.translation import gettext_lazy as _
 
-from ...creme_core.gui import listview  as lv_gui
-from ...creme_core.auth import build_creation_perm as cperm
-from ...creme_core.views import generic
-from ...creme_core.views.generic import base
+import creme.creme_core.gui.listview as lv_gui
+from creme.creme_core.auth import build_creation_perm as cperm
+from creme.creme_core.views import generic
+from creme.creme_core.views.generic import base
 
 from .. import custom_forms, get_folder_model, gui
 from ..constants import DEFAULT_HFILTER_FOLDER
-from ..compat import LoginRequiredMixin
-from ..forms import (
-    ColleagueFolderShareForm,
-    FolderCreateForm,
-)
-from ..hooks import hookset
 
 logger = logging.getLogger(__name__)
 Folder = get_folder_model()
@@ -193,134 +174,3 @@ class FoldersList(generic.EntitiesList):
 
     def get_internal_q(self):
         return Q(parent_folder=self.get_parent_folder())
-
-
-#class of app_list
-class FolderCreate(LoginRequiredMixin, CreateView):
-    model = Folder
-    form_class = FolderCreateForm
-    template_name = "app_list/documents/folder_create.html"
-    parent = None
-#
-    def get(self, request, *args, **kwargs):
-        if "p" in request.GET:
-            qs = self.model.objects.for_user(request.user)
-            self.parent = get_object_or_404(qs, pk=request.GET["p"])
-        else:
-            self.parent = None
-        return super().get(request, *args, **kwargs)
-#
-    def get_context_data(self, **kwargs):
-        kwargs.setdefault("parent", self.parent)
-        return super().get_context_data(**kwargs)
-#
-    def get_initial(self):
-        if self.parent:
-            self.initial["parent"] = self.parent
-        return super().get_initial()
-#
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({"folders": self.model.objects.for_user(self.request.user)})
-        return kwargs
-#
-    def create_folder(self, **kwargs):
-        folder = self.model.objects.create(**kwargs)
-        folder.touch(self.request.user)
-        # if folder is not amongst anything shared it will share with no
-        # users which share will no-op; perhaps not the best way?
-        folder.share(folder.shared_parent().shared_with())
-        return folder
-#
-    def form_valid(self, form):
-        kwargs = {
-            "name": form.cleaned_data["name"],
-            "author": self.request.user,
-            "parent": form.cleaned_data["parent"],
-        }
-        self.object = self.create_folder(**kwargs)
-        hookset.folder_created_message(self.request, self.object)
-        return HttpResponseRedirect(self.get_success_url())
-
-
-class FolderDetail(LoginRequiredMixin, DetailView):
-    model = Folder
-    template_name = "app_list/documents/folder_detail.html"
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.for_user(self.request.user)
-        return qs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        ctx = {
-            "members": self.object.members(user=self.request.user),
-            "can_share": self.object.can_share(self.request.user),
-        }
-        context.update(ctx)
-        return context
-
-
-class FolderShare(LoginRequiredMixin,
-                  SingleObjectTemplateResponseMixin,
-                  FormMixin,
-                  SingleObjectMixin,
-                  ProcessFormView):
-    model = Folder
-    context_object_name = "folder"
-    form_class = ColleagueFolderShareForm
-    template_name = "app_list/documents/folder_share.html"
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.for_user(self.request.user)
-        return qs
-
-    def get_object(self):
-        folder = super().get_object()
-        if not folder.can_share(self.request.user):
-            raise Http404(_(f"Cannot share folder '{folder}'."))
-        return folder
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        can_share_with = hookset.share_with_options(self.request.user, self.object)
-        kwargs.update({"colleagues": can_share_with})
-        return kwargs
-
-    def form_valid(self, form):
-        self.object.share(form.cleaned_data["participants"])
-        hookset.folder_shared_message(self.request, self.request.user, self.object)
-        return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self):
-        return reverse("documents:folder_detail", args=[self.object.pk])
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        ctx = {
-            "participants": self.object.shared_with(),
-        }
-        context.update(ctx)
-        return context
-
-
-class FolderDelete(LoginRequiredMixin, DeleteView):
-    model = Folder
-    success_url = reverse_lazy("documents:document_index")
-    template_name = "app_list/documents/folder_confirm_delete.html"
-
-    def delete(self, request, *args, **kwargs):
-        hookset.folder_pre_delete(self.request, self.get_object())
-        success_url = super().delete(request, *args, **kwargs)
-        hookset.folder_deleted_message(self.request, self.object)
-        return success_url

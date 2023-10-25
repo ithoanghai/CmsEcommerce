@@ -22,7 +22,7 @@ class DefaultHookSet(object):
             })
 
 
-class HookProxy(object):
+class HookProxy:
 
     def __getattr__(self, attr):
         from .conf import settings  # if put globally there is a race condition

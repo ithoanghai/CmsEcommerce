@@ -215,7 +215,7 @@ class CrudityBackend:
 
                         if user is None:
                             shift_user_id = data.get('user_id')
-                            User = get_user_model()  # TODO: use first() instead
+                            CremeUser = get_user_model()  # TODO: use first() instead
                             if shift_user_id is None:
                                 try:
                                     # Not as the default value of data.get because a query is

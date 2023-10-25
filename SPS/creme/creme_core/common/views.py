@@ -36,22 +36,19 @@ from .tasks import (resend_activation_link_to_user,
                           send_email_to_new_user, send_email_to_reset_password,
                           send_email_user_delete)
 from .token_generator import account_activation_token
-# from rest_framework_jwt.serializers import jwt_encode_handler
+from rest_framework_jwt.serializers import jwt_encode_handler
 
 from .utils import COUNTRIES, ROLES, jwt_payload_handler
-from ...contacts.serializer import ContactSerializer
+from .serializer import ContactSerializer, TeamsSerializer
 from ...leads.models import Lead
 from ...leads.serializer import LeadSerializer
-from ...opportunity.models import Opportunity
-from ...opportunity.serializer import OpportunitySerializer
-from ...contacts.models import Contact
+from ...opportunities.models import Opportunity
+from ...opportunities.serializer import OpportunitySerializer
+from ...persons.models import Contact, Teams, Organisation, Profile
 from ...cases.models import Case
 from ...cases.serializer import CaseSerializer
-from ...teams.models import Teams
-from ...teams.serializer import TeamsSerializer
-from ..models.auth import Account, Tags, User
-from ...creme_core.accounts.serializer import AccountSerializer
-from ...userprofile.models import Org, Profile
+from ..models.auth import Account, Tags, CremeUser
+from ...creme_core.auth.serializer import AccountSerializer
 
 
 class GetTeamsAndUsersView(APIView):
@@ -64,7 +61,7 @@ class GetTeamsAndUsersView(APIView):
     )
     def get(self, request, *args, **kwargs):
         data = {}
-        teams = Teams.objects.filter(org=request.org).order_by("-id")
+        teams = settings.PERSONS_TEAM_MODEL.objects.filter(org=request.org).order_by("-id")
         teams_data = TeamsSerializer(teams, many=True).data
         profiles = Profile.objects.filter(is_active=True, org=request.org).order_by(
             "user__email"
@@ -80,7 +77,7 @@ class UserDetailView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
-        profile = get_object_or_404(Profile, pk=pk)
+        profile = get_object_or_404(settings.PERSONS_PROFILE_MODEL, pk=pk)
         return profile
 
     @swagger_auto_schema(
@@ -296,7 +293,7 @@ class LoginView(APIView):
 
 
 class RegistrationView(APIView):
-    model = User
+    model = CremeUser
     serializer_class = RegisterOrganizationSerializer
 
     @swagger_auto_schema(
@@ -333,7 +330,7 @@ class OrgProfileCreateView(APIView):
     ##authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    model1 = Org
+    model1 = Organisation
     model2 = Profile
     serializer_class = OrgProfileCreateSerializer
     profile_serializer = CreateProfileSerializer
@@ -652,7 +649,7 @@ class DocumentListView(APIView, LimitOffsetPagination):
                     doc.shared_to.add(*profiles)
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 if teams:
                     doc.teams.add(*teams)
 
@@ -797,7 +794,7 @@ class DocumentDetailView(APIView):
             doc.teams.clear()
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 if teams:
                     doc.teams.add(*teams)
             return Response(
@@ -818,7 +815,7 @@ class ForgotPasswordView(APIView):
         params = request.post_data
         serializer = ForgotPasswordSerializer(data=params)
         if serializer.is_valid():
-            user = get_object_or_404(User, email=params.get("email"))
+            user = get_object_or_404(settings.AUTH_USER_MODEL, email=params.get("email"))
             if not user.is_active:
                 return Response(
                     {"error": True, "errors": "Please activate account to proceed."},
@@ -847,12 +844,12 @@ class ResetPasswordView(APIView):
         params = request.post_data
         try:
             uid = force_str(urlsafe_base64_decode(uid))
-            user_obj = User.objects.get(pk=uid)
+            user_obj = CremeUser.objects.get(pk=uid)
             if not user_obj.password:
                 if not user_obj.is_active:
                     user_obj.is_active = True
                     user_obj.save()
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        except (TypeError, ValueError, OverflowError, CremeUser.DoesNotExist):
             user_obj = None
         if user_obj is not None:
             password1 = params.get("new_password1")
@@ -1037,7 +1034,7 @@ class ActivateUserView(View):
     #     tags=["Auth"],
     # )
     def get(self, request, uid, token, activation_key, format=None):
-        user = User.objects.get(activation_key=activation_key)
+        user = CremeUser.objects.get(activation_key=activation_key)
         if user:
             if timezone.now() > user.key_expires:
                 resend_activation_link_to_user.delay(
@@ -1051,8 +1048,8 @@ class ActivateUserView(View):
             else:
                 try:
                     uid = force_str(urlsafe_base64_decode(uid))
-                    user = User.objects.get(pk=uid)
-                except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+                    user = CremeUser.objects.get(pk=uid)
+                except (TypeError, ValueError, OverflowError, CremeUser.DoesNotExist):
                     user = None
                 if user is not None and account_activation_token.check_token(
                     user, token
@@ -1086,8 +1083,8 @@ class ActivateUserView(View):
     #         else:
     #             try:
     #                 uid = force_str(urlsafe_base64_decode(uid))
-    #                 user = User.objects.get(pk=uid)
-    #             except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+    #                 user = CremeUser.objects.get(pk=uid)
+    #             except (TypeError, ValueError, OverflowError, CremeUser.DoesNotExist):
     #                 user = None
     #             if user is not None and account_activation_token.check_token(
     #                 user, token
@@ -1113,7 +1110,7 @@ class ResendActivationLinkView(APIView):
     )
     def post(self, request, format=None):
         params = request.post_data
-        user = get_object_or_404(User, email=params.get("email"))
+        user = get_object_or_404(settings.AUTH_USER_MODEL, email=params.get("email"))
         if user.is_active:
             return Response(
                 {"error": False, "message": "Account is active. Please login"},
@@ -1168,7 +1165,7 @@ class GoogleLoginView(APIView):
             kw = dict(params=params, headers={}, timeout=60)
             response = requests.request("GET", url, **kw)
             if response.status_code == 200:
-                email_matches = User.objects.filter(email=response.json().get("email"))
+                email_matches = CremeUser.objects.filter(email=response.json().get("email"))
                 if email_matches:
                     user = email_matches.first()
                     # user = authenticate(email=user.email)

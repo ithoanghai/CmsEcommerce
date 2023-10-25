@@ -22,10 +22,10 @@ from collections import defaultdict
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.utils.translation import gettext as _
 
-from creme.creme_core.core.exceptions import ConflictError
-from creme.creme_core.forms import CremeModelForm
-from creme.creme_core.gui.custom_form import ExtraFieldGroup
-from creme.creme_core.models import FieldsConfig
+from ...creme_core.core.exceptions import ConflictError
+from ...creme_core.forms import CremeModelForm
+from ...creme_core.gui.custom_form import ExtraFieldGroup
+from ...creme_core.models import FieldsConfig
 
 from .. import get_address_model
 
@@ -139,7 +139,7 @@ class AddressesGroup(ExtraFieldGroup):
             for field, errors in addr_form.errors.items():
                 if field == NON_FIELD_ERRORS:
                     yield field, [
-                        gettext('{address_field}: {error}').format(
+                        _('{address_field}: {error}').format(
                             address_field=verbose_name, error=error,
                         ) for error in errors
                     ]

@@ -21,7 +21,7 @@ from ..creme_core.forms import widgets
 
 CustomerDispatcher = get_class('customer.utils', 'CustomerDispatcher')
 ProductAlert = get_model('customer', 'ProductAlert')
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 def generate_username():
@@ -29,9 +29,9 @@ def generate_username():
     allowed_chars = letters + string.digits + '_'
     uname = get_random_string(length=30, allowed_chars=allowed_chars)
     try:
-        User.objects.get(username=uname)
+        CremeUser.objects.get(username=uname)
         return generate_username()
-    except User.DoesNotExist:
+    except CremeUser.DoesNotExist:
         return uname
 
 
@@ -111,7 +111,7 @@ class EmailUserCreationForm(forms.ModelForm):
         widget=forms.HiddenInput, required=False)
 
     class Meta:
-        model = User
+        model = CremeUser
         fields = ('email',)
 
     def __init__(self, host=None, *args, **kwargs):
@@ -135,7 +135,7 @@ class EmailUserCreationForm(forms.ModelForm):
         Checks for existing users with the supplied email address.
         """
         email = normalise_email(self.cleaned_data['email'])
-        if User._default_manager.filter(email__iexact=email).exists():
+        if CremeUser._default_manager.filter(email__iexact=email).exists():
             raise forms.ValidationError(
                 _("A user with that email address already exists"))
         return email
@@ -158,7 +158,7 @@ class EmailUserCreationForm(forms.ModelForm):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password1'])
 
-        if 'username' in [f.name for f in User._meta.fields]:
+        if 'username' in [f.name for f in CremeUser._meta.fields]:
             user.username = generate_username()
         if commit:
             user.save()
@@ -257,7 +257,7 @@ class UserForm(forms.ModelForm):
         level in ``django.contrib.auth.models.User``.
         """
         email = normalise_email(self.cleaned_data['email'])
-        if User._default_manager.filter(
+        if CremeUser._default_manager.filter(
                 email__iexact=email).exclude(id=self.user.id).exists():
             raise ValidationError(
                 _("A user with this email address already exists"))
@@ -265,7 +265,7 @@ class UserForm(forms.ModelForm):
         return email
 
     class Meta:
-        model = User
+        model = CremeUser
         fields = existing_user_fields(['first_name', 'last_name', 'email'])
 
 
@@ -288,19 +288,19 @@ if Profile:  # noqa (too complex (12))
             profile_field_names = list(self.fields.keys())
 
             # Get user field names (we look for core user fields first)
-            core_field_names = set([f.name for f in User._meta.fields])
+            core_field_names = set([f.name for f in CremeUser._meta.fields])
             user_field_names = ['email']
             for field_name in ('first_name', 'last_name'):
                 if field_name in core_field_names:
                     user_field_names.append(field_name)
-            user_field_names.extend(User._meta.additional_fields)
+            user_field_names.extend(CremeUser._meta.additional_fields)
 
             # Store user fields so we know what to save later
             self.user_field_names = user_field_names
 
             # Add additional user form fields
             additional_fields = forms.fields_for_model(
-                User, fields=user_field_names)
+                CremeUser, fields=user_field_names)
             self.fields.update(additional_fields)
 
             # Ensure email is required and initialised correctly
@@ -320,7 +320,7 @@ if Profile:  # noqa (too complex (12))
         def clean_email(self):
             email = normalise_email(self.cleaned_data['email'])
 
-            users_with_email = User._default_manager.filter(
+            users_with_email = CremeUser._default_manager.filter(
                 email__iexact=email).exclude(id=self.instance.user.id)
             if users_with_email.exists():
                 raise ValidationError(

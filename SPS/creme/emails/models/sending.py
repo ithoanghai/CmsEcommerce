@@ -115,7 +115,7 @@ class EmailSendingConfigItem(CremeModel):
         return self.name
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_sending_config_item', args=(self.id,))
+        return reverse('emails__edit_sending_config_item', args=(self.id,))
 
     def _password_encrypter(self):
         return SymmetricEncrypter(salt=self.password_salt)
@@ -211,10 +211,10 @@ class EmailSending(CremeModel):
         )
 
     def get_absolute_url(self):
-        return reverse('emails:view_sending', args=(self.id,))
+        return reverse('emails__view_sending', args=(self.id,))
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_sending', args=(self.id,))
+        return reverse('emails__edit_sending', args=(self.id,))
 
     def get_related_entity(self):  # For generic views
         return self.campaign

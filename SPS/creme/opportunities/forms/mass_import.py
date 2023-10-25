@@ -18,7 +18,7 @@
 
 from django.forms import ModelChoiceField
 from django.utils.translation import gettext as _
-
+from django.conf import settings
 from ... import persons
 from ...creme_core.forms.mass_import import (
     EntityExtractorField,

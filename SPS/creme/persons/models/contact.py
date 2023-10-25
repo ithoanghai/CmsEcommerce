@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import logging
+import arrow
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -28,6 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext_lazy
 
+from ...creme_core.common.utils import COUNTRIES
 from ...creme_core.core.exceptions import SpecificProtectedError
 from ...creme_core.models import CREME_REPLACE_NULL, CremeEntity, Language
 from ...creme_core.models.fields import PhoneField
@@ -35,7 +37,7 @@ from ...creme_core.utils import update_model_instance
 from ...documents.models.fields import ImageEntityForeignKey
 
 from .. import constants, get_contact_model, get_organisation_model
-from . import other_models
+from . import other_models, profile, address, organisation, team
 from .base import PersonWithAddressesMixin
 
 logger = logging.getLogger(__name__)
@@ -53,10 +55,14 @@ class AbstractContact(CremeEntity, PersonWithAddressesMixin):
     first_name = models.CharField(_('First name'), max_length=100, blank=True)
 
     skype    = models.CharField('Skype', max_length=100, blank=True).set_tags(optional=True)
+    linked_in_url = models.URLField(blank=True, null=True)
+    facebook_url = models.URLField(blank=True, null=True)
+    twitter_username = models.CharField(max_length=255, null=True)
     phone    = PhoneField(_('Phone'), max_length=100, blank=True).set_tags(optional=True)
     mobile   = PhoneField(_('Mobile'), max_length=100, blank=True).set_tags(optional=True)
     fax      = models.CharField(_('Fax'), max_length=100, blank=True).set_tags(optional=True)
     email    = models.EmailField(_('Email address'), blank=True).set_tags(optional=True)
+    secondary_email = models.EmailField(_('Second Email address'), default="", blank=True)
     url_site = models.URLField(_('Web Site'), max_length=500, blank=True).set_tags(optional=True)
 
     position = models.ForeignKey(
@@ -93,6 +99,28 @@ class AbstractContact(CremeEntity, PersonWithAddressesMixin):
 
     search_score = 101
 
+    salutation = models.CharField(
+        _("Salutation"), max_length=255, default="", blank=True
+    )
+    title = models.CharField(_("Title"), max_length=255, default="", blank=True)
+    department = models.CharField(_("Department"), max_length=255, null=True)
+    do_not_call = models.BooleanField(default=False)
+    address = models.ForeignKey(
+        address.Address,
+        related_name="adress_contacts",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    created_by = models.ForeignKey(profile.Profile, on_delete=models.CASCADE, related_name='contact_created_by', null=True)
+    created_on = models.DateTimeField(_("Created on"), auto_now=True)
+    is_active = models.BooleanField(default=False)
+    assigned_to = models.ManyToManyField(profile.Profile, related_name="contact_assigned_users")
+    teams = models.ManyToManyField(settings.PERSONS_TEAM_MODEL, related_name="contact_teams")
+    org = models.ForeignKey(organisation.Organisation, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_("Organization"))
+    country = models.CharField(max_length=3, choices=COUNTRIES, blank=True, null=True)
+
+
     creation_label = _('Create a contact')
     save_label     = _('Save the contact')
 
@@ -102,7 +130,6 @@ class AbstractContact(CremeEntity, PersonWithAddressesMixin):
         ordering = ('last_name', 'first_name')
         verbose_name = _('Contact')
         verbose_name_plural = _('Contacts')
-        # index_together = ('last_name', 'first_name', 'cremeentity_ptr')
         indexes = [
             models.Index(
                 fields=['last_name', 'first_name', 'cremeentity_ptr'],
@@ -248,6 +275,30 @@ class AbstractContact(CremeEntity, PersonWithAddressesMixin):
             email=user.email or _('complete@Me.com'),
             **kwargs
         )
+
+    @property
+    def created_on_arrow(self):
+        return arrow.get(self.created_on).humanize()
+
+    @property
+    def get_team_users(self):
+        team_user_ids = list(self.teams.values_list("users__id", flat=True))
+        return profile.Profile.objects.filter(id__in=team_user_ids)
+
+    @property
+    def get_team_and_assigned_users(self):
+        team_user_ids = list(self.teams.values_list("users__id", flat=True))
+        assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
+        user_ids = team_user_ids + assigned_user_ids
+        return profile.Profile.objects.filter(id__in=user_ids)
+
+    @property
+    def get_assigned_users_not_in_teams(self):
+        team_user_ids = list(self.teams.values_list("users__id", flat=True))
+        assigned_user_ids = list(self.assigned_to.values_list("id", flat=True))
+        user_ids = set(assigned_user_ids) - set(team_user_ids)
+        return profile.Profile.objects.filter(id__in=list(user_ids))
+
 
 
 class Contact(AbstractContact):

@@ -4,7 +4,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
 
-from ..creme_core.models.auth import User, Account, Email
+from ..creme_core.models import CremeUser, Account, Email
 from ..contacts.models import Contact
 from ..tasks.models import Task
 

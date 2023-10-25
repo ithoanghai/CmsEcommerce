@@ -9,7 +9,7 @@ from channels.db import database_sync_to_async
 from ..friends.models import CustomNotification
 from ..friends.serializers import NotificationSerializer
 
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 @database_sync_to_async

@@ -655,7 +655,7 @@
 
 # def get_users(request):
 #     if request.method == 'GET':
-#         users = User.objects.all()
+#         users = CremeUser.objects.all()
 #         paginator = Paginator(users, 5)
 #         try:
 #             users = paginator.page(request.GET.get('page'))

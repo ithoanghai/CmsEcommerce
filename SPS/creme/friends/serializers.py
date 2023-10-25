@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
-from ..creme_core.models.auth import User
+from ..creme_core.models import CremeUser
 from ..creme_core.core.serializers import DynamicFieldsModelSerializer
 from .models import CustomNotification, FriendshipRequest
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
     class Meta:
-        model = User
+        model = CremeUser
         exclude = ("password",)
 
 

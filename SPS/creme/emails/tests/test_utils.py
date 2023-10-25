@@ -3,7 +3,7 @@ from email.mime.image import MIMEImage
 from django.core import mail as django_mail
 from django.utils.html import escape
 
-from creme_crm.creme.documents.tests.base import _DocumentsTestCase
+from ...documents.tests.base import _DocumentsTestCase
 
 from ..models import EmailSignature
 from ..utils import EMailSender, SignatureRenderer, get_mime_image

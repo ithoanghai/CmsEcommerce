@@ -30,9 +30,6 @@ from .views import (
 from . import views
 
 
-app_name = "reviews"
-
-
 urlpatterns = [
     re_path(r"^section/(?P<section_slug>[\w\-]+)/all/", review_section, {"reviewed": "all"}, name="review_section"),
     re_path(r"^section/(?P<section_slug>[\w\-]+)/reviewed/", review_section, {"reviewed": "reviewed"}, name="user_reviewed"),

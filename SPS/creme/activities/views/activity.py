@@ -18,23 +18,23 @@
 
 from __future__ import annotations
 
+# import warnings
 from datetime import time
 from functools import partial
 
-# from dateutil.parser import isoparse
+from dateutil.parser import isoparse
 from django.db.models import Q
 from django.forms.forms import BaseForm
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-# from django.utils.timezone import get_current_timezone, is_naive, make_naive
+from django.utils.timezone import get_current_timezone, is_naive, make_naive
 from django.utils.translation import gettext_lazy as _
 
-from ...creme_core.models import EntityCredentials, RelationType
+from ...creme_core.models import CremeEntity, EntityCredentials, RelationType
 from ...creme_core.auth import build_creation_perm as cperm
 from ...creme_core.gui.custom_form import CustomFormDescriptor
 from ...creme_core.gui.listview import CreationButton
-from ...creme_core.models.entity import CremeEntity
 from ...creme_core.utils import bool_from_str_extended, get_from_GET_or_404
 from ...creme_core.views import generic
 from ...persons import get_contact_model
@@ -43,7 +43,6 @@ from .. import constants, custom_forms, get_activity_model
 from ..forms import activity as act_forms
 from ..models import ActivitySubType, ActivityType
 from ..utils import ICalEncoder
-from .calendar import fromRFC3339
 
 Activity = get_activity_model()
 _CREATION_PERM_STR = cperm(Activity)
@@ -55,84 +54,55 @@ class ActivityCreation(generic.EntityCreation):
     type_name_url_kwarg = 'act_type'
 
     allowed_activity_types = {
-        # 'meeting':   constants.ACTIVITYTYPE_MEETING,
-        # 'phonecall': constants.ACTIVITYTYPE_PHONECALL,
-        # 'task':      constants.ACTIVITYTYPE_TASK,
-        'meeting':   constants.UUID_TYPE_MEETING,
-        'phonecall': constants.UUID_TYPE_PHONECALL,
-        'task':      constants.UUID_TYPE_TASK,
+        'meeting':   constants.ACTIVITYTYPE_MEETING,
+        'phonecall': constants.ACTIVITYTYPE_PHONECALL,
+        'task':      constants.ACTIVITYTYPE_TASK,
     }
     # TODO: add a field <ActivitySubType.is_default> instead.
     default_activity_subtypes = {
-        # constants.ACTIVITYTYPE_MEETING:   constants.ACTIVITYSUBTYPE_MEETING_MEETING,
-        # constants.ACTIVITYTYPE_PHONECALL: constants.ACTIVITYSUBTYPE_PHONECALL_OUTGOING,
-        constants.UUID_TYPE_MEETING:   constants.UUID_SUBTYPE_MEETING_MEETING,
-        constants.UUID_TYPE_PHONECALL: constants.UUID_SUBTYPE_PHONECALL_OUTGOING,
+        constants.ACTIVITYTYPE_MEETING:   constants.ACTIVITYSUBTYPE_MEETING_MEETING,
+        constants.ACTIVITYTYPE_PHONECALL: constants.ACTIVITYSUBTYPE_PHONECALL_OUTGOING,
     }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.type_id = None
-        self.type_uuid = None
+        self.type_id = None
 
     def get(self, request, *args, **kwargs):
-        # self.type_id = self.get_type_id()
-        self.type_uuid = self.get_type_uuid()
+        self.type_id = self.get_type_id()
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # self.type_id = self.get_type_id()
-        self.type_uuid = self.get_type_uuid()
+        self.type_id = self.get_type_id()
         return super().post(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
 
-        # type_id = self.type_id
-        # if type_id:
-        #     subtype_id = self.default_activity_subtypes.get(type_id)
-        #     kwargs['sub_type'] = get_object_or_404(
-        #         ActivitySubType, id=subtype_id,
-        #     ) if subtype_id else ActivitySubType.objects.filter(type=type_id).first()
-        type_uuid = self.type_uuid
-        if type_uuid:
-            subtype_uuid = self.default_activity_subtypes.get(type_uuid)
-            kwargs['sub_type'] = (
-                get_object_or_404(ActivitySubType, uuid=subtype_uuid)
-                if subtype_uuid else
-                ActivitySubType.objects.filter(type__uuid=type_uuid).first()
-            )
+        type_id = self.type_id
+        if type_id:
+            subtype_id = self.default_activity_subtypes.get(type_id)
+            kwargs['sub_type'] = get_object_or_404(
+                ActivitySubType, id=subtype_id,
+            ) if subtype_id else ActivitySubType.objects.filter(type=type_id).first()
 
         return kwargs
 
-    # def get_type_id(self):
-    #     act_type = self.kwargs.get(self.type_name_url_kwarg)
-    #
-    #     if act_type is None:
-    #         type_id = None
-    #     else:
-    #         type_id = self.allowed_activity_types.get(act_type)
-    #
-    #         if not type_id:
-    #             raise Http404(f'No activity type matches with: {act_type}')
-    #
-    #     return type_id
-    def get_type_uuid(self):
+    def get_type_id(self):
         act_type = self.kwargs.get(self.type_name_url_kwarg)
 
         if act_type is None:
-            type_uuid = None
+            type_id = None
         else:
-            type_uuid = self.allowed_activity_types.get(act_type)
+            type_id = self.allowed_activity_types.get(act_type)
 
-            if not type_uuid:
+            if not type_id:
                 raise Http404(f'No activity type matches with: {act_type}')
 
-        return type_uuid
+        return type_id
 
     def get_title(self):
-        # return Activity.get_creation_title(self.type_id)
-        return Activity.get_creation_title(self.type_uuid)
+        return Activity.get_creation_title(self.type_id)
 
 
 class ActivityCreationPopup(generic.EntityCreationPopup):
@@ -144,23 +114,23 @@ class ActivityCreationPopup(generic.EntityCreationPopup):
         request = self.request
 
         if request.method == 'GET':
-            # tz = get_current_timezone()
+            tz = get_current_timezone()
             get = partial(get_from_GET_or_404, GET=request.GET)
             initial['is_all_day'] = get(
                 key='allDay', default='0', cast=bool_from_str_extended,
             )
 
-            # def isoparse_naive(value):
-            #     if value is not None:
-            #        value = isoparse(value)
+            def isoparse_naive(value):
+                if value is not None:
+                    value = isoparse(value)
 
-            #     if not is_naive(value):
-            #        value = make_naive(value, tz)
+                    if not is_naive(value):
+                        value = make_naive(value, tz)
 
-            #    return value
+                return value
 
             def _set_datefield(request_key, field_name, **kwargs):
-                value = get(key=request_key, cast=fromRFC3339, **kwargs)
+                value = get(key=request_key, cast=isoparse_naive, **kwargs)
 
                 if value:
                     initial[field_name] = (
@@ -187,10 +157,8 @@ class ActivityCreationPopup(generic.EntityCreationPopup):
 class UnavailabilityCreation(ActivityCreation):
     form_class = custom_forms.UNAVAILABILITY_CREATION_CFORM
 
-    # def get_type_id(self):
-    #     return constants.ACTIVITYTYPE_INDISPO
-    def get_type_uuid(self):
-        return constants.UUID_TYPE_UNAVAILABILITY
+    def get_type_id(self):
+        return constants.ACTIVITYTYPE_INDISPO
 
 
 class RelatedActivityCreation(ActivityCreation):
@@ -259,20 +227,13 @@ class RelatedActivityCreation(ActivityCreation):
 
         return rtype_id
 
-    # def get_type_id(self):
-    #     type_id = self.request.GET.get('activity_type')
-    #
-    #     if type_id:
-    #         get_object_or_404(ActivityType, pk=type_id)
-    #
-    #     return type_id
-    def get_type_uuid(self):
-        type_uuid = self.request.GET.get('activity_type')  # TODO: attribute
+    def get_type_id(self):
+        type_id = self.request.GET.get('activity_type')  # TODO: attribute
 
-        if type_uuid:
-            get_object_or_404(ActivityType, uuid=type_uuid)
+        if type_id:
+            get_object_or_404(ActivityType, pk=type_id)
 
-        return type_uuid
+        return type_id
 
 
 class ActivityDetail(generic.EntityDetail):
@@ -318,17 +279,15 @@ class TypedActivitiesList(ActivitiesList):
 class PhoneCallsList(TypedActivitiesList):
     title = _('List of phone calls')
     creation_label = _('Create a phone call')
-    creation_url = reverse_lazy('activities:create_activity', args=('phonecall',))
-    # internal_q = Q(type=constants.ACTIVITYTYPE_PHONECALL)
-    internal_q = Q(type__uuid=constants.UUID_TYPE_PHONECALL)
+    creation_url = reverse_lazy('activities__create_activity', args=('phonecall',))
+    internal_q = Q(type=constants.ACTIVITYTYPE_PHONECALL)
 
 
 class MeetingsList(TypedActivitiesList):
     title = _('List of meetings')
     creation_label = _('Create a meeting')
-    creation_url = reverse_lazy('activities:create_activity', args=('meeting',))
-    # internal_q = Q(type=constants.ACTIVITYTYPE_MEETING)
-    internal_q = Q(type__uuid=constants.UUID_TYPE_MEETING)
+    creation_url = reverse_lazy('activities__create_activity', args=('meeting',))
+    internal_q = Q(type=constants.ACTIVITYTYPE_MEETING)
 
 
 class ICalExport(generic.CheckedView):
@@ -361,3 +320,31 @@ class ICalExport(generic.CheckedView):
                 'Content-Disposition': f'attachment; filename="{self.attachment_name}"',
             },
         )
+
+
+# class TypeChoices(base.CheckedView):
+#     response_class = CremeJsonResponse
+#     type_id_url_kwarg = 'type_id'
+#
+#     def get_choices(self):
+#         type_id = self.kwargs[self.type_id_url_kwarg]
+#
+#         if not type_id:
+#             return []
+#
+#         get_object_or_404(ActivityType, pk=type_id)
+#
+#         return [
+#             *ActivitySubType.objects.filter(type=type_id).values_list('id', 'name'),
+#         ]
+#
+#     def get(self, request, *args, **kwargs):
+#         warnings.warn(
+#             'The view activities.views.activity.TypeChoices is deprecated.',
+#             DeprecationWarning,
+#         )
+#
+#         return self.response_class(
+#             self.get_choices(),
+#             safe=False,  # Result is not a dictionary
+#         )

@@ -765,7 +765,7 @@ class HistoryLine(Model):
     entity_owner = CremeUserForeignKey()
 
     # Not a FK to a User object because we want to keep the same line after the
-    # deletion of a User.
+    # deletion of a CremeUser.
     username = models.CharField(max_length=30)
 
     date = CreationDateTimeField(_('Date'))

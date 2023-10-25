@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from ..creme_core.models.auth import Account, User
+from ...creme_core.models import Account, CremeUser
 
 from ..models import PhoneNumber, PhoneCountryCode
 

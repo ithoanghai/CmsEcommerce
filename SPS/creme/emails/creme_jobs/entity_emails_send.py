@@ -20,7 +20,7 @@ from datetime import timedelta
 
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.creme_jobs.base import JobType
+from ...creme_core.creme_jobs.base import JobType
 
 from .. import get_entityemail_model
 

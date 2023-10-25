@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from creme.creme_core.views import generic
+from ...creme_core.views import generic
 
 from .. import custom_forms, get_ticket_model
 from ..constants import DEFAULT_HFILTER_TICKET

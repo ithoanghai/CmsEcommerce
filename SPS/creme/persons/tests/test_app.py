@@ -4,11 +4,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.auth import EntityCredentials
-from creme.creme_core.menu import CremeEntry
-from creme.creme_core.models import EntityFilter, HeaderFilter, SetCredentials
+from ...creme_core.auth import EntityCredentials
+from ...creme_core.menu import CremeEntry
+from ...creme_core.models import EntityFilter, HeaderFilter, SetCredentials
 # from creme.creme_core.tests.base import CremeTestCase
-from creme.creme_core.tests.views.base import BrickTestCaseMixin
+from ...creme_core.tests.views.base import BrickTestCaseMixin
 
 from .. import bricks, constants, workflow
 from ..menu import UserContactEntry

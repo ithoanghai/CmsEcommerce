@@ -11,7 +11,7 @@ from ...core.compat import get_user_model
 from ...core.loading import get_classes, get_model
 from ...views import sort_queryset
 
-User = get_user_model()
+CremeUser = get_user_model()
 Partner = get_model('partner', 'Partner')
 (
     PartnerSearchForm, PartnerCreateForm, PartnerAddressForm,
@@ -127,7 +127,7 @@ class PartnerDeleteView(generic.DeleteView):
 
 
 class PartnerUserCreateView(generic.CreateView):
-    model = User
+    model = CremeUser
     template_name = 'oscar/dashboard/partners/partner_user_form.html'
     form_class = NewUserForm
 
@@ -194,7 +194,7 @@ class PartnerUserLinkView(generic.View):
         return self.post(request, user_pk, partner_pk)
 
     def post(self, request, user_pk, partner_pk):
-        user = get_object_or_404(User, pk=user_pk)
+        user = get_object_or_404(settings.AUTH_USER_MODEL, pk=user_pk)
         name = user.get_full_name() or user.email
         partner = get_object_or_404(Partner, pk=partner_pk)
         if self.link_user(user, partner):
@@ -247,7 +247,7 @@ class PartnerUserUnlinkView(generic.View):
         return True
 
     def post(self, request, user_pk, partner_pk):
-        user = get_object_or_404(User, pk=user_pk)
+        user = get_object_or_404(settings.AUTH_USER_MODEL, pk=user_pk)
         name = user.get_full_name() or user.email
         partner = get_object_or_404(Partner, pk=partner_pk)
         if self.unlink_user(user, partner):
@@ -277,7 +277,7 @@ class PartnerUserUpdateView(generic.UpdateView):
 
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['partner_pk'])
-        return get_object_or_404(User,
+        return get_object_or_404(settings.AUTH_USER_MODEL,
                                  pk=self.kwargs['user_pk'],
                                  partners__pk=self.kwargs['partner_pk'])
 

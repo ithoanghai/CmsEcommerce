@@ -2,3 +2,5 @@ from .address import AbstractAddress, Address  # NOQA
 from .contact import AbstractContact, Contact  # NOQA
 from .organisation import AbstractOrganisation, Organisation  # NOQA
 from .other_models import *  # NOQA
+from .profile import AbstractProfile, Profile  # NOQA
+from .team import AbstractTeams, Teams, AbstractBaseTeam, Team, AbstractBaseMembership, Membership, create_slug  # NOQA

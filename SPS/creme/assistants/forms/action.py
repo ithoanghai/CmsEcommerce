@@ -20,8 +20,9 @@ from datetime import datetime, time
 
 from django.forms.fields import TimeField
 from django.utils.timezone import localtime, make_aware
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
+# from creme.creme_core.utils.dates import make_aware_dt
 from ...creme_core.forms import CremeModelForm
 from ...creme_core.forms.widgets import CalendarWidget
 
@@ -56,6 +57,7 @@ class ActionForm(CremeModelForm):
             deadline_time = cdata.get('deadline_time')
 
             if deadline_time:
+                # cdata['deadline'] = make_aware_dt(
                 cdata['deadline'] = make_aware(
                     datetime.combine(cdata['deadline'], deadline_time)
                 )

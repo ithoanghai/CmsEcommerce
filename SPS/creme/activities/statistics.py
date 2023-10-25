@@ -1,6 +1,6 @@
 ################################################################################
 #    Creme is a free/open-source Customer Relationship Management software
-#    Copyright (C) 2018-2023  Hybird
+#    Copyright (C) 2018-2022  Hybird
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published by
@@ -19,7 +19,7 @@
 from dateutil.relativedelta import relativedelta
 from django.utils.formats import number_format
 from django.utils.timezone import now
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy
 
 from . import constants
@@ -29,8 +29,7 @@ class AveragePerMonthStatistics:
     label = _('Activities (since one year)')
     items = [
         {
-            # 'type_id': constants.ACTIVITYTYPE_MEETING,
-            'type_uuid': constants.UUID_TYPE_MEETING,
+            'type_id': constants.ACTIVITYTYPE_MEETING,
             'empty': _('No meeting since one year'),
             'messages': ngettext_lazy(
                 '{count} meeting per month',
@@ -39,8 +38,7 @@ class AveragePerMonthStatistics:
             'months': 12,
         },
         {
-            # 'type_id': constants.ACTIVITYTYPE_PHONECALL,
-            'type_uuid': constants.UUID_TYPE_PHONECALL,
+            'type_id': constants.ACTIVITYTYPE_PHONECALL,
             'empty': _('No phone call since one year'),
             'messages': ngettext_lazy(
                 '{count} phone call per month',
@@ -56,8 +54,7 @@ class AveragePerMonthStatistics:
     def _get_stat(self, item, now_value):
         months = item['months']
         count = self.activity_model.objects.filter(
-            # type_id=item['type_id'],
-            type__uuid=item['type_uuid'],
+            type_id=item['type_id'],
             start__gte=(
                 now_value - relativedelta(months=months)
             ).replace(hour=0, minute=0),

@@ -9,25 +9,23 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..creme_core.models.auth import Account
-from ..creme_core.accounts.serializer import AccountSerializer
+from ..creme_core.auth.serializer import AccountSerializer
 from ..creme_core.common.models import Attachments
 from ..comments.models import Comment
-from ..userprofile.models import Profile
+from ..persons.models import Profile, Contact, Teams
 
 # from ..creme_core.common.custom_auth import JSONWebTokenAuthentication
 from ..creme_core.common.serializer import (
     AttachmentsSerializer,
     CommentSerializer,
     ProfileSerializer,
+    ContactSerializer,
+    TeamsSerializer,
 )
-from ..contacts.models import Contact
-from ..contacts.serializer import ContactSerializer
 from . import swagger_params
 from .models import Task
 from .serializer import TaskCreateSerializer, TaskSerializer
 from .utils import PRIORITY_CHOICES, STATUS_CHOICES
-from ..teams.models import Teams
-from ..teams.serializer import TeamsSerializer
 
 
 class TaskListView(APIView, LimitOffsetPagination):
@@ -109,7 +107,7 @@ class TaskListView(APIView, LimitOffsetPagination):
 
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 task_obj.teams.add(*teams)
 
             if params.get("assigned_to"):
@@ -292,7 +290,7 @@ class TaskDetailView(APIView):
             task_obj.teams.clear()
             if params.get("teams"):
                 teams_list = json.loads(params.get("teams"))
-                teams = Teams.objects.filter(id__in=teams_list, org=request.org)
+                teams = settings.PERSONS_TEAM_MODEL.objects.filter(id__in=teams_list, org=request.org)
                 task_obj.teams.add(*teams)
 
             task_obj.assigned_to.clear()

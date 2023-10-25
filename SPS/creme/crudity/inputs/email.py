@@ -171,9 +171,9 @@ class CreateEmailInput(EmailInput):
         owner = None
 
         if is_sandbox_by_user:
-            User = get_user_model()
+            CremeUser = get_user_model()
             # TODO: search even if email is None ?
-            owner = User.objects.filter(email=sender).first() or User.objects.get_admin()
+            owner = CremeUser.objects.filter(email=sender).first() or CremeUser.objects.get_admin()
 
         return owner
 

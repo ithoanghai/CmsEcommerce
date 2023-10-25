@@ -177,7 +177,7 @@ class EntityFilterManager(models.Manager):
             if not user:
                 raise ValueError(
                     'EntityFilterManager.smart_update_or_create(): '
-                    'a private filter must belong to a User.'
+                    'a private filter must belong to a CremeUser.'
                 )
 
             if not is_custom:
@@ -188,9 +188,9 @@ class EntityFilterManager(models.Manager):
                     'a private filter must be custom.'
                 )
 
-        User = get_user_model()
+        CremeUser = get_user_model()
 
-        if isinstance(user, User):
+        if isinstance(user, CremeUser):
             if user.is_staff:
                 # Staff users cannot be owner in order to stay 'invisible'.
                 raise ValueError(
@@ -198,7 +198,7 @@ class EntityFilterManager(models.Manager):
                     'the owner cannot be a staff user.'
                 )
         elif user == 'admin':
-            user = User.objects.get_admin()
+            user = CremeUser.objects.get_admin()
 
         ct = ContentType.objects.get_for_model(model)
 

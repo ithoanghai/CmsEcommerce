@@ -52,7 +52,7 @@ class CremeRegistryTestCase(CremeTestCase):
     @skipIfNotInstalled('creme.persons')
     @skipIfNotInstalled('creme.documents')
     def test_filtered_entity_models(self):
-        from creme import documents, persons
+        from ... import documents, persons
 
         Contact = persons.get_contact_model()
         Organisation = persons.get_organisation_model()

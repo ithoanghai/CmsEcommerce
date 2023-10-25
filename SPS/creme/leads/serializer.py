@@ -2,10 +2,8 @@ from rest_framework import serializers
 
 from ..creme_core.models.auth import Account, Tags
 from ..creme_core.common.serializer import (AttachmentsSerializer, LeadCommentSerializer,
-                               OrganizationSerializer, ProfileSerializer)
-from ..contacts.serializer import ContactSerializer
+                               OrganizationSerializer, ProfileSerializer, ContactSerializer, TeamsSerializer)
 from .models import Company, Lead
-from ..teams.serializer import TeamsSerializer
 
 
 class TagsSerializer(serializers.ModelSerializer):

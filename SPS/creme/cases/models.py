@@ -4,13 +4,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext_lazy
+from django.conf import settings
 
 from ..creme_core.models.auth import Account
-from ..userprofile.models import Org, Profile
+from ..persons.models import Organisation, Profile, Contact, Teams
 from ..creme_core.common.utils import CASE_TYPE, PRIORITY_CHOICE, STATUS_CHOICE
-from ..contacts.models import Contact
 from ..planner.models import Event
-from ..teams.models import Teams
 
 
 class Case(models.Model):
@@ -31,15 +30,13 @@ class Case(models.Model):
     # closed_on = models.DateTimeField()
     closed_on = models.DateField()
     description = models.TextField(blank=True, null=True)
-    assigned_to = models.ManyToManyField(Profile, related_name="case_assigned_users")
-    created_by = models.ForeignKey(
-        Profile, related_name="case_created_by", on_delete=models.SET_NULL, null=True
-    )
+    assigned_to = models.ManyToManyField(settings.PERSONS_PROFILE_MODEL, related_name="case_assigned_users")
+    created_by = models.ForeignKey( settings.PERSONS_PROFILE_MODEL, related_name="case_created_by", on_delete=models.SET_NULL, null=True )
     created_on = models.DateTimeField(_("Created on"), auto_now=True)
     is_active = models.BooleanField(default=False)
-    teams = models.ManyToManyField(Teams, related_name="cases_teams")
+    teams = models.ManyToManyField(settings.PERSONS_TEAM_MODEL, related_name="cases_teams")
     org = models.ForeignKey(
-        Org, on_delete=models.SET_NULL, null=True, blank=True, related_name="case_org"
+        Organisation, on_delete=models.SET_NULL, null=True, blank=True, related_name="case_org"
     )
 
     class Meta:

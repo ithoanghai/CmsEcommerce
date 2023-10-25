@@ -1,8 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from creme import polls
-from creme.creme_core.gui.custom_form import (
+from .. import polls
+from ..creme_core.gui.custom_form import (
     CustomFormDefault,
     CustomFormDescriptor,
 )

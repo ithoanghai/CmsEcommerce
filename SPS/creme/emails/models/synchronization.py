@@ -78,7 +78,7 @@ class EmailSyncConfigItem(core_models.CremeModel):
         # verbose_name_plural = _('...')
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_sync_config_item', args=(self.id,))
+        return reverse('emails__edit_sync_config_item', args=(self.id,))
 
     def _password_encrypter(self):
         return SymmetricEncrypter(salt=self.password_salt)
@@ -162,4 +162,4 @@ class EmailToSyncPerson(core_models.CremeModel):
         return self.email
 
     def get_edit_absolute_url(self):
-        return reverse('emails:edit_email_to_sync_person', args=(self.id,))
+        return reverse('emails__edit_email_to_sync_person', args=(self.id,))

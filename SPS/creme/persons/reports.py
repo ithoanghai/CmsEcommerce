@@ -19,7 +19,7 @@
 from django.db.models import Q
 from django.utils.translation import gettext as _
 
-from creme.reports.core.graph.fetcher import GraphFetcher
+from ..reports.core.graph.fetcher import GraphFetcher
 
 from . import get_contact_model
 from .constants import RGF_OWNED

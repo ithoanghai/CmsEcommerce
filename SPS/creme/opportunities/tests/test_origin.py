@@ -2,8 +2,8 @@ from functools import partial
 
 from django.urls import reverse
 
-from ..creme_core.tests.base import CremeTestCase
-from creme.opportunities.models import Origin, SalesPhase
+from ...creme_core.tests.base import CremeTestCase
+from ..models import Origin, SalesPhase
 
 from .base import Opportunity, Organisation, skipIfCustomOpportunity
 

@@ -21,7 +21,7 @@ import logging
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
-
+from django.conf import settings
 from ..creme_core import bricks as core_bricks
 from ..creme_core import constants as core_constants
 from .. import persons
@@ -627,7 +627,7 @@ class Populator(BasePopulator):
                 # logger.info('Documents app is installed
                 # => we use the documents block on detail views')
 
-                from creme.documents.bricks import LinkedDocsBrick
+                from ..documents.bricks import LinkedDocsBrick
 
                 BrickDetailviewLocation.objects.multi_create(
                     defaults={'brick': LinkedDocsBrick, 'order': 600, 'zone': RIGHT},

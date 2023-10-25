@@ -1,10 +1,10 @@
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from creme.creme_core.auth.entity_credentials import EntityCredentials
-from ...creme.creme_core.models import FakeOrganisation, SetCredentials
-from creme.creme_core.tests.views.base import BrickTestCaseMixin
-from creme_crm.creme.documents.tests.base import (
+from ...creme_core.auth.entity_credentials import EntityCredentials
+from ...creme_core.models import FakeOrganisation, SetCredentials
+from ...creme_core.tests.views.base import BrickTestCaseMixin
+from ...documents.tests.base import (
     Document,
     _DocumentsTestCase,
     skipIfCustomDocument,
@@ -18,12 +18,12 @@ from .base import EmailTemplate, _EmailsTestCase, skipIfCustomEmailTemplate
 class TemplatesTestCase(BrickTestCaseMixin, _DocumentsTestCase, _EmailsTestCase):
     @staticmethod
     def _build_rm_attachment_url(template):
-        return reverse('emails:remove_attachment_from_template', args=(template.id,))
+        return reverse('emails__remove_attachment_from_template', args=(template.id,))
 
     def test_createview01(self):
         user = self.login_as_root_and_get()
 
-        url = reverse('emails:create_template')
+        url = reverse('emails__create_template')
         self.assertGET200(url)
 
         # ---
@@ -79,7 +79,7 @@ class TemplatesTestCase(BrickTestCaseMixin, _DocumentsTestCase, _EmailsTestCase)
         body = 'Hello {{name}}'
         body_html = '<p>Hi {{name}}</p>'
         response1 = self.client.post(
-            reverse('emails:create_template'),
+            reverse('emails__create_template'),
             follow=True,
             data={
                 'user':      user.pk,
@@ -116,7 +116,7 @@ class TemplatesTestCase(BrickTestCaseMixin, _DocumentsTestCase, _EmailsTestCase)
         user = self.login_as_root_and_get()
 
         response = self.assertPOST200(
-            reverse('emails:create_template'),
+            reverse('emails__create_template'),
             follow=True,
             data={
                 'user':      user.pk,
@@ -248,7 +248,7 @@ class TemplatesTestCase(BrickTestCaseMixin, _DocumentsTestCase, _EmailsTestCase)
     def test_add_attachments02(self):
         user = self.login_as_root_and_get()
         orga = FakeOrganisation.objects.create(user=user, name='Acme')
-        self.assertGET404(reverse('emails:add_attachments_to_template', args=(orga.id,)))
+        self.assertGET404(reverse('emails__add_attachments_to_template', args=(orga.id,)))
 
     @skipIfCustomDocument
     def test_delete_attachments01(self):

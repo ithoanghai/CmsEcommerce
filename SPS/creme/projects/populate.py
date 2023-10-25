@@ -21,14 +21,14 @@ import logging
 from django.apps import apps
 from django.utils.translation import gettext as _
 
-import creme.creme_core.bricks as core_bricks
-from creme.activities import get_activity_model
-from creme.creme_core.core.entity_cell import EntityCellRegularField
-# from creme.creme_core.forms import LAYOUT_DUAL_FIRST, LAYOUT_DUAL_SECOND
-# from creme.creme_core.gui.custom_form import EntityCellCustomFormSpecial
-from creme.creme_core.gui.menu import ContainerEntry
-from creme.creme_core.management.commands.creme_populate import BasePopulator
-from creme.creme_core.models import (
+from ..creme_core import bricks as core_bricks
+from ..activities import get_activity_model
+from ..creme_core.core.entity_cell import EntityCellRegularField
+# from ..creme_core.forms import LAYOUT_DUAL_FIRST, LAYOUT_DUAL_SECOND
+# from ..creme_core.gui.custom_form import EntityCellCustomFormSpecial
+from ..creme_core.gui.menu import ContainerEntry
+from ..creme_core.management.commands.creme_populate import BasePopulator
+from ..creme_core.models import (
     BrickDetailviewLocation,
     CustomFormConfigItem,
     HeaderFilter,
@@ -36,8 +36,8 @@ from creme.creme_core.models import (
     RelationType,
     SearchConfigItem,
 )
-from creme.creme_core.utils import create_if_needed
-from creme.persons import get_contact_model
+from ..creme_core.utils import create_if_needed
+from ..persons import get_contact_model
 
 from . import (
     bricks,
@@ -372,7 +372,7 @@ class Populator(BasePopulator):
                 # logger.info('Documents app is installed
                 # => we use the documents block on detail views')
 
-                from creme.documents.bricks import LinkedDocsBrick
+                from ..documents.bricks import LinkedDocsBrick
 
                 BrickDetailviewLocation.objects.multi_create(
                     defaults={'brick': LinkedDocsBrick, 'order': 600, 'zone': RIGHT},

@@ -16,8 +16,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-from creme import polls
-from creme.creme_core.gui import menu
+from .. import polls
+from ..creme_core.gui import menu
 
 PollForm = polls.get_pollform_model()
 PollReply = polls.get_pollreply_model()

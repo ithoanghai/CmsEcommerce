@@ -1,5 +1,5 @@
-from creme import documents, persons
-from creme.persons.tests.base import (  # NOQA
+from ... import documents, persons
+from ...persons.tests.base import (  # NOQA
     skipIfCustomAddress,
     skipIfCustomContact,
     skipIfCustomOrganisation,

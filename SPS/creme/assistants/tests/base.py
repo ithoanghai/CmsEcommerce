@@ -1,19 +1,20 @@
 from functools import partial
 
-from ...creme_core.creme_jobs import reminder_type
-from ...creme_core.models import Job
-from ...creme_core.models.history import (
+from creme.creme_core.creme_jobs import reminder_type
+from creme.creme_core.models import Job
+from creme.creme_core.models.history import (
     TYPE_AUX_CREATION,
     TYPE_DELETION,
     HistoryLine,
 )
-from ...creme_core.tests.base import CremeTestCase
-from ...creme_core.tests.fake_models import FakeContact
+from creme.creme_core.tests.base import CremeTestCase
+from creme.creme_core.tests.fake_models import FakeContact
 
 
 class AssistantsTestCase(CremeTestCase):
     def setUp(self):
         super().setUp()
+        # user = self.login()
         user = self.login_as_root_and_get()
         self.entity = FakeContact.objects.create(
             user=user, first_name='Ranma', last_name='Saotome',

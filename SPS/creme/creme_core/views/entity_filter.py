@@ -50,7 +50,7 @@ from .enumerable import FieldChoicesView
 from .generic import base
 
 logger = logging.getLogger(__name__)
-User = get_user_model()
+CremeUser = get_user_model()
 
 
 class FilterMixin:

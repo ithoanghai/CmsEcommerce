@@ -10,7 +10,7 @@ from django.db.models.signals import post_init, post_save
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext as _
 
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models import Account, CremeUser
 
 from ..conference.models import Conference
 from ..sponsorship.managers import SponsorManager
@@ -69,7 +69,7 @@ class SponsorLevel(models.Model):
 @deconstructible
 class Sponsor(models.Model):
 
-    applicant = models.ForeignKey(User, related_name="sponsorships", verbose_name=_("Applicant"),
+    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="sponsorships", verbose_name=_("Applicant"),
                                   null=True, on_delete=models.CASCADE)
 
     name = models.CharField(_("Sponsor Name"), max_length=100)

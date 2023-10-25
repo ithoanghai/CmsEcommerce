@@ -20,8 +20,6 @@ from django.conf import settings
 
 from ..creme_core import get_concrete_model
 
-default_app_config = "creme.events.apps.CremeAppConfig"
-
 
 def event_model_is_custom():
     return (
@@ -33,4 +31,3 @@ def event_model_is_custom():
 def get_event_model():
     """Returns the Event model that is active in this project."""
     return get_concrete_model('EVENTS_EVENT_MODEL')
-

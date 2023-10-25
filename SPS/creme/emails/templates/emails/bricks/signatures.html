@@ -11,7 +11,7 @@
 {% block brick_header_actions %}
     {% translate 'New signature' context 'emails' as new_label %}
     {% has_perm_to access 'emails' as app_perm %}
-    {% brick_header_action id='add' url='emails:create_signature'|url label=new_label enabled=app_perm %}
+    {% brick_header_action id='add' url='emails__create_signature'|url label=new_label enabled=app_perm %}
 {% endblock %}
 
 {% block brick_table_columns %}
@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block brick_table_rows %}
-{% url 'emails:delete_signature' as delete_url %}
+{% url 'emails__delete_signature' as delete_url %}
 {% translate 'Edit this signature' context 'emails' as edit_label %}{% translate 'Delete this signature' context 'emails' as del_label %}
     {% for signature in page.object_list %}
     <tr>

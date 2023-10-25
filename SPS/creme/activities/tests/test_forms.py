@@ -1,6 +1,7 @@
+# from json import dumps as json_dump
 from datetime import date, time
 
-# from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 from django.db.models.expressions import Q
 from django.forms import Field
 from django.test.utils import override_settings
@@ -15,6 +16,7 @@ from ...creme_core.models import SetCredentials
 from ...creme_core.tests.base import CremeTestCase
 
 from .. import constants
+# from ..forms.fields import ActivityTypeField
 from ..forms.fields import (
     DateWithOptionalTimeField,
     ParticipatingUsersField,
@@ -23,6 +25,150 @@ from ..forms.fields import (
 from ..models import ActivitySubType, ActivityType, Calendar
 from .base import _ActivitiesTestCase
 
+# class ActivityTypeFieldTestCase(FieldTestCase):
+#     @classmethod
+#     def setUpClass(cls):
+#         super().setUpClass()
+#
+#         cls.atype = ActivityType.objects.create(
+#             id='meeting', name='Meeting',
+#             default_day_duration=0,
+#             default_hour_duration='01:00:00',
+#         )
+#         cls.subtype = ActivitySubType.objects.create(
+#             id='rendezvous', name='Rendez-vous', type=cls.atype,
+#         )
+#
+#     @staticmethod
+#     def _build_value(act_type_id, subtype_id=None):
+#         return json_dump(
+#             {'type': act_type_id, 'sub_type': subtype_id},
+#             separators=(',', ':'),
+#         )
+#
+#     def test_format_object(self):
+#         atype = self.atype
+#         subtype = self.subtype
+#         from_python = ActivityTypeField(
+#             types=ActivityType.objects.filter(pk=atype.id),
+#         ).from_python
+#         args = (atype.id, subtype.id)
+#         self.assertEqual(self._build_value(*args), from_python(args))
+#         self.assertEqual(self._build_value(*args), from_python(subtype))
+#
+#     def test_clean_empty_required(self):
+#         clean = ActivityTypeField(required=True).clean
+#         self.assertFieldValidationError(ActivityTypeField, 'required', clean, None)
+#         self.assertFieldValidationError(ActivityTypeField, 'required', clean, '{}')
+#
+#     def test_clean_empty_not_required(self):
+#         clean = ActivityTypeField(required=False).clean
+#
+#         with self.assertNoException():
+#             value = clean(None)
+#
+#         self.assertIsNone(value)
+#
+#         with self.assertNoException():
+#             value = clean('{}')
+#
+#         self.assertIsNone(value)
+#
+#     def test_clean_invalid_json(self):
+#         clean = ActivityTypeField(required=False).clean
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'invalidformat', clean,
+#             '{"type":"12", "sub_type":"1"',
+#         )
+#
+#     def test_clean_invalid_data_type(self):
+#         clean = ActivityTypeField(required=False).clean
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'invalidtype', clean, '"this is a string"',
+#         )
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'invalidtype', clean, '12',
+#         )
+#
+#     def test_clean_unknown_type(self):
+#         "Data injections."
+#         atype1 = self.atype
+#         atype2 = ActivityType.objects.create(
+#             id='phonecall', name='phone Call',
+#             default_day_duration=0,
+#             default_hour_duration=1,
+#         )
+#         subtype2 = ActivitySubType.objects.create(
+#             id='incoming', name='Incoming', type=atype2,
+#         )
+#
+#         clean = ActivityTypeField(types=ActivityType.objects.filter(pk=atype1.id)).clean
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'typenotallowed', clean,
+#             self._build_value('unknown', self.subtype.id),
+#         )
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'subtyperequired', clean,
+#             self._build_value(atype1.id, 'unknown'),
+#         )
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'typenotallowed', clean,
+#             self._build_value(atype2.id, subtype2.id),
+#         )
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'subtyperequired', clean,
+#             self._build_value(atype1.id, subtype2.id),
+#         )
+#
+#     def test_clean01(self):
+#         atype = self.atype
+#         subtype = self.subtype
+#
+#         with self.assertNumQueries(0):
+#             field = ActivityTypeField(types=ActivityType.objects.filter(pk=atype.id))
+#
+#         self.assertTupleEqual(
+#             (atype, subtype),
+#             field.clean(self._build_value(atype.id, subtype.id)),
+#         )
+#
+#     def test_clean02(self):
+#         "Use 'types' setter."
+#         atype = self.atype
+#         subtype = self.subtype
+#         field = ActivityTypeField()
+#         field.types = ActivityType.objects.filter(pk=atype.id)
+#         self.assertTupleEqual(
+#             (atype, subtype),
+#             field.clean(self._build_value(atype.id, subtype.id)),
+#         )
+#
+#     def test_clean03(self):
+#         "Not required."
+#         atype = self.atype
+#         field = ActivityTypeField(
+#             types=ActivityType.objects.filter(pk=atype.id),
+#             required=False,
+#         )
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'subtyperequired', field.clean,
+#             self._build_value(atype.id),
+#         )
+#
+#     def test_clean04(self):
+#         "No related ActivitySubType."
+#         atype2 = ActivityType.objects.create(
+#             id='custom', name='Custom',
+#             default_day_duration=0,
+#             default_hour_duration=1,
+#         )
+#         field = ActivityTypeField(
+#             types=ActivityType.objects.filter(pk__in=[self.atype.id, atype2.id]),
+#         )
+#         self.assertFieldValidationError(
+#             ActivityTypeField, 'subtyperequired', field.clean,
+#             self._build_value(atype2.id),
+#         )
 
 # class ActivitySubTypeFieldTestCase(FieldTestCase):
 class ActivitySubTypeFieldTestCase(_ActivitiesTestCase):
@@ -31,110 +177,72 @@ class ActivitySubTypeFieldTestCase(_ActivitiesTestCase):
         super().setUpClass()
 
         cls.atype = ActivityType.objects.create(
-            # id='meeting',
-            name='Meeting',
+            id='meeting', name='Meeting',
             default_day_duration=0,
             default_hour_duration='01:00:00',
         )
         cls.subtype = ActivitySubType.objects.create(
-            # id='rendezvous', name='Rendez-vous', type=cls.atype,
-            name='Rendez-vous', type=cls.atype,
+            id='rendezvous', name='Rendez-vous', type=cls.atype,
         )
 
     def test_choices(self):
         field = ActivitySubTypeField()
         self.assertEqual(Activity._meta.get_field('sub_type'), field.enum.field)
         self.assertEqual(NO_LIMIT, field.limit)
-        # self.assertListEqual(
-        #     sorted([
-        #         ('', field.empty_label, None),
-        #         *(
-        #             (c.pk, str(c), str(c.type))
-        #             for c in ActivitySubType.objects.all()
-        #         ),
-        #     ]),
-        #     sorted((c.value, c.label, c.group) for c in field.choices),
-        # )
-        self.assertCountEqual(
-            [
+        self.assertListEqual(
+            sorted([
                 ('', field.empty_label, None),
-                *((c.pk, str(c), str(c.type)) for c in ActivitySubType.objects.all()),
-            ],
-            [(c.value, c.label, c.group) for c in field.choices],
+                *(
+                    (c.pk, str(c), str(c.type))
+                    for c in ActivitySubType.objects.all()
+                ),
+            ]),
+            sorted((c.value, c.label, c.group) for c in field.choices),
         )
 
     def test_limit_choices_to(self):
         field = ActivitySubTypeField(
             model=Activity, field_name='sub_type',
-            # limit_choices_to=Q(type_id=constants.ACTIVITYTYPE_INDISPO)
-            limit_choices_to=Q(type__uuid=constants.UUID_TYPE_UNAVAILABILITY)
+            limit_choices_to=Q(type_id=constants.ACTIVITYTYPE_INDISPO)
         )
 
         self.assertEqual(field.limit, NO_LIMIT)
-        # self.assertListEqual(
-        #     sorted([
-        #         ('', field.empty_label, None),
-        #         *(
-        #             (c.pk, str(c), str(c.type))
-        #             for c in ActivitySubType.objects.filter(
-        #                 type_id=constants.ACTIVITYTYPE_INDISPO,
-        #             )
-        #         ),
-        #     ]),
-        #     sorted((c.value, c.label, c.group) for c in field.choices),
-        # )
-        self.assertCountEqual(
-            [
+        self.assertListEqual(
+            sorted([
                 ('', field.empty_label, None),
                 *(
                     (c.pk, str(c), str(c.type))
                     for c in ActivitySubType.objects.filter(
-                        type__uuid=constants.UUID_TYPE_UNAVAILABILITY,
+                        type_id=constants.ACTIVITYTYPE_INDISPO,
                     )
                 ),
-            ],
-            [(c.value, c.label, c.group) for c in field.choices],
+            ]),
+            sorted((c.value, c.label, c.group) for c in field.choices),
         )
 
     def test_clean(self):
         field = ActivitySubTypeField()
+
         self.assertEqual(self.subtype, field.clean(self.subtype.pk))
-        self.assertFormfieldError(
-            field=field, value=None,
-            messages=_('This field is required.'),
-            codes='required',
-        )
+        with self.assertRaises(ValidationError):
+            field.clean(None)
 
     def test_clean__not_required(self):
         field = ActivitySubTypeField(required=False)
         self.assertIsNone(field.clean(None))
 
     def test_clean__limit_choices_to(self):
-        sub_type = self._get_sub_type(constants.UUID_SUBTYPE_UNAVAILABILITY)
         field = ActivitySubTypeField(
-            # limit_choices_to=Q(type_id=constants.ACTIVITYTYPE_INDISPO),
-            limit_choices_to=Q(type_id=sub_type.type_id),
+            limit_choices_to=Q(type_id=constants.ACTIVITYTYPE_INDISPO),
         )
 
-        # self.assertEqual(
-        #     ActivitySubType.objects.get(pk=constants.ACTIVITYSUBTYPE_UNAVAILABILITY),
-        #     field.clean(constants.ACTIVITYSUBTYPE_UNAVAILABILITY),
-        # )
         self.assertEqual(
-            sub_type,
-            field.clean(sub_type.id),
+            ActivitySubType.objects.get(pk=constants.ACTIVITYSUBTYPE_UNAVAILABILITY),
+            field.clean(constants.ACTIVITYSUBTYPE_UNAVAILABILITY),
         )
 
-        # with self.assertRaises(ValidationError):
-        #     field.clean(constants.ACTIVITYSUBTYPE_MEETING_MEETING)
-        self.assertFormfieldError(
-            field=field,
-            value=self._get_sub_type(constants.UUID_SUBTYPE_MEETING_MEETING).id,
-            messages=_(
-                'Select a valid choice. That choice is not one of the available choices.'
-            ),
-            codes='invalid_choice',
-        )
+        with self.assertRaises(ValidationError):
+            field.clean(constants.ACTIVITYSUBTYPE_MEETING_MEETING)
 
 
 # class DateWithOptionalTimeFieldTestCase(FieldTestCase):
@@ -168,6 +276,10 @@ class DateWithOptionalTimeFieldTestCase(CremeTestCase):
     def test_clean_complete(self):
         field = DateWithOptionalTimeField()
 
+        # self.assertTupleEqual(
+        #     (date(year=2020, month=12, day=8), time(hour=18, minute=44)),
+        #     field.clean([self.formfield_value_date(2020, 12, 8), '18:44:00']),
+        # )
         self.assertEqual(
             field.DateWithOptionalTime(
                 date=date(year=2020, month=12, day=8),
@@ -177,20 +289,23 @@ class DateWithOptionalTimeFieldTestCase(CremeTestCase):
         )
 
     def test_clean_empty_required(self):
-        field = DateWithOptionalTimeField(required=True)
-        code = 'required'
-        msg = Field.default_error_messages[code]
-        self.assertFormfieldError(field=field, messages=msg, codes='required', value=None)
-        self.assertFormfieldError(field=field, messages=msg, codes='required', value=[])
+        clean = DateWithOptionalTimeField(required=True).clean
+        self.assertFieldValidationError(DateWithOptionalTimeField, 'required', clean, None)
+        self.assertFieldValidationError(DateWithOptionalTimeField, 'required', clean, [])
 
     def test_clean_empty_not_required(self):
         field = DateWithOptionalTimeField(required=False)
+        # self.assertTupleEqual((None, None), field.clean([]))
         self.assertIsNone(field.clean([]))
         self.assertIsNone(field.clean(['']))
         self.assertIsNone(field.clean(['', '']))
 
     def test_clean_only_date(self):
         field = DateWithOptionalTimeField()
+        # self.assertTupleEqual(
+        #     (date(year=2020, month=11, day=9), None),
+        #     field.clean([self.formfield_value_date(2020, 11, 9)]),
+        # )
         self.assertEqual(
             field.DateWithOptionalTime(date=date(year=2020, month=11, day=9)),
             field.clean([self.formfield_value_date(2020, 11, 9)]),
@@ -203,19 +318,21 @@ class DateWithOptionalTimeFieldTestCase(CremeTestCase):
         with self.assertNoException():
             res = field.clean([])
 
+        # self.assertTupleEqual((None, None), res)
         self.assertIsNone(res)
 
     def test_required_property02(self):
         field = DateWithOptionalTimeField(required=False)
         field.required = True
 
-        self.assertFormfieldError(
-            field=field, value=[], codes='required', messages=_('This field is required.'),
+        self.assertFieldValidationError(
+            DateWithOptionalTimeField, 'required', field.clean, [],
         )
 
         with self.assertNoException():
             res = field.clean([self.formfield_value_date(2020, 11, 9)])
 
+        # self.assertTupleEqual((date(year=2020, month=11, day=9), None), res)
         self.assertEqual(
             field.DateWithOptionalTime(date=date(year=2020, month=11, day=9)),
             res,
@@ -227,6 +344,7 @@ class UserParticipationFieldTestCase(CremeTestCase):
     def test_clean_empty(self):
         user = self.get_root_user()
         field = UserParticipationField(user=user, required=False)
+        # self.assertTupleEqual((False, None), field.clean([]))
         self.assertEqual(
             UserParticipationField.Option(is_set=False),
             field.clean([]),
@@ -234,6 +352,7 @@ class UserParticipationFieldTestCase(CremeTestCase):
 
     @override_settings(ACTIVITIES_DEFAULT_CALENDAR_IS_PUBLIC=None)
     def test_clean(self):
+        # user = self.login(is_superuser=False, allowed_apps=('persons', 'activities'))
         user = self.login_as_standard(allowed_apps=('persons', 'activities'))
 
         SetCredentials.objects.create(
@@ -247,33 +366,34 @@ class UserParticipationFieldTestCase(CremeTestCase):
         cal11 = create_cal(user=user, is_default=True,  name='Cal #11')
         cal12 = create_cal(user=user, is_default=False, name='Cal #12')
         cal2 = create_cal(
+            # user=self.other_user, is_default=True, name='Cal #2', is_public=True,
             user=self.get_root_user(), is_default=True, name='Cal #2', is_public=True,
         )
 
-        field = UserParticipationField(user=user)
+        clean = UserParticipationField(user=user).clean
         Option = UserParticipationField.Option
-        self.assertEqual(Option(is_set=True, data=cal11), field.clean([True, cal11.id]))
-        self.assertEqual(Option(is_set=True, data=cal12), field.clean([True, cal12.id]))
+        # self.assertTupleEqual((True, cal11), clean([True, cal11.id]))
+        self.assertEqual(Option(is_set=True, data=cal11), clean([True, cal11.id]))
+        # self.assertTupleEqual((True, cal12), clean([True, cal12.id]))
+        self.assertEqual(Option(is_set=True, data=cal12), clean([True, cal12.id]))
 
         # ---
-        self.assertFormfieldError(
-            field=field,
-            value=[True, cal2.id],
-            codes='invalid_choice',
-            messages=_(
-                'Select a valid choice. That choice is not one of the available choices.'
-            ),
+        with self.assertRaises(ValidationError) as cm:
+            clean([True, cal2.id])
+
+        self.assertEqual(
+            [_('Select a valid choice. That choice is not one of the available choices.')],
+            cm.exception.messages,
         )
 
         # ---
-        self.assertFormfieldError(
-            field=field, value=['on', None],
-            messages=_('Enter a value if you check the box.'),
-            codes='subfield_required',
+        self.assertFieldValidationError(
+            UserParticipationField, 'subfield_required', clean, ['on', None],
         )
 
     @override_settings(ACTIVITIES_DEFAULT_CALENDAR_IS_PUBLIC=None)
     def test_not_linkable(self):
+        # user = self.login(is_superuser=False, allowed_apps=('persons', 'activities'))
         user = self.login_as_standard(allowed_apps=('persons', 'activities'))
 
         SetCredentials.objects.create(
@@ -283,15 +403,18 @@ class UserParticipationFieldTestCase(CremeTestCase):
         )
 
         cal = Calendar.objects.create(user=user, is_default=True, name='Cal #11')
-        self.assertFormfieldError(
-            field=UserParticipationField(user=user),
-            value=[True, cal.id],
-            messages=_('You are not allowed to link this entity: {}').format(user.linked_contact),
+        field = UserParticipationField(user=user)
+
+        with self.assertRaises(ValidationError) as cm:
+            field.clean([True, cal.id])
+
+        self.assertEqual(
+            [_('You are not allowed to link this entity: {}').format(user.linked_contact)],
+            cm.exception.messages,
         )
 
 
-# class ParticipatingUsersFieldTestCase(FieldTestCase):
-class ParticipatingUsersFieldTestCase(CremeTestCase):
+class ParticipatingUsersFieldTestCase(FieldTestCase):
     def test_clean_empty(self):
         user = self.get_root_user()
         field = ParticipatingUsersField(user=user, required=False)
@@ -299,6 +422,7 @@ class ParticipatingUsersFieldTestCase(CremeTestCase):
         self.assertFalse(field.clean(None))
 
     def test_clean(self):
+        # user = self.login(is_superuser=False, allowed_apps=('persons', 'activities'))
         user = self.login_as_standard(allowed_apps=('persons', 'activities'))
 
         SetCredentials.objects.create(
@@ -308,21 +432,21 @@ class ParticipatingUsersFieldTestCase(CremeTestCase):
             ctype=type(user.linked_contact),
         )
 
+        # other_user = self.other_user
         other_user = self.get_root_user()
         staff_user = self.create_user(index=2, is_staff=True)
 
-        field = ParticipatingUsersField(user=user)
+        clean = ParticipatingUsersField(user=user).clean
+
         self.assertCountEqual(
             [user.linked_contact, other_user.linked_contact],
-            field.clean([user.id, other_user.id]),
+            clean([user.id, other_user.id]),
         )
-        self.assertFormfieldError(
-            field=field,
-            value=[user.id, staff_user.id],
-            codes='invalid_choice',
-            messages=_(
-                'Select a valid choice. %(value)s is not one of the available choices.'
-            ) % {'value': staff_user.id},
+
+        self.assertFieldValidationError(
+            ParticipatingUsersField, 'invalid_choice', clean,
+            [user.id, staff_user.id],
+            message_args={'value': staff_user.id},
         )
 
     def test_clean_teamate(self):
@@ -339,14 +463,21 @@ class ParticipatingUsersFieldTestCase(CremeTestCase):
         )
 
     def test_not_linkable(self):
+        # user = self.login(is_superuser=False, allowed_apps=('persons', 'activities'))
         user = self.login_as_standard(allowed_apps=('persons', 'activities'))
+
         SetCredentials.objects.create(
             role=user.role,
             value=EntityCredentials.VIEW,
             set_type=SetCredentials.ESET_ALL,
         )
-        self.assertFormfieldError(
-            field=ParticipatingUsersField(user=user),
-            value=[user.id],
-            messages=_('Some entities are not linkable: {}').format(user.linked_contact),
+
+        field = ParticipatingUsersField(user=user)
+
+        with self.assertRaises(ValidationError) as cm:
+            field.clean([user.id])
+
+        self.assertEqual(
+            [_('Some entities are not linkable: {}').format(user.linked_contact)],
+            cm.exception.messages,
         )

@@ -10,7 +10,7 @@
 
 {% block brick_header_actions %}
   {% if config_available %}{% has_perm_to change object as edit_perm %}
-    {% brick_header_action id='add' url='emails:create_sending'|url:object.id label=_('New sending') enabled=edit_perm %}
+    {% brick_header_action id='add' url='emails__create_sending'|url:object.id label=_('New sending') enabled=edit_perm %}
   {% endif %}
 {% endblock %}
 

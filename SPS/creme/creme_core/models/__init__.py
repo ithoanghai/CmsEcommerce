@@ -1,11 +1,17 @@
 from django.conf import settings
 
 from .auth import (  # NOQA
-    User,
+    CremeUser,
     EntityCredentials,
     Sandbox,
     SetCredentials,
     UserRole,
+    Tags, Account,
+    AccountDeletion,
+    EmailAddress,
+    PasswordExpiry,
+    PasswordHistory,
+    SignupCode,
 )
 from .base import CremeModel, MinionModel  # NOQA
 from .bricks import *  # NOQA
@@ -24,7 +30,6 @@ from .deletion import (  # NOQA
 from .entity import CremeEntity  # NOQA
 from .entity_filter import EntityFilter, EntityFilterCondition  # NOQA
 from .fields_config import FieldsConfig  # NOQA
-from . import fields # NOQA
 from .file_ref import FileRef  # NOQA
 from .header_filter import HeaderFilter  # NOQA
 from .history import HistoryConfigItem, HistoryLine  # NOQA

@@ -146,12 +146,12 @@ class FieldInfoTestCase(CremeTestCase):
         fi = meta.FieldInfo(FakeContact, 'image__user__username')
 
         with self.assertNoException():
-            sub_fi = fi[-1:]  # User.username
+            sub_fi = fi[-1:]  # CremeUser.username
 
-        User = get_user_model()
-        self.assertEqual(User, sub_fi.model)
+        CremeUser = get_user_model()
+        self.assertEqual(settings.AUTH_USER_MODEL, sub_fi.model)
         sub_field = self.get_alone_element(sub_fi)
-        self.assertEqual(User._meta.get_field('username'), sub_field)
+        self.assertEqual(CremeUser._meta.get_field('username'), sub_field)
 
     def test_field_info_slice04(self):
         "'very' negative start."

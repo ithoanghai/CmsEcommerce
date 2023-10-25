@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.sites.models import Site
-from ..creme_core.models.auth import Account, User
+from ..creme_core.models.auth import Account, CremeUser
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -14,7 +14,7 @@ from .utils import digits_only
 
 class PhoneNumber(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     phone_number = models.CharField(max_length=50, unique=True)
     verified = models.BooleanField(default=False)

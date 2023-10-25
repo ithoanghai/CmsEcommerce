@@ -15,12 +15,15 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
+import importlib
 
 from functools import partial
 
 from django.apps import apps
 from django.utils.translation import gettext_lazy as _
-
+from django.core.exceptions import ImproperlyConfigured
+from django.conf import settings
+from ..utils import load_path_attr
 from ..creme_core.apps import CremeAppConfig
 
 from . import constants
@@ -29,8 +32,26 @@ from . import constants
 class PersonsConfig(CremeAppConfig):
     default = True
     name = 'creme.persons'
+    #app_label = 'persons'
     verbose_name = _('Accounts and Contacts')
     dependencies = ['creme.creme_core']
+
+    PROFILE_MODEL = ""
+    TEAMS_HOOKSET = "creme.persons.hooks.TeamDefaultHookset"
+    NAME_BLACKLIST = []
+
+    class Meta:
+        prefix = "persons"
+
+    def ready(self):
+        importlib.import_module("creme.persons.receivers")
+
+    def configure_profile_model(self, value):
+        if value:
+            return load_path_attr(value)
+
+    def configure_hookset(self, value):
+        return load_path_attr(value)()
 
     def all_apps_ready(self):
         # NB: check MIGRATION_MODE to avoid error with empty SECRET_KEY with
@@ -41,6 +62,8 @@ class PersonsConfig(CremeAppConfig):
             self.Contact      = persons.get_contact_model()
             self.Organisation = persons.get_organisation_model()
             self.Address      = persons.get_address_model()
+            self.Profile      = persons.get_profile_model()
+            self.Team         = persons.get_team_model()
             super().all_apps_ready()
             self.hook_user()
             self.hook_user_form()
@@ -113,6 +136,8 @@ class PersonsConfig(CremeAppConfig):
             self.Contact,
             self.Organisation,
             self.Address,
+            self.Profile,
+            self.Team,
         )
 
     def register_field_printers(self, field_printers_registry):

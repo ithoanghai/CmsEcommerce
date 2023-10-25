@@ -4,7 +4,7 @@ from django.conf import settings  # noqa
 
 from appconf import AppConf
 
-from .utils import load_path_attr
+from ..utils import load_path_attr
 
 
 class PagesAppConf(AppConf):

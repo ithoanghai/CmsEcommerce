@@ -17,10 +17,11 @@
 ################################################################################
 
 from django.core.exceptions import PermissionDenied
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
-from ...assistants.forms.user_message import UserMessageForm
-from ...assistants.models import UserMessage
+from ..forms.user_message import UserMessageForm
+from ..models import UserMessage
 from ...creme_core.views import generic
 
 
@@ -42,5 +43,5 @@ class UserMessageDeletion(generic.CremeModelDeletion):
     def check_instance_permissions(self, instance, user):
         if user.id != instance.recipient_id:
             raise PermissionDenied(
-               _('You are not allowed to delete this message: {}').format(instance)
+                gettext('You are not allowed to delete this message: {}').format(instance)
             )

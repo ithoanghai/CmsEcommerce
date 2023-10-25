@@ -20,7 +20,7 @@ from django.db.models.query_utils import Q
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from creme.creme_core.creme_jobs.base import JobType
+from ...creme_core.creme_jobs.base import JobType
 
 from ..models import EmailSending
 
@@ -43,7 +43,7 @@ class _CampaignEmailsSendType(JobType):
             sending.save()
 
             # if getattr(settings, 'REMOTE_STATS', False):
-            #     from creme.emails.utils.remoteutils import populate_minicreme #broken
+            #     from ...emails.utils.remoteutils import populate_minicreme #broken
             #     populate_minicreme(sending)
 
             status = sending.send_mails()

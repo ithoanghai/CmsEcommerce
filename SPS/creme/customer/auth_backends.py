@@ -4,10 +4,10 @@ from django.core.exceptions import ImproperlyConfigured
 from ..customer.utils import normalise_email
 from ..creme_core.core.compat import get_user_model
 
-User = get_user_model()
+CremeUser = get_user_model()
 
-if hasattr(User, 'REQUIRED_FIELDS'):
-    if not (User.USERNAME_FIELD == 'email' or 'email' in User.REQUIRED_FIELDS):
+if hasattr(CremeUser, 'REQUIRED_FIELDS'):
+    if not (CremeUser.USERNAME_FIELD == 'email' or 'email' in CremeUser.REQUIRED_FIELDS):
         raise ImproperlyConfigured(
             "EmailBackend: Your User model must have an email"
             " field with blank=False")
@@ -38,7 +38,7 @@ class EmailBackend(ModelBackend):
         # (has been a requirement in larger system deployments),
         # we just enforce that they don't share the same password.
         # We make a case-insensitive match when looking for emails.
-        matching_users = User.objects.filter(email__iexact=clean_email)
+        matching_users = CremeUser.objects.filter(email__iexact=clean_email)
         authenticated_users = [
             user for user in matching_users if (user.check_password(password) and self.user_can_authenticate(user))]
         if len(authenticated_users) == 1:
@@ -48,7 +48,7 @@ class EmailBackend(ModelBackend):
             # This is the problem scenario where we have multiple users with
             # the same email address AND password. We can't safely authenticate
             # either.
-            raise User.MultipleObjectsReturned(
+            raise CremeUser.MultipleObjectsReturned(
                 "There are multiple users with the given email address and "
                 "password")
         return None

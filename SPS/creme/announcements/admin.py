@@ -27,9 +27,9 @@ class DismissalAdmin(admin.ModelAdmin):
     list_display = ("user", "announcement", "dismissed_at")
 
     def get_search_fields(self, request):
-        User = get_user_model()
-        if hasattr(User, "USERNAME_FIELD"):
-            username_search = f"user__{User.USERNAME_FIELD}"
+        CremeUser = get_user_model()
+        if hasattr(CremeUser, "USERNAME_FIELD"):
+            username_search = f"user__{CremeUser.USERNAME_FIELD}"
         else:
             username_search = "user__username"
         return (username_search, "announcement__title")

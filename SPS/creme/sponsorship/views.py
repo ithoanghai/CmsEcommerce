@@ -18,7 +18,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import gettext_lazy as _
 
-from ..creme_core.accounts.decorators import login_required
+from ..creme_core.auth.decorators import login_required
 
 from ..sponsorship.forms import SponsorApplicationForm, \
     SponsorDetailsForm, SponsorBenefitsFormSet
