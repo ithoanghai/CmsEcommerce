@@ -16,8 +16,8 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:voucher-list' %}">{% trans "Vouchers" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:voucher-stats' pk=voucher.pk %}">{{ voucher }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'voucher-list' %}">{% trans "Vouchers" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'voucher-stats' pk=voucher.pk %}">{{ voucher }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Delete?" %}</li>
         </ol>
     </nav>
@@ -41,7 +41,7 @@
             {% csrf_token %}
             <div class="form-actions">
                 <button class="btn btn-danger" type="submit" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete" %}</button> {% trans "or" %}
-                <a href="{% if not voucher.voucher_set %}{% url 'creme_core:voucher-list' %}{% else %}{% url 'creme_core:voucher-set-detail' pk=voucher.voucher_set.pk %}{% endif %}">{% trans "cancel" %}</a>
+                <a href="{% if not voucher.voucher_set %}{% url 'voucher-list' %}{% else %}{% url 'voucher-set-detail' pk=voucher.voucher_set.pk %}{% endif %}">{% trans "cancel" %}</a>
             </div>
         </form>
     </div>

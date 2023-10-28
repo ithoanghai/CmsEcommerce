@@ -12,10 +12,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
             <li class="breadcrumb-item">
-                <a href="{% url 'creme_core:range-list' %}">{% trans "Ranges" %}</a>
+                <a href="{% url 'range-list' %}">{% trans "Ranges" %}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{% url 'creme_core:range-update' pk=range.id %}">'{{ range.name }}'</a>
+                <a href="{% url 'range-update' pk=range.id %}">'{{ range.name }}'</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 {% trans "Products" %}
@@ -106,7 +106,7 @@
                                     <input type="checkbox" name="selected_product" value="{{ product.id }}" />
                                 </td>
                                 <td>{{ product.upc|default:"-" }}</td>
-                                <td><a href="{% url 'creme_core:catalogue-product' pk=product.id %}">{{ product.get_title }}</a></td>
+                                <td><a href="{% url 'catalogue-product' pk=product.id %}">{{ product.get_title }}</a></td>
                                 <td>{% if product.get_is_discountable %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
                                 <td>
                                     <a class="btn btn-danger" href="#" data-behaviours="remove">{% trans "Remove" %}</a>
@@ -134,8 +134,8 @@
     </div>
         {% endif %}
         <div class="form-actions">
-            <a href="{% url 'creme_core:range-update' pk=range.id %}" class="btn btn-primary">{% trans "Edit range" %}</a> {% trans "or" %}
-            <a href="{% url 'creme_core:range-list' %}" class="">{% trans "return to range list" %}</a>
+            <a href="{% url 'range-update' pk=range.id %}" class="btn btn-primary">{% trans "Edit range" %}</a> {% trans "or" %}
+            <a href="{% url 'range-list' %}" class="">{% trans "return to range list" %}</a>
         </div>
 
 {% endblock dashboard_content %}
@@ -145,6 +145,6 @@
     creme.dashboard.ranges.init();
     creme.dashboard.reordering.init({
         wrapper: '.product_list',
-        submit_url: '{% url 'creme_core:range-reorder' pk=range.id %}'
+        submit_url: '{% url 'range-reorder' pk=range.id %}'
     });
 {% endblock %}

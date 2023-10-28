@@ -12,7 +12,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:shipping-method-list' %}">{% trans "Shipping methods" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shipping-method-list' %}">{% trans "Shipping methods" %}</a></li>
             <li class="breadcrumb-item">{{ band.method.name }}</li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Edit weight band" %}</li>
         </ol>
@@ -31,7 +31,7 @@
             {% block form_actions %}
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button> {% trans "or" %}
-                    <a href="{% url 'creme_core:shipping-method-list' %}">{% trans "cancel" %}</a>
+                    <a href="{% url 'shipping-method-list' %}">{% trans "cancel" %}</a>
                 </div>
             {% endblock form_actions %}
         </form>

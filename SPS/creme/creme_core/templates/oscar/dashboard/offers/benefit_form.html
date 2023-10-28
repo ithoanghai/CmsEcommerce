@@ -15,7 +15,7 @@
     {% endif %}
     {% include "oscar/dashboard/partials/form_field.html" with field=form.range %}
     <p>
-        {% url 'creme_core:range-list' as range_list_url %}
+        {% url 'range-list' as range_list_url %}
         {% blocktrans %}
         Ranges can be created and edited from within the <a href="{{ range_list_url }}" target="_blank">range dashboard</a>.
         {% endblocktrans %}

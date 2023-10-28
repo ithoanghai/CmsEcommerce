@@ -12,7 +12,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:order-list' %}">{% trans "Orders" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'order-list' %}">{% trans "Orders" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">#{{ order.number }}</li>
         </ol>
     </nav>
@@ -143,11 +143,11 @@
                                         <td>
                                             <input type="text" name="selected_line_qty_{{ line.id }}" value="{{ line.quantity }}" size="2" style="width:40px" />
                                         </td>
-                                        <td><a href="{% url 'creme_core:order-line-detail' number=order.number line_id=line.id %}">#{{ line.id }}</a></td>
+                                        <td><a href="{% url 'order-line-detail' number=order.number line_id=line.id %}">#{{ line.id }}</a></td>
                                         <td>{{ line.quantity }}</td>
                                         <td>
                                             {% if line.product %}
-                                                <a href="{% url 'creme_core:catalogue-product' pk=line.product.id %}">{{ line.title }}</a>
+                                                <a href="{% url 'catalogue-product' pk=line.product.id %}">{{ line.title }}</a>
                                             {% else %}
                                                 {{ line.title }}
                                             {% endif %}
@@ -156,7 +156,7 @@
                                         <td>{{ line.status|default:"-" }}</td>
                                         <td>
                                             {% if line.partner %}
-                                                <a href="{% url 'creme_core:partner-manage' pk=line.partner.id %}">{{ line.partner_name }}</a>
+                                                <a href="{% url 'partner-manage' pk=line.partner.id %}">{{ line.partner_name }}</a>
                                             {% else %}
                                                 {{ line.partner_name }}
                                             {% endif %}
@@ -165,7 +165,7 @@
                                         <td class="text-right">{{ line.line_price_before_discounts_excl_tax|currency:order.currency }}</td>
                                         <td class="text-right">{{ line.line_price_before_discounts_incl_tax|currency:order.currency }}</td>
                                         <td>
-                                            <a href="{% url 'creme_core:order-line-detail' number=order.number line_id=line.id %}" class="btn btn-secondary">{% trans "View" %}</a>
+                                            <a href="{% url 'order-line-detail' number=order.number line_id=line.id %}" class="btn btn-secondary">{% trans "View" %}</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -427,7 +427,7 @@
                                                 <td>{{ event.event_type.name }}</td>
                                                 <td>
                                                     {% for line_qty in event.line_quantities.all %}
-                                                        <a href="{% url 'creme_core:order-line-detail' number=order.number line_id=line_qty.line.id %}">
+                                                        <a href="{% url 'order-line-detail' number=order.number line_id=line_qty.line.id %}">
                                                             {% blocktrans with title=line_qty.line.title event_qty=line_qty.quantity total_qty=line_qty.line.quantity %}
                                                                 {{ title }} (quantity {{ event_qty }}/{{ total_qty }})
                                                             {% endblocktrans %}
@@ -522,7 +522,7 @@
                                     {% for field in order.shipping_address.active_address_fields %}
                                         {{ field }}<br/>
                                     {% endfor %}
-                                    <a class="btn btn-secondary" href="{% url 'creme_core:order-shipping-address' order.number %}">
+                                    <a class="btn btn-secondary" href="{% url 'order-shipping-address' order.number %}">
                                         {% trans "Update" %}
                                     </a>
                                 </td>
@@ -649,7 +649,7 @@
                                             </td>
                                             <td>
                                                 {% if discount.offer %}
-                                                    <a href="{% url 'creme_core:offer-detail' pk=discount.offer.id %}">{{ discount.offer.name }}</a>
+                                                    <a href="{% url 'offer-detail' pk=discount.offer.id %}">{{ discount.offer.name }}</a>
                                                 {% else %}
                                                     {{ discount.offer_name }}
                                                 {% endif %}
@@ -694,7 +694,7 @@
                                         <td>{{ note.message|linebreaks }}</td>
                                         <td>
                                             {% if note.is_editable %}
-                                                <a href="{% url 'creme_core:order-detail-note' number=order.number note_id=note.id %}#notes" class="btn btn-info">{% trans "Edit" %}</a>
+                                                <a href="{% url 'order-detail-note' number=order.number note_id=note.id %}#notes" class="btn btn-info">{% trans "Edit" %}</a>
                                                 <form method="post" class="float-left m-0">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="order_action" value="delete_note" />

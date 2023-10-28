@@ -471,7 +471,9 @@ creme_core_patterns = [
     ),
 ]
 
-oscarpatterns = [
+oscardashboardpatterns = [
+    re_path(r'^$', index.IndexOscarDashboardView.as_view(), name='shop_dashboard'),
+    # for dashboard
     path('catalogue/', include(apps.get_app_config('catalogue_dashboard').urls[0])),
     path('reports/', include(apps.get_app_config('reports_dashboard').urls[0])),
     path('orders/', include(apps.get_app_config('orders_dashboard').urls[0])),
@@ -490,10 +492,8 @@ oscarpatterns = [
 
 urlpatterns = [
     re_path(r'^$',            index.Home.as_view(),   name='creme_dashboard'),
-    re_path(r'^shop/dashboard/',include(oscarpatterns)),
-    re_path(r'^shop/dashboard/', index.IndexView.as_view(), name='creme_core__shop_dashboard'),
+    re_path(r'^shop/dashboard/',include(oscardashboardpatterns)), # for oscar dashboard
     re_path(r'^my_page[/]?$', index.MyPage.as_view(), name='creme_core__my_page'),
-
     re_path(r'^creme_core/', include(creme_core_patterns)),
 
     re_path(

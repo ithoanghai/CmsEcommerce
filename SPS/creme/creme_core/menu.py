@@ -48,7 +48,7 @@ class HomeEntry(menu.FixedURLEntry):
 class MyDashboardEntry(menu.FixedURLEntry):
     id = 'creme_core-my_dashboard'
     label = _('My Shop Dashboard')
-    url_name = 'creme_core__shop_dashboard'
+    url_name = 'shop_dashboard'
 
 
 class MyPageEntry(menu.FixedURLEntry):

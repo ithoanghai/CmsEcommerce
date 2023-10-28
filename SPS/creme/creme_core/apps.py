@@ -27,10 +27,10 @@ from django.contrib.contenttypes.apps import (
 )
 from django.core import checks
 from django.core.exceptions import ImproperlyConfigured
-from django.urls import URLPattern, reverse_lazy
+from django.urls import URLPattern, reverse_lazy, include, path
 from django.apps import apps
-from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
+from django.views.generic.base import RedirectView
 
 from .core.loading import feature_hidden, get_class
 from .core.field_tags import FieldTag
@@ -586,32 +586,31 @@ class CremeCoreConfig(CremeAppConfig):
     def ready(self):
         super().ready()
 
+        #for oscar frontend
+        self.catalogue_app = apps.get_app_config('catalogue')
+        self.customer_app = apps.get_app_config('customer')
+        self.basket_app = apps.get_app_config('basket')
+        self.checkout_app = apps.get_app_config('checkout')
+        self.search_app = apps.get_app_config('search')
+        self.offer_app = apps.get_app_config('offer')
+        self.wishlists_app = apps.get_app_config('wishlists')
+
         if self.MIGRATION_MODE:
             return
 
         checks.register(Tags.settings)(check_uninstalled_apps)  # Crashes in migrate mode.
 
-        #for oscar admin dashboard
-        self.index_view = get_class('creme_core.views.index', 'IndexView')
-        self.login_view = get_class('creme_core.views.index', 'LoginView')
-        #for oscar frontend
-        self.catalogue_app = apps.get_app_config('catalogue_dashboard')
-        self.reports_app = apps.get_app_config('reports_dashboard')
-        self.orders_app = apps.get_app_config('orders_dashboard')
-        self.users_app = apps.get_app_config('users_dashboard')
-        self.pages_app = apps.get_app_config('pages_dashboard')
-        self.partners_app = apps.get_app_config('partners_dashboard')
-        self.offers_app = apps.get_app_config('offers_dashboard')
-        self.ranges_app = apps.get_app_config('ranges_dashboard')
-        self.reviews_app = apps.get_app_config('reviews_dashboard')
-        self.vouchers_app = apps.get_app_config('vouchers_dashboard')
-        self.comms_app = apps.get_app_config('communications_dashboard')
-        self.shipping_app = apps.get_app_config('shipping_dashboard')
-
     def get_urls(self):
         from django.contrib.auth import views as auth_views
-
         urls = [
+            path('', RedirectView.as_view(url=settings.OSCAR_HOMEPAGE), name='shop_home'),
+            path('catalogue/', self.catalogue_app.urls),
+            path('basket/', self.basket_app.urls),
+            path('checkout/', self.checkout_app.urls),
+            path('accounts/', self.customer_app.urls),
+            path('search/', self.search_app.urls),
+            path('offers/', self.offer_app.urls),
+            path('wishlists/', self.wishlists_app.urls),
 
         ]
         return self.post_process_urls(urls)

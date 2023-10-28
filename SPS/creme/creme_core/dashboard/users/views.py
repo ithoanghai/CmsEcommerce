@@ -115,7 +115,7 @@ class IndexView(BulkEditMixin, FormMixin, SingleTableView):
                 user.is_active = value
                 user.save()
         messages.info(self.request, _("Users' status successfully changed"))
-        return redirect('creme_core:users-index')
+        return redirect('users-index')
 
 
 class UserDetailView(DetailView):
@@ -147,7 +147,7 @@ class PasswordResetView(SingleObjectMixin, FormView):
         messages.success(
             self.request, _("A password reset email has been sent"))
         return reverse(
-            'creme_core:user-detail', kwargs={'pk': self.object.id}
+            'user-detail', kwargs={'pk': self.object.id}
         )
 
 
@@ -217,7 +217,7 @@ class ProductAlertUpdateView(UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, _("Product alert saved"))
-        return reverse('creme_core:user-alert-list')
+        return reverse('user-alert-list')
 
 
 class ProductAlertDeleteView(DeleteView):
@@ -227,4 +227,4 @@ class ProductAlertDeleteView(DeleteView):
 
     def get_success_url(self):
         messages.warning(self.request, _("Product alert deleted"))
-        return reverse('creme_core:user-alert-list')
+        return reverse('user-alert-list')

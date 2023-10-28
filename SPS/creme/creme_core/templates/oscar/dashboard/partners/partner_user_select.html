@@ -9,8 +9,8 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:partner-list' %}">{% trans "Partners" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:partner-manage' pk=partner.id %}">{{ partner.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'partner-list' %}">{% trans "Partners" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'partner-manage' pk=partner.id %}">{{ partner.name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Link an existing user" %}</li>
         </ol>
     </nav>
@@ -27,7 +27,7 @@
                 {% include 'oscar/dashboard/partials/form_fields_inline.html' with form=form %}
                 <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
                 {% if form.is_bound %}
-                    <a class="btn btn-secondary" href="{% url 'creme_core:partner-user-select' partner_pk=partner.id %}" >{% trans "Reset" %}</a>
+                    <a class="btn btn-secondary" href="{% url 'partner-user-select' partner_pk=partner.id %}" >{% trans "Reset" %}</a>
                 {% endif %}
                 <div style="margin-top:5px">{% trans "A partial email address can be entered (eg '@example.com') to match multiple addresses." %}</div>
             </form>
@@ -61,7 +61,7 @@
                                                 User is already linked to {{ name }}.
                                             {% endblocktrans %}
                                         {% else %}
-                                            <form action="{% url 'creme_core:partner-user-link' partner_pk=partner.id user_pk=user.id %}" method="post">
+                                            <form action="{% url 'partner-user-link' partner_pk=partner.id user_pk=user.id %}" method="post">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Linking...' %}">{% trans 'Link user' %}</button>
                                             </form>

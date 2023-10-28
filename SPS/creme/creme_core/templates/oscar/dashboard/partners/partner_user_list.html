@@ -8,7 +8,7 @@
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:partner-list' %}">{% trans "Partners" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'partner-list' %}">{% trans "Partners" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ partner.name }}</li>
         </ol>
     </nav>
@@ -22,8 +22,8 @@
                 {% trans 'Link a user' %}
             </a>
             <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="{% url 'creme_core:partner-user-create' partner_pk=partner.pk %}" >{% trans "Link a new user" %}</a></li>
-                <li><a href="{% url 'creme_core:partner-user-select' partner_pk=partner.pk %}" >{% trans "Link an existing user" %}</a></li>
+                <li><a href="{% url 'partner-user-create' partner_pk=partner.pk %}" >{% trans "Link a new user" %}</a></li>
+                <li><a href="{% url 'partner-user-select' partner_pk=partner.pk %}" >{% trans "Link an existing user" %}</a></li>
             </ul>
         </div>
         <h1>{% trans "Manage users" %}</h1>
@@ -44,11 +44,11 @@
             <tbody>
                 {% for user in users %}
                     <tr>
-                        <td><a href="{% url 'creme_core:partner-user-update' partner_pk=partner.pk user_pk=user.id %}">{{ user.email }}</a></td>
+                        <td><a href="{% url 'partner-user-update' partner_pk=partner.pk user_pk=user.id %}">{{ user.email }}</a></td>
                         <td>{{ user.first_name|default:"-" }}</td>
                         <td>{{ user.last_name|default:"-" }}</td>
                         <td>
-                            <form action="{% url 'creme_core:partner-user-unlink' partner_pk=partner.id user_pkuser.id %}" method="post">
+                            <form action="{% url 'partner-user-unlink' partner_pk=partner.id user_pkuser.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger" data-loading-text="{% trans 'Unlinking...' %}">{% trans 'Unlink user' %}</button>
                             </form>

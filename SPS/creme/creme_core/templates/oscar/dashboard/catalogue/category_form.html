@@ -15,7 +15,7 @@
                 <a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{% url 'creme_core:catalogue-category-list' %}">{% trans "Categories" %}</a>
+                <a href="{% url 'catalogue-category-list' %}">{% trans "Categories" %}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 {{ title }}
@@ -100,7 +100,7 @@
             <div class="fixed-actions-group">
                 <div class="form-group">
                     <div class="float-right">
-                        <a href="{% url 'creme_core:catalogue-category-list' %}">
+                        <a href="{% url 'catalogue-category-list' %}">
                             {% trans "Cancel" %}
                         </a>
                         {% trans "or" %}

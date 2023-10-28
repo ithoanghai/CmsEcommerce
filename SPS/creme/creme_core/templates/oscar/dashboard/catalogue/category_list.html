@@ -24,7 +24,7 @@
 
 {% block header %}
     <div class="page-header">
-        <a href="{% url 'creme_core:catalogue-category-create' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new category" %}</a>
+        <a href="{% url 'catalogue-category-create' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new category" %}</a>
         <h1>{% trans "Categories" %}</h1>
     </div>
 {% endblock header %}
@@ -32,11 +32,11 @@
 {% block dashboard_content %}
     <div class="alert alert-info">
         <div>{% trans "You are editing:" %}
-            <strong><a href="{% url 'creme_core:catalogue-category-list' %}">{% trans "Home" %}</a></strong>
+            <strong><a href="{% url 'catalogue-category-list' %}">{% trans "Home" %}</a></strong>
             {% if ancestors %}
                 &gt;
                 {% for ancestor in ancestors %}
-                    <strong><a href="{% url 'creme_core:catalogue-category-detail-list' pk=ancestor.pk %}">{{ ancestor.name }}</a></strong>{% if not forloop.last %} > {% endif %}
+                    <strong><a href="{% url 'catalogue-category-detail-list' pk=ancestor.pk %}">{{ ancestor.name }}</a></strong>{% if not forloop.last %} > {% endif %}
                 {% endfor %}
             {% endif %}
         </div>

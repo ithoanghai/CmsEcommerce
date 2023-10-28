@@ -33,6 +33,6 @@
     {% endif %}
 </ul>
 <p>
-    <a href="{% url 'creme_core:range-update' pk=range.pk %}" class="btn btn-success">{% trans "Edit range metadata" %}</a>
-    <a href="{% url 'creme_core:range-list' %}" class="btn btn-success">{% trans "Return to ranges homepage" %}</a>
+    <a href="{% url 'range-update' pk=range.pk %}" class="btn btn-success">{% trans "Edit range metadata" %}</a>
+    <a href="{% url 'range-list' %}" class="btn btn-success">{% trans "Return to ranges homepage" %}</a>
 </p>

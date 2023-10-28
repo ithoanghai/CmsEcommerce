@@ -10,7 +10,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:voucher-list' %}">{% trans "Vouchers" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'voucher-list' %}">{% trans "Vouchers" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ voucher }}</li>
         </ol>
     </nav>
@@ -48,7 +48,7 @@
             {% for offer in voucher.offers.all %}
             <tr>
                 <td>
-                    <a href="{% url 'creme_core:offer-detail' pk=offer.pk %}">{{ offer.name }}</a>
+                    <a href="{% url 'offer-detail' pk=offer.pk %}">{{ offer.name }}</a>
                 </td>
                 <td>{{ offer.start_datetime|default:"-" }}</td>
                 <td>{{ offer.end_datetime|default:"-" }}</td>
@@ -126,18 +126,18 @@
 
     <div class="form-actions">
         {% if not voucher.voucher_set %}
-        <a class="btn btn-primary" href="{% url 'creme_core:voucher-update' pk=voucher.id %}">{% trans "Edit" %}</a> {% trans "or" %}
+        <a class="btn btn-primary" href="{% url 'voucher-update' pk=voucher.id %}">{% trans "Edit" %}</a> {% trans "or" %}
         {% else %}
-        <a class="btn btn-primary" href="{% url 'creme_core:voucher-set-update' pk=voucher.voucher_set.pk %}">{% trans "Edit set" %}</a> {% trans "or" %}
+        <a class="btn btn-primary" href="{% url 'voucher-set-update' pk=voucher.voucher_set.pk %}">{% trans "Edit set" %}</a> {% trans "or" %}
         {% endif %}
-        <a class="btn btn-danger" href="{% url 'creme_core:voucher-delete' pk=voucher.id %}">
+        <a class="btn btn-danger" href="{% url 'voucher-delete' pk=voucher.id %}">
         {% if not voucher.voucher_set %}
         {% trans "Delete" %}
         {% else %}
         {% trans "Delete from set" %}
         {% endif %}
         </a> {% trans "or" %}
-        <a href="{% if not voucher.voucher_set %}{% url 'creme_core:voucher-list' %}{% else %}{% url 'creme_core:voucher-set-detail' pk=voucher.voucher_set.pk %}{% endif %}">{% trans "cancel" %}</a>
+        <a href="{% if not voucher.voucher_set %}{% url 'voucher-list' %}{% else %}{% url 'voucher-set-detail' pk=voucher.voucher_set.pk %}{% endif %}">{% trans "cancel" %}</a>
     </div>
 
 {% endblock dashboard_content %}

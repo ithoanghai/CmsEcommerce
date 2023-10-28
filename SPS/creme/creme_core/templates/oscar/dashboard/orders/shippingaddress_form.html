@@ -9,9 +9,9 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:order-list' %}">{% trans "Orders" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'order-list' %}">{% trans "Orders" %}</a></li>
             <li class="breadcrumb-item">
-                <a href="{% url 'creme_core:order-detail' number=order.number %}">{{ order.number }}</a>
+                <a href="{% url 'order-detail' number=order.number %}">{{ order.number }}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Edit shipping address" %}</li>
         </ol>
@@ -29,7 +29,7 @@
         {% include "oscar/dashboard/partials/form_fields.html" with form=form style='horizontal' %}
         <div class="form-actions">
             <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Updating...' %}">{% trans "Update address" %}</button>
-            {% trans "or" %} <a href="{% url 'creme_core:order-detail' number=order.number %}">{% trans "cancel" %}</a>
+            {% trans "or" %} <a href="{% url 'order-detail' number=order.number %}">{% trans "cancel" %}</a>
         </div>
     </form>
 

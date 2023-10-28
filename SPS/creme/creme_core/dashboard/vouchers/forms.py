@@ -86,7 +86,7 @@ class VoucherSetForm(forms.ModelForm):
     def clean_count(self):
         data = self.cleaned_data['count']
         if (self.instance.pk is not None) and (data < self.instance.count):
-            detail_url = reverse('creme_core:voucher-set-detail', kwargs={'pk': self.instance.pk})
+            detail_url = reverse('voucher-set-detail', kwargs={'pk': self.instance.pk})
             raise forms.ValidationError(mark_safe(
                 _('This cannot be used to delete vouchers (currently %s) in this set. '
                   'You can do that on the <a href="%s">detail</a> page.') % (self.instance.count, detail_url)))

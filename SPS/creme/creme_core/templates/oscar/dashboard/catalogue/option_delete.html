@@ -24,7 +24,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'creme_core:catalogue-option-list' %}">{% trans "Options" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'catalogue-option-list' %}">{% trans "Options" %}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{% trans "Delete Option?" %}</li>
             </ol>
         </nav>
@@ -54,7 +54,7 @@
                 {% blocktrans with name=object.name %}Delete Option <strong>{{ name }}</strong> - are you sure?{% endblocktrans %}
             </p>
             <div class="form-actions">
-                <a href="{% url 'creme_core:catalogue-option-list' %}">
+                <a href="{% url 'catalogue-option-list' %}">
                     {% trans "Cancel" %}
                 </a>
                 <button type="submit" class="btn btn-danger" data-loading-text="{% trans 'Deleting...' %}">

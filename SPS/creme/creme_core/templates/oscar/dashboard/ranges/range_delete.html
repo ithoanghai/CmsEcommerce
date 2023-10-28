@@ -11,8 +11,8 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:range-list' %}">{% trans "Ranges" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:range-update' pk=range.pk %}">'{{ range.name }}'</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'range-list' %}">{% trans "Ranges" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'range-update' pk=range.pk %}">'{{ range.name }}'</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Delete?" %}</li>
         </ol>
     </nav>
@@ -28,7 +28,7 @@
         {% csrf_token %}
         <div class="form-actions">
             <button class="btn btn-danger" type="submit" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete" %}</button> {% trans "or" %}
-            <a href="{% url 'creme_core:range-list' %}">{% trans "cancel" %}</a>
+            <a href="{% url 'range-list' %}">{% trans "cancel" %}</a>
         </div>
     </form>
 {% endblock dashboard_content %}

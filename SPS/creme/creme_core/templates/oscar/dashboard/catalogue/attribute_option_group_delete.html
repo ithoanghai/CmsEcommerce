@@ -25,7 +25,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{% url 'creme_core:catalogue-attribute-option-group-list' %}">{% trans "Attribute Option Group" %}</a>
+                    <a href="{% url 'catalogue-attribute-option-group-list' %}">{% trans "Attribute Option Group" %}</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">{% trans "Delete Attribute Option Group?" %}</li>
             </ol>
@@ -56,7 +56,7 @@
                 {% blocktrans with name=object.name %}Delete Attribute Option Group <strong>{{ name }}</strong> - are you sure?{% endblocktrans %}
             </p>
             <div class="form-actions">
-                <a {% if not is_popup %}href="{% url 'creme_core:catalogue-attribute-option-group-list' %}"{% else %}href="#" onclick="window.close();return false;"{% endif %}>
+                <a {% if not is_popup %}href="{% url 'catalogue-attribute-option-group-list' %}"{% else %}href="#" onclick="window.close();return false;"{% endif %}>
                     {% trans "Cancel" %}
                 </a>
                 <button type="submit" class="btn btn-danger" data-loading-text="{% trans 'Deleting...' %}">

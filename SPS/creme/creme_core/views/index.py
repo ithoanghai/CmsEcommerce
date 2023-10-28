@@ -65,7 +65,15 @@ class Home(BaseHome):
         return brick_ids
 
 
-class IndexView(TemplateView):
+class MyPage(BaseHome):
+    template_name = 'creme_core/my_page.html'
+    def get_brick_ids(self):
+        return BrickMypageLocation.objects.filter(user=self.request.user) \
+                                          .order_by('order') \
+                                          .values_list('brick_id', flat=True)
+
+
+class IndexOscarDashboardView(TemplateView):
     """
     An overview view which displays several reports about the shop.
 
@@ -77,7 +85,7 @@ class IndexView(TemplateView):
     def get_template_names(self):
         print(self.request.user)
         if self.request.user.is_staff:
-            return ['creme_core/home.html', ]
+            return ['oscar/dashboard/index.html', ]
         else:
             return ['oscar/dashboard/index_nonstaff.html', 'oscar/dashboard/index.html']
 

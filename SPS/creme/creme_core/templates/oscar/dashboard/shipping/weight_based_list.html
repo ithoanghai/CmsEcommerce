@@ -17,7 +17,7 @@
 
 {% block header %}
     <div class="page-header">
-        <a id="create_new_shipping_method" href="{% url 'creme_core:shipping-method-create' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new shipping charge" %}</a>
+        <a id="create_new_shipping_method" href="{% url 'shipping-method-create' %}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> {% trans "Create new shipping charge" %}</a>
         <h1>{% trans "Shipping methods" %}</h1>
     </div>
 {% endblock header %}
@@ -38,14 +38,14 @@
                 {% for method in methods %}
                     <tr>
                         <td>
-                            <a href="{% url 'creme_core:shipping-method-detail' pk=method.pk %}">{{ method.name }}</a>
+                            <a href="{% url 'shipping-method-detail' pk=method.pk %}">{{ method.name }}</a>
                         </td>
                         <td>{{ method.num_bands }}</td>
                         <td>{{ method.default_weight }}</td>
                         <td>
-                            <a href="{% url 'creme_core:shipping-method-detail' pk=method.pk %}" class="btn btn-secondary">{% trans "View" %}</a>
-                            <a href="{% url 'creme_core:shipping-method-edit' pk=method.pk %}" class="btn btn-primary">{% trans "Edit" %}</a>
-                            <a href="{% url 'creme_core:shipping-method-delete' pk=method.pk %}" class="btn btn-danger">{% trans "Delete" %}</a>
+                            <a href="{% url 'shipping-method-detail' pk=method.pk %}" class="btn btn-secondary">{% trans "View" %}</a>
+                            <a href="{% url 'shipping-method-edit' pk=method.pk %}" class="btn btn-primary">{% trans "Edit" %}</a>
+                            <a href="{% url 'shipping-method-delete' pk=method.pk %}" class="btn btn-danger">{% trans "Delete" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

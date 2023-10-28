@@ -3,6 +3,6 @@
 <p>Range <strong>{{ name }}</strong> saved.</p>
 {% endblocktrans %}
 <p>
-    <a href="{% url 'creme_core:range-update' pk=range.pk %}" class="btn btn-success">{% trans "Edit again" %}</a>
-    <a href="{% url 'creme_core:range-products' pk=range.pk %}" class="btn btn-success">{% trans "Edit included products" %}</a>
+    <a href="{% url 'range-update' pk=range.pk %}" class="btn btn-success">{% trans "Edit again" %}</a>
+    <a href="{% url 'range-products' pk=range.pk %}" class="btn btn-success">{% trans "Edit included products" %}</a>
 </p>

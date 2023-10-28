@@ -8,7 +8,7 @@ from ..offer.applicator import Applicator  # backwards-compat  # noqa
 
 def range_anchor(range):
     return '<a href="%s">%s</a>' % (
-        reverse('creme_core:range-update', kwargs={'pk': range.pk}),
+        reverse('range-update', kwargs={'pk': range.pk}),
         range.name)
 
 

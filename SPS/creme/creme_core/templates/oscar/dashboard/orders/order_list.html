@@ -106,7 +106,7 @@
                 {% for order in orders %}
                     <tr>
                         <td><input type="checkbox" name="selected_order" class="selected_order" value="{{ order.id }}"/></td>
-                        <td><a href="{% url 'creme_core:order-detail' number=order.number %}">{{ order.number }}</a></td>
+                        <td><a href="{% url 'order-detail' number=order.number %}">{{ order.number }}</a></td>
                         <td>{{ order.total_incl_tax|currency:order.currency }}</td>
                         <td>{{ order.num_items }}</td>
                         <td>{{ order.status|default:"-" }}</td>
@@ -114,7 +114,7 @@
                             {% if order.guest_email %}
                                 {{ order.guest_email }}
                             {% elif order.user %}
-                                <a href="{% url 'creme_core:user-detail' pk=order.user.id %}">{{ order.user.get_full_name|default:"-" }}</a>
+                                <a href="{% url 'user-detail' pk=order.user.id %}">{{ order.user.get_full_name|default:"-" }}</a>
                             {% else %}
                                 &lt;{% trans "Deleted" %}&gt;
                             {% endif %}
@@ -123,7 +123,7 @@
                         <td>{{ order.billing_address|default:"-" }}</td>
                         <td>{{ order.date_placed }}</td>
                         <td>
-                            <a class="btn btn-secondary" href="{% url 'creme_core:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            <a class="btn btn-secondary" href="{% url 'order-detail' number=order.number %}">{% trans "View" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -7,5 +7,5 @@
 </p>
 <p>
     <a href="{{ page.url }}" class="btn btn-success">{% trans "View on site" %}</a>
-    <a href="{% url 'creme_core:page-update' pk=page.pk %}" class="btn btn-success">{% trans "Edit again" %}</a>
+    <a href="{% url 'page-update' pk=page.pk %}" class="btn btn-success">{% trans "Edit again" %}</a>
 </p>

@@ -37,11 +37,11 @@
             <tbody>
                 {% for commtype in commtypes %}
                     <tr>
-                        <td><a href="{% url 'creme_core:comms-update' commtype.code %}">{{ commtype.code }}</a></td>
+                        <td><a href="{% url 'comms-update' commtype.code %}">{{ commtype.code }}</a></td>
                         <td>{{ commtype.name }}</td>
                         <td>{{ commtype.category }}</td>
                         <td>
-                            <a class="btn btn-success" href="{% url 'creme_core:comms-update' commtype.code %}">{% trans "Edit" %}</a>
+                            <a class="btn btn-success" href="{% url 'comms-update' commtype.code %}">{% trans "Edit" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

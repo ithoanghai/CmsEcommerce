@@ -81,7 +81,7 @@ url_main = [
 
     # MAIN PAGE
     path("", as_view("home.html", config=None), name="homepage"),
-    path('shop/', include(apps.get_app_config('creme_config').urls[0])),
+    path('shop/', include(apps.get_app_config('creme_core').urls[0])),
     path('cms/', include(wagtail_urls)),
 
 

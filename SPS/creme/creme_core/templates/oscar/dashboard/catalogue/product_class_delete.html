@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:catalogue-class-list' %}">{% trans "Product type" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalogue-class-list' %}">{% trans "Product type" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{% trans "Delete product type?" %}</li>
         </ol>
     </nav>
@@ -32,7 +32,7 @@
             </p>
             <div class="form-actions">
                 <button type="submit" class="btn btn-danger" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete" %}</button>
-            {% trans "or" %} <a href="{% url 'creme_core:catalogue-class-list' %}">{% trans "cancel" %}</a>
+            {% trans "or" %} <a href="{% url 'catalogue-class-list' %}">{% trans "cancel" %}</a>
             </div>
         </form>
     {% endif %}

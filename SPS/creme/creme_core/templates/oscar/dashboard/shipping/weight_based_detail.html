@@ -10,7 +10,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'shop_home' %}">{% trans "Dashboard" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'creme_core:shipping-method-list' %}">{% trans "Shipping methods" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'shipping-method-list' %}">{% trans "Shipping methods" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ method.name }}</li>
         </ol>
     </nav>
@@ -49,10 +49,10 @@
         </table>
 
         <p>
-            <a id="edit_method" href="{% url 'creme_core:shipping-method-edit' pk=method.pk %}" class="btn btn-primary">
+            <a id="edit_method" href="{% url 'shipping-method-edit' pk=method.pk %}" class="btn btn-primary">
                 {% trans 'Edit shipping method' %}
             </a>
-            <a id="delete_method" href="{% url 'creme_core:shipping-method-delete' pk=method.pk %}" class="btn btn-danger">
+            <a id="delete_method" href="{% url 'shipping-method-delete' pk=method.pk %}" class="btn btn-danger">
                 {% trans 'Delete shipping method' %}
             </a>
         </p>
@@ -73,8 +73,8 @@
                             <td>{{ band.weight_from|floatformat:3 }} - {{ band.weight_to|floatformat:3 }}</td>
                             <td>{{ band.charge|currency }}</td>
                             <td>
-                                <a id="edit_band_{{ band.id }}" href="{% url 'creme_core:shipping-method-band-edit' method_pk=band.method.pk pk=band.pk %}" class="btn btn-primary">{% trans "Edit" %}</a>
-                                <a id="delete_band_{{ band.id }}" href="{% url 'creme_core:shipping-method-band-delete' method_pk=band.method.pk pk=band.pk %}" class="btn btn-danger">{% trans "Delete" %}</a>
+                                <a id="edit_band_{{ band.id }}" href="{% url 'shipping-method-band-edit' method_pk=band.method.pk pk=band.pk %}" class="btn btn-primary">{% trans "Edit" %}</a>
+                                <a id="delete_band_{{ band.id }}" href="{% url 'shipping-method-band-delete' method_pk=band.method.pk pk=band.pk %}" class="btn btn-danger">{% trans "Delete" %}</a>
                             </td>
                         </tr>
                     {% endfor %}

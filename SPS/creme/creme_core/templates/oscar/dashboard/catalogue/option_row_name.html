@@ -1,2 +1,2 @@
 {% load django_tables2 %}
-<a href="{% url 'creme_core:catalogue-option-update' pk=record.pk %}{% querystring %}">{{ value }}</a>
+<a href="{% url 'catalogue-option-update' pk=record.pk %}{% querystring %}">{{ value }}</a>

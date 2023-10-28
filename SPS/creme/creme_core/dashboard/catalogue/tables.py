@@ -51,14 +51,14 @@ class ProductTable(DashboardTable):
 
 
 class CategoryTable(DashboardTable):
-    name = LinkColumn('creme_core:catalogue-category-update', args=[A('pk')])
+    name = LinkColumn('catalogue-category-update', args=[A('pk')])
     description = TemplateColumn(
         template_code='{{ record.description|default:""|striptags'
                       '|cut:"&nbsp;"|truncatewords:6 }}')
     # mark_safe is needed because of
     # https://github.com/bradleyayers/django-tables2/issues/187
     num_children = LinkColumn(
-        'creme_core:catalogue-category-detail-list', args=[A('pk')],
+        'catalogue-category-detail-list', args=[A('pk')],
         verbose_name=mark_safe(_('Number of child categories')),
         accessor='get_num_children',
         orderable=False)

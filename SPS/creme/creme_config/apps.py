@@ -20,11 +20,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
 # flake8: noqa, because URL syntax is more readable with long lines
-from django.apps import apps
-from django.conf import settings
 from django.urls import path, reverse_lazy
-from django.views.generic.base import RedirectView
-from django.apps import AppConfig
 from ..creme_core.core.loading import get_class
 from ..creme_core.apps import CremeAppConfig
 
@@ -148,21 +144,8 @@ class CremeConfigConfig(CremeAppConfig):
             menu.MySettingsEntry,
         )
 
-    #def for oscar
     def ready(self):
         from django.contrib.auth.forms import SetPasswordForm
-
-        self.dashboard_app = apps.get_app_config('creme_core')
-
-        #for oscar
-        self.index_view = get_class('creme_core.views.index', 'IndexView')
-        self.catalogue_app = apps.get_app_config('catalogue')
-        self.customer_app = apps.get_app_config('customer')
-        self.basket_app = apps.get_app_config('basket')
-        self.checkout_app = apps.get_app_config('checkout')
-        self.search_app = apps.get_app_config('search')
-        self.offer_app = apps.get_app_config('offer')
-        self.wishlists_app = apps.get_app_config('wishlists')
 
         self.password_reset_form = get_class('customer.forms', 'PasswordResetForm')
         self.set_password_form = SetPasswordForm
@@ -173,16 +156,6 @@ class CremeConfigConfig(CremeAppConfig):
         from ..creme_core.views.decorators import login_forbidden
 
         urls = [
-            path('dashboard/', self.dashboard_app.urls),  #shop dashboard
-            path('', RedirectView.as_view(url=settings.OSCAR_HOMEPAGE), name='shop_home'),
-            path('catalogue/', self.catalogue_app.urls),
-            path('basket/', self.basket_app.urls),
-            path('checkout/', self.checkout_app.urls),
-            path('accounts/', self.customer_app.urls),
-            path('search/', self.search_app.urls),
-            path('offers/', self.offer_app.urls),
-            path('wishlists/', self.wishlists_app.urls),
-
             # Password reset - as we're using Django's default view functions,
             # we can't namespace these urls as that prevents
             # the reverse function from working.

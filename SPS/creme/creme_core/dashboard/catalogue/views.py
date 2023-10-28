@@ -161,12 +161,12 @@ class ProductCreateRedirectView(generic.RedirectView):
 
     def get_product_create_url(self, product_class):
         """ Allow site to provide custom URL """
-        return reverse('creme_core:catalogue-product-create',
+        return reverse('catalogue-product-create',
                        kwargs={'product_class_slug': product_class.slug})
 
     def get_invalid_product_class_url(self):
         messages.error(self.request, _("Please choose a product type"))
-        return reverse('creme_core:catalogue-product-list')
+        return reverse('catalogue-product-list')
 
     def get_redirect_url(self, **kwargs):
         form = self.productclass_form_class(self.request.GET)
@@ -230,7 +230,7 @@ class ProductCreateUpdateView(PartnerProductFilterMixin, generic.UpdateView):
             is_valid, reason = self.parent.can_be_parent(give_reason=True)
             if not is_valid:
                 messages.error(self.request, reason)
-                return redirect('creme_core:catalogue-product-list')
+                return redirect('catalogue-product-list')
 
     def get_queryset(self):
         """
@@ -421,17 +421,17 @@ class ProductCreateUpdateView(PartnerProductFilterMixin, generic.UpdateView):
         action = self.request.POST.get('action')
         if action == 'continue':
             url = reverse(
-                'creme_core:catalogue-product', kwargs={"pk": self.object.id})
+                'catalogue-product', kwargs={"pk": self.object.id})
         elif action == 'create-another-child' and self.parent:
             url = reverse(
-                'creme_core:catalogue-product-create-child',
+                'catalogue-product-create-child',
                 kwargs={'parent_pk': self.parent.pk})
         elif action == 'create-child':
             url = reverse(
-                'creme_core:catalogue-product-create-child',
+                'catalogue-product-create-child',
                 kwargs={'parent_pk': self.object.pk})
         else:
-            url = reverse('creme_core:catalogue-product-list')
+            url = reverse('catalogue-product-list')
         return self.get_url_with_querystring(url)
 
 
@@ -503,12 +503,12 @@ class ProductDeleteView(PartnerProductFilterMixin, generic.DeleteView):
             msg = _("Deleted product variant '%s'") % self.object.get_title()
             messages.success(self.request, msg)
             return reverse(
-                'creme_core:catalogue-product',
+                'catalogue-product',
                 kwargs={'pk': self.object.parent_id})
         else:
             msg = _("Deleted product '%s'") % self.object.title
             messages.success(self.request, msg)
-            return reverse('creme_core:catalogue-product-list')
+            return reverse('catalogue-product-list')
 
 
 class StockAlertListView(generic.ListView):
@@ -614,7 +614,7 @@ class CategoryUpdateView(CategoryListMixin, generic.UpdateView):
         messages.info(self.request, _("Category updated successfully"))
         action = self.request.POST.get('action')
         if action == 'continue':
-            return reverse('creme_core:catalogue-category-update', kwargs={"pk": self.object.id})
+            return reverse('catalogue-category-update', kwargs={"pk": self.object.id})
         return super().get_success_url()
 
 

@@ -19,7 +19,7 @@
 
 {% block header %}
     <div class="page-header">
-        <a href="{% url 'creme_core:page-create' %}" class="btn btn-primary float-right">
+        <a href="{% url 'page-create' %}" class="btn btn-primary float-right">
             <i class="fas fa-plus-circle"></i> {% trans "Create new page" %}
         </a>
         <h1>{% trans "Pages" %}</h1>
@@ -36,7 +36,7 @@
             <button type="submit" class="btn btn-primary mr-2" data-loading-text="{% trans 'Searching...' %}">
                 {% trans "Search" %}
             </button>
-            <a href="{% url 'creme_core:page-list' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
+            <a href="{% url 'page-list' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
         </form>
     </div>
 
@@ -59,7 +59,7 @@
                 <tbody>
                     {% for page in flatpage_list %}
                         <tr>
-                            <td><a href="{% url 'creme_core:page-update' pk=page.id %}">{{ page.title}}</a></td>
+                            <td><a href="{% url 'page-update' pk=page.id %}">{{ page.title}}</a></td>
                             <td><a title="{% trans "View on site" %}" href="{{ page.get_absolute_url }}">{{ page.url }}</a></td>
                             <td>
                                 <div class="btn-toolbar">
@@ -69,8 +69,8 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="{{ page.get_absolute_url }}">{% trans "View" %}</a>
-                                            <a class="dropdown-item" id="edit_page_{{ page.id }}" href="{% url 'creme_core:page-update' pk=page.id %}">{% trans "Edit" %}</a>
-                                            <a class="dropdown-item" id="delete_page_{{ page.id }}" href="{% url 'creme_core:page-delete' pk=page.id %}">{% trans "Delete" %}</a>
+                                            <a class="dropdown-item" id="edit_page_{{ page.id }}" href="{% url 'page-update' pk=page.id %}">{% trans "Edit" %}</a>
+                                            <a class="dropdown-item" id="delete_page_{{ page.id }}" href="{% url 'page-delete' pk=page.id %}">{% trans "Delete" %}</a>
                                         </div>
                                     </div>
                                 </div>
