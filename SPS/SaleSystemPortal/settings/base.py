@@ -2112,7 +2112,7 @@ PERSONS_ADDRESS_MODEL      = 'persons.Address'
 PERSONS_CONTACT_MODEL      = 'persons.Contact'
 PERSONS_ORGANISATION_MODEL = 'persons.Organisation'
 PERSONS_PROFILE_MODEL      = 'persons.Profile'
-PERSONS_TEAM_MODEL         = 'persons.Team'
+PERSONS_TEAM_MODEL          = 'persons.Team'
 
 PERSONS_ADDRESS_FORCE_NOT_CUSTOM      = False
 PERSONS_CONTACT_FORCE_NOT_CUSTOM      = False

@@ -29,7 +29,7 @@ from django.utils.translation import gettext as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from ...creme_core.common.utils import ROLES
+from ...creme_core.common.utils import ROLES, COUNTRIES
 from ...creme_core.core.exceptions import SpecificProtectedError
 from ...creme_core.models import CremeEntity, CremeUser
 from ...creme_core.models.fields import PhoneField
@@ -49,7 +49,7 @@ class AbstractProfile(CremeEntity):
     alternate_phone = PhoneField(max_length=20, null=True).set_tags(optional=True)
     address = models.ForeignKey(address.Address, related_name="adress_users", on_delete=models.CASCADE, blank=True, null=True, ).set_tags(optional=True)
     city = models.CharField(max_length=20, blank=True).set_tags(optional=True)
-    country = models.CharField(max_length=20, blank=True).set_tags(optional=True)
+    country = models.CharField(_('Country'), max_length=40, choices=COUNTRIES, blank=True, default="").set_tags(optional=True)
     follows = models.ManyToManyField("self", related_name="followed_by", symmetrical=False, blank=True).set_tags(optional=True)
     role = models.CharField(max_length=50, choices=ROLES, default="USER").set_tags(optional=True)
     has_sales_access = models.BooleanField(default=False).set_tags(optional=True)

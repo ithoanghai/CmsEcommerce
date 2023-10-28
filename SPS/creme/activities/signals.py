@@ -23,9 +23,8 @@ from django.conf import settings
 from django.db.models import signals
 from django.dispatch import receiver
 
-from ..persons import constants as persons_constants
-from ..creme_core.models import Relation
-from ..persons import get_organisation_model
+from ..creme_core.models.relation import Relation
+from ..persons import get_organisation_model, constants as persons_constants
 
 from .constants import (
     REL_OBJ_PART_2_ACTIVITY,

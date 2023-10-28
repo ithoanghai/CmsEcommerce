@@ -136,7 +136,7 @@ urlpatterns = calendar_patterns + [
                 activity.ActivityCreation.as_view(),
                 name='activities__create_activity',
             ),
-            check_args=('idxxx',),
+            check_args=('activities__idxxx',),
         ),
         Swappable(
             re_path(

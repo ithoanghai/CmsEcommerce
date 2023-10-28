@@ -28,6 +28,15 @@ class ActivitiesConfig(CremeAppConfig):
     name = 'creme.activities'
     verbose_name = _('Activities')
     dependencies = ['creme.persons']  # 'creme.assistants' is optional
+    #label = "activities"
+    ACTIVITIES = {}
+    HOOKSET = "activities.hooks.ActivitiesDefaultHookSet"
+
+    class Meta:
+        prefix = "activities"
+
+    def configure_hookset(self, value):
+        return load_path_attr(value)()
 
     def all_apps_ready(self):
         from . import get_activity_model

@@ -22,18 +22,18 @@ from django.apps import apps
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext
 
-import creme.creme_core.bricks as core_bricks
-from creme import persons
-from creme.creme_core.core.entity_cell import (
+from ..creme_core import bricks as core_bricks
+from .. import persons
+from ..creme_core.core.entity_cell import (
     EntityCellRegularField,
     EntityCellRelation,
 )
-from creme.creme_core.core.entity_filter import condition_handler, operators
-# from creme.creme_core.forms import LAYOUT_DUAL_FIRST, LAYOUT_DUAL_SECOND
-# from creme.creme_core.gui.custom_form import EntityCellCustomFormSpecial
-from creme.creme_core.gui.menu import ContainerEntry
-from creme.creme_core.management.commands.creme_populate import BasePopulator
-from creme.creme_core.models import (
+from ..creme_core.core.entity_filter import condition_handler, operators
+# from ..creme_core.forms import LAYOUT_DUAL_FIRST, LAYOUT_DUAL_SECOND
+# from ..creme_core.gui.custom_form import EntityCellCustomFormSpecial
+from ..creme_core.gui.menu import ContainerEntry
+from ..creme_core.management.commands.creme_populate import BasePopulator
+from ..creme_core.models import (
     BrickDetailviewLocation,
     BrickHomeLocation,
     ButtonMenuItem,
@@ -45,8 +45,8 @@ from creme.creme_core.models import (
     SearchConfigItem,
     SettingValue,
 )
-from creme.creme_core.utils import create_if_needed
-from creme.persons.constants import FILTER_CONTACT_ME
+from ..creme_core.utils import create_if_needed
+from ..persons.constants import FILTER_CONTACT_ME
 
 from . import (
     bricks,

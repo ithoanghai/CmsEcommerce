@@ -136,8 +136,7 @@ class CalendarManager(models.Manager):
 
         for user_id, user in users_per_id.items():
             if user_id not in calendars_per_users:
-                default_calendars[user_id] = self.create_default_calendar(
-                    user,
+                default_calendars[user_id] = self.create_default_calendar(user,
                     # color=COLOR_POOL[(len(default_calendars) + user_id) % len(COLOR_POOL)],
                 )
 
