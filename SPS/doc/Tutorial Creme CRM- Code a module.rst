@@ -1,69 +1,108 @@
-======================================
-Developer's notebook for Creme modules
-======================================
+=========================================
+Sổ ghi chép của nhà phát triển cho các mô-đun Creme
+=========================================
 
-Creme is a free/open-source Customer Relationship Management software developed by Hybird (www.hybird.org).
+:Tác giả: Guillaume Englert
+:Phiên bản: 18-09-2023 cho Creme 2.6
+:Bản quyền: Hybird
+:Giấy phép: GIẤY PHÉP TÀI LIỆU MIỄN PHÍ GNU phiên bản 1.3
+:Lỗi: Hugo Smett, Patix, Morgane Alonso
 
-It is designed with an entities/relationships architecture, and is highly configurable, which allows
-adapting Creme to many workflows.
+.. nội dung:: Tóm tắt
 
-![Detailed view of a contact](https://github.com/HybirdCorp/creme_crm/raw/main/screenshot.png)
 
-It provides apps (i.e. modules) to manage:
- - Contacts & organisations.
- - Documents & folders.
- - Activities (meetings, phone calls, tasks...) with a calendar.
- - Products & services.
- - Invoices, quotes, sales orders & credit notes.
- - Opportunities.
- - Commercial actions.
- - Email campaigns.
- - Reports.
- - Tickets.
- - Alerts, todos & memos.
- - Geolocation.
+Giới thiệu
+=============
+
+Tài liệu này được gửi tới những người muốn thêm hoặc sửa đổi một số tính năng
+đến phần mềm quản lý quan hệ khách hàng Creme_. Nó không phải là đầy đủ
+tài liệu về API của Creme, đây là hướng dẫn thể hiện việc tạo một mô-đun
+mô-đun, từng bước một.
+
+Creme là phần mềm Quản lý quan hệ khách hàng mã nguồn mở/miễn phí được phát triển bởi Hybird (www.hybird.org).
+
+Nó được thiết kế với kiến trúc thực thể/mối quan hệ và có khả năng cấu hình cao, cho phép
+điều chỉnh Creme phù hợp với nhiều quy trình công việc.
+
+![Xem chi tiết của một liên hệ](https://github.com/HybirdCorp/creme_crm/raw/main/screenshot.png)
+
+Nó cung cấp các ứng dụng (tức là mô-đun) để quản lý:
+ - Liên hệ và tổ chức.
+ - Tài liệu & thư mục.
+ - Các hoạt động (cuộc họp, cuộc gọi điện thoại, nhiệm vụ ...) có lịch.
+ - Sản phẩm và dịch vụ.
+ - Hóa đơn, báo giá, đơn đặt hàng và ghi chú tín dụng.
+ - Những cơ hội.
+ - Hoạt động thương mại.
+ - Chiến dịch email.
+ - Báo cáo.
+ - Vé.
+ - Cảnh báo, việc cần làm và ghi nhớ.
+ - Định vị địa lý.
  - ...
 
-Lots of aspects can be configured through a graphical interface :
- - Detailed views for entities are built from blocks ; you can configure which blocks are
-   displayed, you can create your own the blocks (chose the fields which are used)...
- - You can configure the columns of the list views (columns can be related to fields, custom-fields,
-   relationships...), and filter the lines with powerful rules.
- - You can create your custom-fields, or hide existing fields.
- - You can choose which fields of forms are used, and group them like you want.
- - You can create your own types of relationship, adapted to your business.
+Rất nhiều khía cạnh có thể được cấu hình thông qua giao diện đồ họa:
+ - Chế độ xem chi tiết cho các thực thể được xây dựng từ các khối; bạn có thể định cấu hình khối nào
+   được hiển thị, bạn có thể tạo các khối của riêng mình (chọn các trường được sử dụng)...
+ - Bạn có thể định cấu hình các cột của chế độ xem danh sách (các cột có thể liên quan đến các trường, trường tùy chỉnh,
+   mối quan hệ...), và lọc các dòng với các quy tắc mạnh mẽ.
+ - Bạn có thể tạo các trường tùy chỉnh của mình hoặc ẩn các trường hiện có.
+ - Bạn có thể chọn trường nào của biểu mẫu sẽ được sử dụng và nhóm chúng theo ý muốn.
+ - Bạn có thể tạo các loại mối quan hệ của riêng mình, phù hợp với doanh nghiệp của bạn.
  - ...
 
-Creme has powerful tools to filter, search or import data. it provides a credential system with
-some cool features (teams, allow/forbid entities from a filter on fields/relationships, ...).
+Creme có các công cụ mạnh mẽ để lọc, tìm kiếm hoặc nhập dữ liệu. nó cung cấp một hệ thống thông tin xác thực với
+một số tính năng thú vị (nhóm, cho phép/cấm các thực thể khỏi bộ lọc trên các trường/mối quan hệ, ...).
 
-If you have very specific needs, Creme can also be used as a CRM framework to code your own CRM.
+Nếu bạn có nhu cầu rất cụ thể, Creme cũng có thể được sử dụng làm khung CRM để code CRM của riêng bạn.
 
-Creme is coded in Python, and uses the Django web framework (http://www.djangoproject.com/) and
-the JQuery javascript library (http://jquery.com/).
+Creme được code bằng Python và sử dụng khung web Django (http://www.djangoproject.com/) và
+thư viện javascript của JQuery (http://jquery.com/).
 
-You can find more information on Creme on its official website: http://cremecrm.com/
-You can ask your questions in our forum: https://www.cremecrm.com/forum/index.php
-(there is an english section)
-
-### Current translations
-
- - English (could probably be improved)
- - French
+Tìm thêm thông tin về Creme trên trang web chính thức : http://cremecrm.com/
+và trong diễn đàn của chúng tôi: https://www.cremecrm.com/forum/index.php
 
 
-### Recommendations:
+Yêu cầu
+=============
 
-It's recommended to use a database engine which supports transactions :
- - PostGreSQL is probably the best choice for databases with 100,000+ entities.
- - SQLite support is principally done for developers, but it remains a solution
-   for small databases (e.g. a use as mono-user app with the server running of your computer).
+- Nắm vững kiến thức cơ bản về lập trình; biết ngôn ngữ Python_ sẽ rất tuyệt.
+- Biết một chút ngôn ngữ HTML.
+- Biết git_ hoặc phần mềm quản lý phiên bản khác.
 
-You probably should use 'virtualenv' (for an upgrade from Creme 2.4, you should create a new
-virtual env, in order to keep the old one working).
+Creme được phát triển với khung Python cho các trang web và ứng dụng Web: Django_.
+Nếu bạn thực sự muốn viết mã một số mô-đun cho Creme, bạn nên biết Django.
+Tài liệu của nó đầy đủ và khá tốt; xem tại đây: https://docs.djangoproject.com/en/4.2/.
+Để bắt đầu, hãy đọc `hướng dẫn <https://docs.djangoproject.com/en/4.2/intro/overview/>`_
+nên là đủ.
 
+Creme cũng sử dụng thư viện JavaScript (JS) jQuery_ ; để thực hiện một số tính năng
+trong số các mô-đun của bạn, bạn có thể phải sử dụng một số JS ở phía máy khách (trình duyệt Web);
+trong những trường hợp này biết jQuery sẽ là một điều tốt. Tuy nhiên đây không phải là
+bắt buộc và chúng tôi chủ yếu sẽ sử dụng ví dụ không có JS trong tài liệu này.
 
-### Dependencies
+.. _Creme: https://cremecrm.com
+.. _Python: https://www.python.org
+.. _git: https://git-scm.com
+.. _Django: https://www.djangoproject.com
+.. _jQuery: https://jquery.com
+
+### Khuyến nghị:
+
+Bạn nên sử dụng công cụ cơ sở dữ liệu hỗ trợ các giao dịch:
+ - PostGreSQL có lẽ là lựa chọn tốt nhất cho cơ sở dữ liệu có hơn 100.000 thực thể.
+ - Hỗ trợ SQLite chủ yếu được thực hiện cho các nhà phát triển, nhưng nó vẫn là một giải pháp
+   dành cho cơ sở dữ liệu nhỏ (ví dụ: sử dụng dưới dạng ứng dụng một người dùng với máy chủ đang chạy trên máy tính của bạn).
+
+Có lẽ bạn nên sử dụng 'virtualenv' (để nâng cấp từ Creme 2.5, bạn nên tạo một cái mới
+env ảo, để giữ cho cái cũ hoạt động).
+
+Nhận xét:
+ - Phải biết cách cài đặt/triển khai ứng dụng Django.
+ - Lưu ý nâng cấp: nếu đã cài Creme thì nâng cấp từng phiên bản một
+   (ví dụ: đừng cố nâng cấp từ 2.0 lên 2.2, nâng cấp lên 2.1 rồi 2.2).
+
+### Sự phụ thuộc
 
  - Python 3.8+
  - MySQL 8+ (or MariaDB 10.4+) or PostGreSQL 12+ (or SQLite which is included with Python)
@@ -90,60 +129,52 @@ virtual env, in order to keep the old one working).
        - weasyprint (easy to install on Linux ; harder on Windows)
        - you can also use the binary "pdflatex" (Ubuntu package 'texlive-latex-base').
 
-Installation with 'pip':
- - You should probably use "virtualenv".
- - To install Creme itself :
-   - You can just install from pyPI: 'pip install creme-crm==2.5'
-   - If you retrieved the source, you can use the following command at the source's root: 'pip install -e .'
- - About DB server :
-   - If you use MySQL/MariaDB, you must add the 'mysql' flag :
-     'pip install creme-crm[mysql]==2.5' (or 'pip install -e .[mysql]' with the source).
-   - For PostGreSQL,  you must add the 'pgsql' flag :
-     'pip install creme-crm[pgsql]==2.5' (or 'pip install -e .[pgsql]' with the source).
-   - SQLite doesn't require a specific flag (see RECOMMENDATIONS).
- - Notice some of these Python packages need system libraries to be installed.
-   For example, here a list of Debian/Ubuntu packages you'll have to install before:
+
+### Cài đặt
+
+Cài đặt với 'pip':
+ - Nên sử dụng "virtualenv".
+ - Để tự cài đặt Creme:
+   - Cài đặt từ pyPI: 'pip install creme-crm==2.5'
+   - Nếu lấy được nguồn, sử dụng lệnh sau tại thư mục gốc của nguồn: 'pip install -e.'
+ - Về máy chủ DB:
+   - Nếu bạn sử dụng MySQL/MariaDB, bạn phải thêm cờ 'mysql':
+     'pip install creme-crm[mysql]==2.5' (hoặc 'pip install -e .[mysql]' kèm theo nguồn).
+   - Đối với PostGreSQL, bạn phải thêm cờ 'pgsql':
+     'pip install creme-crm[pgsql]==2.5' (hoặc 'pip install -e .[pgsql]' kèm theo nguồn).
+   - SQLite không yêu cầu cờ cụ thể (xem KHUYẾN NGHỊ).
+ - Lưu ý một số gói Python này cần cài đặt thư viện hệ thống.
    - python-dev
    - mysql_config & libmysqlclient-dev (or libpq-dev if you want to use PostGreSQL)
    - redis-server
    - libjpeg-dev
    - libcairo-dev
 
+Cấu hình cơ sở dữ liệu:
+Để cài đặt mới, bạn phải tạo cơ sở dữ liệu mới và người dùng DB mới
+(người được phép tạo/xóa bảng, chỉ mục...).
+Để nâng cấp từ phiên bản chính trước đó, hãy sao lưu cơ sở dữ liệu hiện có của bạn
+(tất nhiên là bạn nên backup thường xuyên, kể cả khi chưa nâng cấp Creme...).
 
-### Install
-
-Global remarks:
- - You should know how to install/deploy a Django application.
- - Upgrade note: if you already have a Creme installation, upgrade the version one by one
-   (e.g. do not try to upgrade from 2.0 to 2.2, upgrade to 2.1 and then 2.2).
-
-Database configuration:
-For a new installation, you have to create a new database & a new DB user
-(who is allowed to create/drop tables, indices...).
-For an upgrade from the previous major version, back up your existing DB
-(of course you should back up regularly, even when you do not upgrade Creme...).
-
-Project creation:
-For new installations AND for upgrades from Creme 2.4, create a new project ;
-with the virtualenv activated, use the following command which creates a new folder:
+Tạo dự án:
+Để cài đặt mới VÀ để nâng cấp từ Creme 2.5, hãy tạo một dự án mới;
+với virtualenv được kích hoạt, hãy sử dụng lệnh sau để tạo thư mục mới:
 ```sh
 >> creme creme_start_project my_project
 ```
 
-Settings:
-The newly created file "my_project/my_project/settings.py" gives all the information
-for a basic installation with the minimal information you must fill.
+Cài đặt:
+Tệp mới được tạo "my_project/my_project/settings.py" cung cấp tất cả thông tin
+để cài đặt cơ bản với thông tin tối thiểu bạn phải điền.
 
-For an upgrade from the previous version of Creme :
- - See the section "UPGRADE NOTE" corresponding to the new version in the file CHANGELOG.txt.
- - Do not remove apps in INSTALLED_APPS during the upgrade (because they are installed in your DB) ;
-   complete your installation & then uninstall apps you do not want anymore (see below).
+Để nâng cấp từ phiên bản trước của Creme:
+ - Xem phần “UPGRADE NOTE” tương ứng với phiên bản mới trong file CHANGELOG.txt.
+ - Không xóa ứng dụng trong INSTALLED_APPS trong quá trình nâng cấp (vì chúng được cài đặt trong DB của bạn);
+   hoàn tất quá trình cài đặt của bạn và sau đó gỡ cài đặt các ứng dụng bạn không muốn nữa (xem bên dưới).
 
-
-Filling the DB tables & creating the static asset:
-You must be in the parent folder "my_project/" (i.e. not "my_project/my_project/").
-Run the following commands (new installations AND upgrades from a previous version):
-
+Điền vào bảng DB và tạo nội dung tĩnh:
+Bạn phải ở trong thư mục mẹ "my_project/" (tức là không phải "my_project/my_project/").
+Chạy các lệnh sau (cài đặt mới VÀ nâng cấp từ phiên bản trước):
  To create/upgrade the DataBase schema:
    > creme migrate --settings=my_project.settings
  To inject the default data (only for new DB) and the mandatory data:
@@ -157,56 +188,32 @@ Do not forget that some features need the job manager to be launched; you should
 
 > ./manage.py load_initial_data
 
-Note for MySQL users: you should load the time zone tables.
- - On Unix servers, it can be done with:
-   ```sh
-   >> mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql
-   ```
- - For Windows environment, see https://stackoverflow.com/questions/14454304/convert-tz-returns-null
 
+### Chạy thử
 
-### Launch
-
-To run the development server, you just have to run this command:
+Để chạy máy chủ phát triển, bạn chỉ cần chạy lệnh này:
 ```sh
 >> creme runserver --settings=my_project.settings
 ```
-You can then go to http://localhost:8000 & log in with root/root.
+Sau đó, bạn có thể truy cập http://localhost:8000 và đăng nhập bằng root/root.
 
-For a production deployment (Apache, Nginx...), you should read https://docs.djangoproject.com/en/3.2/howto/deployment/
+Để triển khai sản xuất (Apache, Nginx...), bạn nên đọc https://docs.djangoproject.com/en/3.2/howto/deployment/
 
-In order to get a completely functional instance, the job manager must be launched
-(some features need it: sending emails campaign, CSV import...).
-To run it, use this command (in a production environment a watch dog is advised):
+Để có được một phiên bản đầy đủ chức năng, trình quản lý công việc phải được khởi chạy
+(một số tính năng cần có: gửi chiến dịch email, nhập CSV...).
+Để chạy nó, hãy sử dụng lệnh này (trong môi trường sản xuất, nên sử dụng chó canh gác):
 ```sh
 >> creme creme_job_manager --settings=my_project.settings
 ```
 
+### Gỡ cài đặt ứng dụng
 
-### Uninstall apps
-
-When you have a working installation, & want to remove an (optional) app, use the command 'creme_uninstall' which will
-clean the DB. When it's done, you can comment the app in local_settings.py
+Khi bạn có bản cài đặt đang hoạt động và muốn xóa ứng dụng (tùy chọn), hãy sử dụng lệnh 'creme_uninstall'. Lệnh này sẽ
+làm sạch cơ sở dữ liệu. Khi hoàn tất, bạn có thể nhận xét ứng dụng trong local_settings.py
 
 
-### Contributing
-
-The repository is using CircleCI and launch some linting tests. To check them locally before any commit or push you can
-use the hooks in '.githooks'. There are two ways to configure them:
-
-Simply change git configuration (works with git 2.9+)
-```sh
->> git config core.hooksPath .githooks
-```
-
-Or create symlink in '.git/hooks/'. Make sure the old one are moved or removed.
-```sh
->> ln -s ../../.githooks/pre-commit .git/hooks/pre-commit
->> ln -s ../../.githooks/pre-push .git/hooks/pre-push
-```
-
-In order to run the JavaScript linter locally, you can install a NodeJS environment within your virtualenv thanks to the
-Python package nodeenv. In your virtualenv (named "mycremeenv"):
+Để chạy kẻ nói dối JavaScript cục bộ, bạn có thể cài đặt môi trường NodeJS trong virtualenv của mình nhờ vào
+Gói Python nodeenv. Trong virtualenv của bạn (có tên là "mycremeenv"):
 ```sh
 >> pip install nodeenv
 >> nodeenv -n 14.20.0 -p    # to install nodejs 14.20.0 with "mycremeenv"
@@ -216,89 +223,42 @@ Python package nodeenv. In your virtualenv (named "mycremeenv"):
 >> make node-update  # Install nodejs requirements
 ```
 
-Now you can run "make eslint" manually, and the pre-commit hook will check the new/modified files.
+Bây giờ bạn có thể chạy "make eslint" theo cách thủ công và hook pre-commit sẽ kiểm tra các tệp mới/đã sửa đổi.
 
-### References
+### Người giới thiệu
 
-Creme CRM source code is available on the [Creme CRM GitHub Repository](https://github.com/HybirdCorp/creme_crm).
+Mã nguồn Creme CRM có sẵn trên [Kho lưu trữ Creme CRM GitHub](https://github.com/HybirdCorp/creme_crm).
 
-Want to know more about Creme CRM ?
-Check out the [Creme CRM Website](https://www.cremecrm.com).
+Bạn muốn biết thêm về Creme CRM?
+Hãy xem [Trang web Creme CRM](https://www.cremecrm.com).
 
-Want to try Creme CRM ?
-Visit the [Creme CRM Public Demo Website](https://demos.cremecrm.com/).
+Bạn muốn dùng thử Creme CRM?
+Truy cập [Trang web demo công khai của Creme CRM](https://demos.cremecrm.com/).
 
-Want your own demo instance ?
-Pull the latest Creme CRM Demo Docker image on the [Creme CRM DockerHub Repository](https://hub.docker.com/r/cremecrm/cremecrm-demo).
+Muốn có bản demo của riêng bạn?
+Kéo hình ảnh Docker Demo Creme CRM mới nhất trên [Kho lưu trữ Creme CRM DockerHub](https://hub.docker.com/r/cremecrm/cremecrm-demo).
 
-Want to know more about our company ?
-Check out the [Hybird Website](https://hybird.org/).
+Bạn muốn biết thêm về công ty chúng tôi?
+Hãy xem [Trang web Hybird](https://hybird.org/).
 
-Any other questions ?
-Need help ?
-Reach us on the [Creme CRM Forums](https://www.cremecrm.com/forum/).
-Our (french) [Video tutorials](https://www.youtube.com/channel/UCqt-dsKnW7sNwlCWOODTDWQ).
+Còn câu hỏi nào khác không?
+Cần giúp đỡ ?
+Hãy liên hệ với chúng tôi trên [Diễn đàn Creme CRM](https://www.cremecrm.com/forum/).
+[Video hướng dẫn] (tiếng Pháp) của chúng tôi (https://www.youtube.com/channel/UCqt-dsKnW7sNwlCWOODTDWQ).
 
+================================
+HƯỚNG DẪN TỪNG BƯỚC TẠO DỰ ÁN CREME BEAVE
+================================
 
-======================================
-Developer's notebook for Creme modules
-======================================
-
-:Author: Guillaume Englert
-:Version: 18-09-2023 for Creme 2.6
-:Copyright: Hybird
-:License: GNU FREE DOCUMENTATION LICENSE version 1.3
-:Errata: Hugo Smett, Patix, Morgane Alonso
-
-.. contents:: Summary
-
-
-Introduction
-============
-
-This document is addressed to people which want to add or modify some features
-to the customer relationships management software Creme_. It's not an exhaustive
-documentation of the Creme's API, it's a tutorial showing the creation of a module
-module, step by step.
-
-
-Requirements
-============
-
-- Get the bases of programming ; knowing the Python_ language would be nice.
-- Knowing the HTML language a little.
-- Knowing git_ or another version manager software.
-
-Creme is developed with a Python framework for websites et Web apps : Django_.
-If you really want to code some modules for Creme, you should know Django.
-Its documentation is complete & quite good ; see here : https://docs.djangoproject.com/en/4.2/.
-To begin, reading the `tutorial <https://docs.djangoproject.com/en/4.2/intro/overview/>`_
-should be enough.
-
-Creme uses the JavaScript (JS) library jQuery_ too ; to implement some features
-of your modules, you may have to use some JS on client side (Web browser);
-in these cases knowing jQuery would be a good thing. Nevertheless this is not
-mandatory and we will mostly use example with no JS in this documentation.
-
-.. _Creme: https://cremecrm.com
-.. _Python: https://www.python.org
-.. _git: https://git-scm.com
-.. _Django: https://www.djangoproject.com
-.. _jQuery: https://jquery.com
-
-Management of a beavers' park
-=============================
-
-1. Presentation of the module
+1. Trình bày module
 -----------------------------
 
-The use case is: we want to create a module to manage a natural park with beavers.
-We have to manage the population of beavers, and so having for all of them their
-name, birthday, and also health.
+Trường hợp sử dụng là: chúng tôi muốn tạo một mô-đun để quản lý công viên tự nhiên bằng beave.
+Chúng ta phải quản lý số lượng beave, và do đó, tất cả chúng đều phải có
+tên, ngày sinh, và cả sức khỏe.
 
-A Creme module is an "app" in the Django's glossary. To be short, we'll use the
-word "app" for our module.
-
+Mô-đun Creme là một "ứng dụng" trong bảng thuật ngữ của Django. Để ngắn gọn, chúng ta sẽ sử dụng
+từ "ứng dụng" cho mô-đun của chúng tôi.
 
 2. First version of our module
 ------------------------------

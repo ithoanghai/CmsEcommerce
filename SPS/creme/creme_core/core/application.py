@@ -147,4 +147,4 @@ class OscarConfig(OscarConfigMixin, AppConfig):
 
 
 class OscarDashboardConfig(OscarConfig):
-    login_url = reverse_lazy('dashboard:login')
+    login_url = reverse_lazy('creme_login')
